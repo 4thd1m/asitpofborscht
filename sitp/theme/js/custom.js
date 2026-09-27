@@ -322,6 +322,14 @@ document.addEventListener("DOMContentLoaded", function () {
     return window.matchMedia("(hover: none)").matches;
   }
 
+  // A link whose peek is worth a hover but not worth a tap, flagged as such by
+  // the provider that claimed it. Asked per event, like `touch` and for the same
+  // reason: which half of the behaviour is live is a property of the pointer the
+  // reader has in hand right now, not of the device the page loaded on.
+  function pointerOnly(a) {
+    return a.dataset.peekPointerOnly != null;
+  }
+
   function ensurePop() {
     if (pop) return pop;
     pop = document.createElement("div");
@@ -625,6 +633,19 @@ document.addEventListener("DOMContentLoaded", function () {
     var PROSE = /^(P|UL|OL|BLOCKQUOTE|DL)$/;
     var HEADING = /^H[1-6]$/;
     var BOX = ".definition, .theorem, .lemma, .example";
+    // A contents entry that already answers a hover: one whose subsections are
+    // hung under it as a panel. custom.css writes that as
+    // `.toc ul ul > li:has(> ul)`; here it is the same test in two halves,
+    // because an unsupported `:has()` is a dead rule in a stylesheet but a
+    // thrown SyntaxError in `matches()`, and one browser without it would cost
+    // the whole page its previews rather than one list its " ▾".
+    //
+    // Both halves earn their place: the nesting because a two-level list's top
+    // entry also has a `<ul>` under it but sits in `.toc > ul`, where no panel
+    // is drawn, and the child `<ul>` because a panel needs something to hold.
+    function panelled(li) {
+      return li.matches(".toc ul ul > li") && !!li.querySelector(":scope > ul");
+    }
     // How far a card will read out from the block it was opened for, in each
     // direction. Not a measure of the card, which is a fixed 16em and scrolls: a
     // measure of how much of a chapter is worth carrying into one, past which
@@ -931,19 +952,56 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll(".content main a[href]").forEach(function (a) {
           var w = where(a);
           if (!w) return;
-          // None of the contents apparatus gets a peek: an entry in a table of
-          // contents is already the title of the section it leads to, so a card
-          // would only say it twice, and the "↩ Table of Contents" line under
-          // every heading is a step the reader is already taking — whether it
-          // goes to the contents list itself (where the card would quote a list
-          // of links back at them) or up to the section's own heading. A
-          // paragraph that is nothing but one link is that back-link and, in
-          // this book, only ever that.
-          if (a.closest(".toc")) return;
+          // The contents lists are read two different ways, and only one of them
+          // wants cards.
+          //
+          // A part's root outline (`.toc-root`, the fifty-odd entries under
+          // "I. Table of Contents") is read *as a list*: the reader runs an eye
+          // down it to find where they are going, and a card opening under every
+          // entry the pointer crosses on the way is in the way of that. It has
+          // its own, quieter answer already — the hover-expanded panel, which
+          // carries each subchapter's "In which ..." blurb (see the `.toc-blurb`
+          // pass further down).
+          //
+          // A chapter's own contents list is the opposite: a handful of entries,
+          // sitting under the heading of the thing the reader has just arrived
+          // at, and what each one actually holds is exactly what they are trying
+          // to find out. So those get cards.
+          if (a.closest(".toc-root")) return;
+          // Inside a panel, the blurb hoisted into it is itself the peek; its
+          // prose links are a copy of prose the reader can reach by following
+          // the entry, and a card hanging off one of those is a peek into a peek.
+          if (a.closest(".toc-blurb")) return;
+          // An entry that opens a panel has said its piece on hover already, and
+          // two things opening under one pointer is one too many.
+          var cli = a.closest(".toc li");
+          if (cli && panelled(cli)) return;
+          // The "↩ Table of Contents" line under every heading is a step the
+          // reader is already taking — whether it goes to the contents list
+          // itself (where the card would quote a list of links back at them) or
+          // up to the section's own heading. A paragraph that is nothing but one
+          // link is that back-link and, in this book, only ever that.
           var p = a.closest("p");
           if (p && isNav(p)) return;
           var t = w.id && !w.cross ? document.getElementById(w.id) : null;
           if (t && (t.closest(".toc") || isContents(t))) return;
+          // A contents list is written ahead of the chapter, so a good many of
+          // its entries point at sections that do not exist yet. An unwritten one
+          // is usually written `[title]()` and `where` has already dropped it,
+          // but an entry can also carry the anchor a heading is *going* to have,
+          // and that resolves to nothing. Off a link in the prose such a miss is
+          // rare enough to be worth reporting; down a contents list it would line
+          // the outline with "Preview unavailable", so here a dead anchor is
+          // simply an entry with nothing to show.
+          if (!t && !w.cross && a.closest(".toc")) return;
+          // Contents entries peek with a pointer and not with a finger. Each part
+          // of this book is one very long page, so its chapter contents lists are
+          // how a reader moves around inside it — and tap-to-peek would spend the
+          // first tap on every one of those entries on a card they did not ask
+          // for, which is the one thing a list of links cannot afford. A hover
+          // costs the reader nothing and the click still goes where it says, so
+          // with a pointer the card stays. (Read in `attach`.)
+          if (a.closest(".toc")) a.dataset.peekPointerOnly = "";
           // A refinement dot already says which rung it leads to in a native
           // `title` tooltip. The popup says that and shows the rung itself, so
           // it takes the tooltip over — two tooltips for one dot is one too
@@ -1088,8 +1146,12 @@ document.addEventListener("DOMContentLoaded", function () {
       clearTimeout(showTimer);
       scheduleHide();
     });
-    // Keyboard/assistive parity: focusing the link previews immediately.
+    // Keyboard/assistive parity: focusing the link previews immediately. A tap
+    // focuses too, so a link that has asked to be pointer-only (see `links`)
+    // opts out of this half as well while touch is live — otherwise its card
+    // would flash up over the page on the way to the place the tap is going.
     a.addEventListener("focus", function () {
+      if (touch() && pointerOnly(a)) return;
       clearTimeout(hideTimer);
       show(a);
     });
@@ -1105,6 +1167,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // first tap straight through to the target.
     a.addEventListener("click", function (e) {
       if (!touch() || peeked === a) return;
+      if (pointerOnly(a)) return; // a tap on this one is just a tap on a link
       e.preventDefault();
       peeked = a;
       clearTimeout(hideTimer);
