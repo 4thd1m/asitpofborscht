@@ -6,7 +6,7 @@
 <!-- 2. linear systems, least squares? -->
 <!-- 3. BLAS -->
 
-<div class="toc">
+<div class="toc toc-root">
 
 - [A. From Problems to Proof]()
   - [I1.1.1 The Monoid of Naturals](#i111-the-monoid-of-naturals)

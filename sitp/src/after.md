@@ -11,7 +11,7 @@ I'll see you at work.
 
 ## Afterword Table of Contents
 
-<div class="toc">
+<div class="toc toc-root">
 
 - [1. Architecture: From `nanochat` to `llama` and `deepseek`](#1-from-nanochat-to-llama-and-deepseek)
 - [2. Systems: From `borscht` to `torch`](#2-from-borscht-to-torch)
