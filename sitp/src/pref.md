@@ -124,7 +124,7 @@ For instance, the traditional ordering one might approach to the discipline of d
 
 all in the context of autoregressive language modeling, culminating in the transformers architecture
 
-during a crisis, it's the Kairos (καιρός). the opportune moment.
+<!-- during a crisis, it's the Kairos (καιρός). the opportune moment.
 we are living in the eye of the storm, and it's hard to predict what comes next.
 
 - one case study: Shampoo/Muon, Muon Kernels (Tri Dao), CuTe Layout
@@ -152,7 +152,7 @@ foo
   - perhaps thats the next education (eureka)
   - perhaps thats the next god with SSI
   - or perhaps it's curing cancer, or getting to mars
-  - these are prompts that are not 1 shot
+  - these are prompts that are not 1 shot -->
 
 <script>
   // Stamp the card dark before widgets.js renders it: the widget reads
@@ -209,140 +209,6 @@ linear algebra, numpy, and torch stood the test of time
 - karpathy as sensei. it's memey but it's the same as calling aristotle the first teacher.
 this is why SITP heavily uses LLM101n
 -->
-
-<br><br><br><br><br><br>
-
-<div class="dual">
-
-<div>
-
-[**Karpathy's LLM101n Syllabus**](https://github.com/karpathy/LLM101n)
-
-- Chapter 01 **Bigram Language Model** (language modeling)
-- Chapter 02 **Micrograd** (machine learning, backpropagation)
-- Chapter 03 **N-gram model** (multi-layer perceptron, matmul, gelu)
-- Chapter 04 **Attention** (attention, softmax, positional encoder)
-- Chapter 05 **Transformer** (transformer, residual, layernorm, GPT-2)
-- Chapter 06 **Tokenization** (minBPE, byte pair encoding)
-- Chapter 07 **Optimization** (initialization, optimization, AdamW)
-- Chapter 08 **Need for Speed I: Device** (device, CPU, GPU, ...)
-- Chapter 09 **Need for Speed II: Precision** (mixed precision training, fp16, bf16, fp8, ...)
-- Chapter 10 **Need for Speed III: Distributed** (distributed optimization, DDP, ZeRO)
-- Chapter 11 **Datasets** (datasets, data loading, synthetic data generation)
-- Chapter 12 **Inference I: kv-cache** (kv-cache)
-- Chapter 13 **Inference II: Quantization** (quantization)
-- Chapter 14 **Finetuning I: SFT** (supervised finetuning SFT, PEFT, LoRA, chat)
-- Chapter 15 **Finetuning II: RL** (reinforcement learning, RLHF, PPO, DPO)
-- Chapter 16 **Deployment** (API, web app)
-- Chapter 17 **Multimodal** (VQVAE, diffusion transformer)
-</div>
-
-<div>
-
-**SITP's Syllabus**
-
-$$
-\begin{array}{ll}
-\left.
-\begin{array}{ll}
-1.1 & \quad\rlap{\text{From Certain to Uncertain Knowledge}}\hphantom{\text{Next Token Prediction is Classification and Compression}} \\
-1.2 & \quad\text{Next Token Prediction is Classification and Compression}
-\end{array}
-\right\}
-&
-\href{https://www.youtube.com/playlist?list=PLaZQkZp6WhWyvdiP49JG-rjyTPck_hvEu}{\text{Stanford CS124}},\ 
-\href{https://www.youtube.com/playlist?list=PLoROMvodv4rOpr_A7B9SriE_iZmkanvUg}{\text{CS109}}
-\\[0.6em]
-
-\left.
-\begin{array}{ll}
-1.3 & \quad\rlap{\text{Parameterizing Classification with Logistic Regression}}\hphantom{\text{Next Token Prediction is Classification and Compression}} \\
-1.4 & \quad\text{Parameterizing Quantification with Linear Regression}
-\end{array}
-\right\}
-&
-\href{https://www.youtube.com/playlist?list=PLoROMvodv4rNH7qL6-efu_q2_bPuy0adh}{\text{Stanford CS229}},\ 
-\href{https://www.youtube.com/playlist?list=PLE7DDD91010BC51F8}{\text{MIT 18.06}},\
-\href{https://www.youtube.com/playlist?list=PLUl4u3cNGP63oMNUHXqIUcrkS2PivhN3k}{\text{MIT 18.065}} \\[0.6em]
-
-\left.
-\begin{array}{ll}
-2.1 & \quad\rlap{\text{The Three Language Problem}}\hphantom{\text{Next Token Prediction is Classification and Compression}} \\
-2.2 & \quad\text{Virtualizing Shapes with Strides} \\
-2.3 & \quad\text{Accelerating Basic Linear Algebra on CPUs}
-\end{array}
-\right\}
-&
-\href{https://www.youtube.com/playlist?list=PLUl4u3cNGP63VIBQVWguXxZZi0566y7Wf}{\text{MIT 6.172}} \\[0.6em]
-
-\left.
-\begin{array}{ll}
-2.4 & \quad\rlap{\text{From the BLAS to LAPACK}}\hphantom{\text{Next Token Prediction is Classification and Compression}} \\
-2.5 & \quad\text{QR Decomposition} \\
-2.6 & \quad\text{Singular Value Decomposition}
-\end{array}
-\right\}
-&
-\href{https://www.youtube.com/playlist?list=PLQ3UicqQtfNsivZX5TmUAoUkkBqFT8aOL}{\text{MIT 6.7350}} \\[0.6em]
-
-\left.
-\begin{array}{ll}
-3.1 & \quad\rlap{\text{Optimization with Gradient Descent}}\hphantom{\text{Next Token Prediction is Classification and Compression}} \\
-3.2 & \quad\text{Learning Representations with FFNs} \\
-3.3 & \quad\text{Learning Representations with CNNs} \\
-3.4 & \quad\text{Learning Representations with RNNs}
-\end{array}
-\right\}
-&
-\href{https://www.youtube.com/playlist?list=PLoROMvodv4rOaMFbaqxPDoLWjDaRAdP9D}{\text{Stanford CS224N}},\ 
-\href{https://www.youtube.com/playlist?list=PLUl4u3cNGP63URZnh5iqBzDTDYPUTQT-8}{\text{MIT 6.7960}},\
-\href{https://www.youtube.com/playlist?list=PLUl4u3cNGP62EaLLH92E_VCN4izBKK6OE}{\text{MIT 18.S096}}
-
-\\[0.6em]
-
-\left.
-\begin{array}{ll}
-3.5 & \quad\rlap{\text{Learning Representations with GPTs}}\hphantom{\text{Next Token Prediction is Classification and Compression}}
-\end{array}
-\right\}
-
-&
-\href{https://www.youtube.com/playlist?list=PLoROMvodv4rMqXOcazWaTUHhq-yembLCV}{\text{Stanford CS336}} \\[0.6em]
-
-\left.
-\begin{array}{ll}
-4.1 & \quad\rlap{\text{Automatic Differentiation}}\hphantom{\text{Next Token Prediction is Classification and Compression}} \\
-4.2 & \quad\text{Gradient-Based Optimization} \\
-4.3 & \quad\text{Network Primitives} \\
-\end{array}
-\right\}
-
-&
-\href{https://www.youtube.com/playlist?list=PLO45-80-XKkQyROXXpn4PfjF1J2tH46w8}{\text{Cornell CS5781}},\ 
-\href{https://www.youtube.com/playlist?list=PLT6QPhVMICSa30axDNX9nljqaTeuftC8t}{\text{CMU 10-414}}
-\\[0.6em]
-
-\left.
-\begin{array}{ll}
-4.4 & \quad\rlap{\text{Accelerating Matrix Multiplication on GPUs}}\hphantom{\text{Next Token Prediction is Classification and Compression}} \\
-4.5 & \quad\text{Accelerating Matrix Multiplication on TPUs} \\
-4.6 & \quad\text{From Strides to Layouts} \\
-4.6 & \quad\text{Accelerating Attention} \\
-\end{array}
-\right\}
-
-&
-\href{https://www.youtube.com/playlist?list=PLoROMvodv4rMp7MTFr4hQsDEcX7Bx6Odp}{\text{Stanford CS149}},\ 
-\href{https://accelerated-computing.academy/fall25/lectures/}{\text{MIT 6.S894}},\
-\href{https://www.youtube.com/@GPUMODE/videos}{\text{GPU MODE}} \\[0.6em]
-
-
-\end{array}
-$$
-</div>
-
-</div>
-
 
 Jeffrey Zhang<br>
 Waterloo, Ontario<br>
