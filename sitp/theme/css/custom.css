@@ -1160,6 +1160,85 @@ p:has(+ ul) {
   justify-self: center;
 }
 
+/* A verse with its worked example pinned inside it — the broadcasting limerick
+   and the shape stack it describes. The blockquote itself is the flex
+   container, so the figure sits within the quote's own rule and background;
+   `:has` is what picks it out, since Markdown gives no way to put a class on a
+   `>` block.
+   Flex rather than `float: right` because the verse is a block box: a float
+   only shortens its line boxes, and the quote's background would still run
+   underneath the figure.
+
+       > line one<br>
+       > line two
+       >
+       > <div class="verse-aside-figure">
+       > <img ...>
+       > <div class="verse-aside-shapes">...</div>
+       > </div>
+*/
+blockquote:has(> .verse-aside-figure) {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+}
+
+/* Both children size to their own content and pack to the left, so the figure
+   sits against the longest line of the verse rather than out on the quote's
+   right edge. `flex-wrap` then does the narrow-screen job on its own: when the
+   pair no longer fits the measure, the figure drops below the verse. */
+blockquote:has(> .verse-aside-figure) > p {
+  margin: 0;
+}
+
+blockquote:has(> .verse-aside-figure) > .verse-aside-figure {
+  flex: none;
+}
+
+.verse-aside-figure {
+  text-align: right;
+}
+
+/* `aspect-ratio` is the asset's own 736 x 1104, so the box is reserved before
+   the image decodes and the shape stack under it does not jump. */
+.verse-aside-figure img {
+  display: block;
+  width: 4.5rem;
+  aspect-ratio: 736 / 1104;
+  margin: 0 auto 0.3rem auto;
+}
+
+/* The shape stack is set in the body face rather than as math: it is the
+   figure's caption, and KaTeX's bold roman digits read as a display equation
+   next to the verse. `max-content` shrinks the box to the widest row so the
+   rule under the operands spans exactly them, and `tabular-nums` keeps the
+   three rows' digits in columns even in a proportional face. */
+.verse-aside-shapes {
+  width: max-content;
+  margin: 0 auto;
+  text-align: right;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+}
+
+.verse-aside-shapes > span {
+  display: block;
+}
+
+/* The leading `1 x` that broadcasting *supplies* rather than the operand
+   carrying it. Opacity rather than a color so it recedes by the same amount in
+   every theme. */
+.verse-aside-supplied {
+  opacity: 0.4;
+}
+
+.verse-aside-sum {
+  border-top: 1px solid currentColor;
+  margin-top: 0.15em;
+  padding-top: 0.15em;
+}
+
 /* Opt-in Goudy Initialen drop cap (gwern-style, with a Renaissance woodcut
    initial in place of gwern's yinit). Wrap a paragraph in a `.dropcap` div in
    the Markdown — keep blank lines inside so mdBook renders the contents:
@@ -1355,6 +1434,13 @@ html.coal img.owl-forest {
   content: url("../../assets/owl_forest2.png");
 }
 
+html.navy img.hipowl,
+html.ayu img.hipowl,
+html.green img.hipowl,
+html.coal img.hipowl {
+  content: url("../../assets/hipowl_dark.png");
+}
+
 /* Theme-dependent probability-space diagram, mirroring the owl swap above. */
 html.coal img.probspace,
 html.navy img.probspace,
@@ -1438,6 +1524,13 @@ html.navy img.broadcast,
 html.ayu img.broadcast,
 html.green img.broadcast {
   content: url("../../assets/broadcast_dark.png");
+}
+
+html.coal img.hand-flame,
+html.navy img.hand-flame,
+html.ayu img.hand-flame,
+html.green img.hand-flame {
+  content: url("../../assets/hand-flame_dark.png");
 }
 
 html.coal img.neuron,
