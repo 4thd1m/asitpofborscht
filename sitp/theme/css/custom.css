@@ -1533,6 +1533,20 @@ html.green img.hand-flame {
   content: url("../../assets/hand-flame_dark.png");
 }
 
+html.coal img.normal,
+html.navy img.normal,
+html.ayu img.normal,
+html.green img.normal {
+  content: url("../../assets/normal_dark.png");
+}
+
+html.coal img.losscurve,
+html.navy img.losscurve,
+html.ayu img.losscurve,
+html.green img.losscurve {
+  content: url("../../assets/losscurve_dark.png");
+}
+
 html.coal img.neuron,
 html.navy img.neuron,
 html.ayu img.neuron,
