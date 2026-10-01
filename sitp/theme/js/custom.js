@@ -1607,3 +1607,59 @@ document.addEventListener("DOMContentLoaded", function () {
     resizeTimer = setTimeout(measureAll, 150);
   });
 });
+
+// Title-page typewriter: each `<span class="retype" data-alt="...">` inside a
+// <code> is backspaced and retyped as its data-alt text, one span after the
+// other (as a link, if it has data-href), then the whole thing runs in reverse back to the originals, forever.
+// The caret is drawn by `.retype-active::after` in custom.css. Readers who ask
+// for reduced motion keep the static original text.
+document.addEventListener("DOMContentLoaded", function () {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  var groups = new Map();
+  document.querySelectorAll(".retype[data-alt]").forEach(function (el) {
+    var key = el.parentElement;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push({ el: el, texts: [el.textContent, el.dataset.alt] });
+  });
+
+  var ERASE_MS = 45, TYPE_MS = 85, GAP_MS = 250, HOLD_MS = 2500;
+  var sleep = function (ms) {
+    return new Promise(function (r) { setTimeout(r, ms); });
+  };
+
+  async function retype(item, to) {
+    var el = item.el;
+    el.classList.add("retype-active");
+    while (el.textContent.length) {
+      el.textContent = el.textContent.slice(0, -1);
+      await sleep(ERASE_MS);
+    }
+    // The alt text links to data-href (if given): type into an <a> so the
+    // link is live as soon as it appears. Erasing via textContent drops it.
+    var target = el;
+    if (to === el.dataset.alt && el.dataset.href) {
+      target = document.createElement("a");
+      target.href = el.dataset.href;
+      target.target = "_blank";
+      target.rel = "noopener";
+      el.appendChild(target);
+    }
+    for (var i = 1; i <= to.length; i++) {
+      target.textContent = to.slice(0, i);
+      await sleep(TYPE_MS);
+    }
+    el.classList.remove("retype-active");
+  }
+
+  groups.forEach(async function (items) {
+    var which = 0;
+    for (;;) {
+      await sleep(HOLD_MS);
+      which = 1 - which;
+      for (var i = 0; i < items.length; i++) {
+        await retype(items[i], items[i].texts[which]);
+        await sleep(GAP_MS);
+      }
+    }
+  });
+});
