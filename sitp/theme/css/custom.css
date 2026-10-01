@@ -1533,11 +1533,11 @@ html.green img.hand-flame {
   content: url("../../assets/hand-flame_dark.png");
 }
 
-html.coal img.normal,
-html.navy img.normal,
-html.ayu img.normal,
-html.green img.normal {
-  content: url("../../assets/normal_dark.png");
+html.coal img.berouilli_logreg,
+html.navy img.berouilli_logreg,
+html.ayu img.berouilli_logreg,
+html.green img.berouilli_logreg {
+  content: url("../../assets/berouilli_logreg_dark.png");
 }
 
 html.coal img.losscurve,
@@ -2620,4 +2620,14 @@ html.green :is(input, textarea) {
 viewBox="0 0 12 24"><g fill="%232e5524" stroke="%237fee64" stroke-width="1">\
 <rect x="4.5" y="2.5" width="3" height="19"/><rect x="1.5" y="2.5" width="9" height="3"/>\
 <rect x="1.5" y="18.5" width="9" height="3"/></g></svg>') 6 12, text;
+}
+
+/* Blinking caret for the title-page typewriter (see `.retype` in custom.js). */
+.retype-active::after {
+  content: "▌";
+  animation: retype-blink 1s steps(1) infinite;
+}
+
+@keyframes retype-blink {
+  50% { opacity: 0; }
 }
