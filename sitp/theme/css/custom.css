@@ -1160,6 +1160,42 @@ p:has(+ ul) {
   justify-self: center;
 }
 
+/* Code in the right-hand cell of a pair gets more room to breathe by
+   overhanging the whole right gutter, ending on the same edge as a
+   `.sidenote`. Only the code moves: the grid keeps its tracks, so the math or
+   prose on the left stays inside the measure and the divider stays put. A
+   margin percentage resolves against the grid area, (measure − 1.5rem gap) / 2,
+   so twice `--margin-note-offset` of the cell falls short of the gutter by
+   0.37 × 1.5rem; the 0.555rem makes that up.
+   Where both cells are code, the whole grid widens by the gutter instead, so
+   the two boxes stay the same width. */
+.dual:not(.dual-margin) > *:not(pre) + pre:last-child {
+  margin-right: calc(-2 * var(--margin-note-offset) - 0.555rem) !important;
+}
+
+.dual:not(.dual-margin):has(> pre + pre:last-child) {
+  margin-right: calc(-1 * var(--margin-note-offset));
+}
+
+/* Stacked, there is no gutter to overhang into. */
+@media (max-width: 1000px) {
+  .dual:not(.dual-margin) > *:not(pre) + pre:last-child {
+    margin-right: 0 !important;
+  }
+
+  .dual:not(.dual-margin):has(> pre + pre:last-child) {
+    margin-right: 0;
+  }
+}
+
+.doc-preview-xref .xref-body .dual > pre:last-child {
+  margin-right: 0 !important;
+}
+
+.doc-preview-xref .xref-body .dual:has(> pre + pre:last-child) {
+  margin-right: 0;
+}
+
 /* A verse with its worked example pinned inside it — the broadcasting limerick
    and the shape stack it describes. The blockquote itself is the flex
    container, so the figure sits within the quote's own rule and background;
