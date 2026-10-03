@@ -112,6 +112,9 @@
             let colorkey = null;
             try { colorkey = localStorage.getItem('sitp-colorkey'); } catch(e) { }
             html.dataset.colorkey = colorkey === 'off' ? 'off' : 'on';
+            let defrefs = null;
+            try { defrefs = localStorage.getItem('sitp-defrefs'); } catch(e) { }
+            html.dataset.defrefs = defrefs === 'off' ? 'off' : 'on';
         </script>
 
         <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
@@ -168,6 +171,9 @@
                         </ul>
                         <button id="colorkey-toggle" class="icon-button" type="button" title="Toggle color coding" aria-label="Toggle color coding" aria-pressed="true">
                             {{fa "solid" "droplet"}}
+                        </button>
+                        <button id="defrefs-toggle" class="icon-button" type="button" title="Toggle definition links" aria-label="Toggle definition links" aria-pressed="true">
+                            {{fa "solid" "link"}}
                         </button>
                         {{#if search_enabled}}
                         <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
