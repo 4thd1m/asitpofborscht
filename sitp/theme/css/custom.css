@@ -1692,6 +1692,18 @@ html[data-colorkey="off"] {
   --okabe-purple: inherit;
 }
 
+/* Definition-link toggle: `a.defref` is tagged in custom.js (a link whose only
+   content is the italic term, i.e. `[*term*](#anchor)`). Off, it reads as the
+   plain italic term: no link color or underline, and pointer-events: none so
+   neither the click nor the xref hover card fires. */
+html[data-defrefs="off"] .content a.defref,
+html[data-defrefs="off"] .content a.defref:hover {
+  color: inherit;
+  text-decoration: none;
+  pointer-events: none;
+  cursor: text;
+}
+
 .okabe-orange {
   color: var(--okabe-orange);
 }

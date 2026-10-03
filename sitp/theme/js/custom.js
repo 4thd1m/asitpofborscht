@@ -1392,6 +1392,56 @@ document.addEventListener("DOMContentLoaded", function () {
   sync();
 });
 
+// Definition-link toggle (the chain link in the menu bar). A term that points
+// back at its definition is written `[*term*](#definition-anchor)`, so it
+// renders as a link whose whole content is one <em>. Those are tagged
+// `.defref` here; with `data-defrefs="off"` the stylesheet flattens them to the
+// plain italic term (no link color, no hover card, no click). Other links —
+// "see §1.3.1", URLs, links with prose around the italics — are untouched.
+// Same per-reader sticky preference as the color key; `data-defrefs` is set in
+// index.hbs before first paint.
+document.addEventListener("DOMContentLoaded", function () {
+  const html = document.documentElement;
+
+  document.querySelectorAll(".content main a[href*='#']").forEach(function (a) {
+    const href = a.getAttribute("href");
+    if (/^[a-z]+:/i.test(href)) return; // external
+    const kids = a.childNodes;
+    let em = null;
+    for (let i = 0; i < kids.length; i++) {
+      const k = kids[i];
+      if (k.nodeType === Node.TEXT_NODE && !k.textContent.trim()) continue;
+      if (em || k.nodeName !== "EM") return;
+      em = k;
+    }
+    if (em) a.classList.add("defref");
+  });
+
+  const button = document.getElementById("defrefs-toggle");
+  if (!button) return;
+
+  function sync() {
+    const on = html.dataset.defrefs !== "off";
+    button.setAttribute("aria-pressed", String(on));
+    button.title = on ? "Turn off definition links" : "Turn on definition links";
+    document.querySelectorAll("a.defref").forEach(function (a) {
+      if (on) a.removeAttribute("tabindex");
+      else a.setAttribute("tabindex", "-1");
+    });
+  }
+
+  button.addEventListener("click", function () {
+    const off = html.dataset.defrefs === "off";
+    html.dataset.defrefs = off ? "on" : "off";
+    try {
+      localStorage.setItem("sitp-defrefs", html.dataset.defrefs);
+    } catch (e) {}
+    sync();
+  });
+
+  sync();
+});
+
 // Carry each subchapter's "In which ..." blurb into its expanded contents panel
 // (the third TOC level; see `.toc ul ul ul` in custom.css), so opening an entry
 // — by hover with a pointer, by tap on touch — previews what the section is
