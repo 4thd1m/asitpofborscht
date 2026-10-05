@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chain-of-Thought Scaling</title>
+<!-- Animated recreation of Figure 4 from Wei et al. (2022), "Chain-of-Thought
+     Prompting Elicits Reasoning in Large Language Models" (arXiv:2201.11903).
+     Embedded in ch. III via iframe. Solve rates are from the paper's Table 2
+     (note: the paper's own Figure 4 plots slightly different PaLM SVAMP points
+     than its Table 2; this follows the table). Prior-best lines follow the
+     Figure 4 caption: Cobbe et al. 2021 (GSM8K), Jie et al. 2022 (SVAMP, value
+     read off the figure), Lan et al. 2021 (MAWPS). -->
+<style>
+  /* Same New Computer Modern faces as the book body (theme/fonts/fonts.css); src/fonts/ ships them. */
+  @font-face { font-family: "New Computer Modern"; font-style: normal; font-weight: 400; src: url("../fonts/NewCM10-Regular.woff2") format("woff2"); }
+  @font-face { font-family: "New Computer Modern"; font-style: italic; font-weight: 400; src: url("../fonts/NewCM10-Italic.woff2") format("woff2"); }
+  :root { --fg: #111; --axis: #222; --std: #111; --cot: #1f1fe0; --prior: #ea7d24; }
+  :root[data-theme="dark"] { --fg: #e6e6e6; --axis: #c8c8c8; --std: #e6e6e6; --cot: #8592ff; --prior: #f2903f; }
+  html, body { margin: 0; padding: 0; background: transparent; overflow: hidden; }
+  body, svg text { color: var(--fg); font-family: "New Computer Modern", "CMU Serif", "Latin Modern Roman", "Times New Roman", serif; }
+  svg { display: block; width: 100%; height: auto; }
+  .tick { font-size: 19px; fill: var(--fg); }
+  .head { font-size: 21px; fill: var(--fg); text-anchor: middle; }
+  .label { font-size: 19px; fill: var(--fg); text-anchor: middle; }
+  .legend { font-size: 16px; fill: var(--fg); }
+  .axis { stroke: var(--axis); stroke-width: 1; fill: none; }
+  .std { stroke: var(--std); stroke-width: 1; fill: none; }
+  .cot { stroke: var(--cot); stroke-width: 1.2; fill: none; }
+  .prior { stroke: var(--prior); stroke-width: 3; stroke-dasharray: 9 6; }
+  .mk { opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(0.2);
+        transition: opacity 200ms ease, transform 280ms cubic-bezier(.3, 1.6, .5, 1); }
+  .mk.on { opacity: 1; transform: scale(1); }
+  .static .mk { transition: none; }
+</style>
+</head>
+<body>
+<svg id="fig" viewBox="0 0 600 676" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="Chain-of-thought prompting beats standard prompting on GSM8K, SVAMP and MAWPS only at large model scale"></svg>
+<script>
+(() => {
+  const NS = "http://www.w3.org/2000/svg";
+  const svg = document.getElementById("fig");
+  const el = (tag, attrs = {}, parent = svg) => {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    parent.appendChild(e);
+    return e;
+  };
+  const log10 = Math.log10;
+
+  // ---------- theme: follow the book's mdbook theme, else the OS ----------
+  const darkThemes = ["coal", "navy", "ayu"];
+  const applyTheme = () => {
+    let dark;
+    try {
+      if (parent === window) throw 0; // opened standalone, not embedded in the book
+      dark = darkThemes.some(t => parent.document.documentElement.classList.contains(t));
+    } catch (e) { dark = matchMedia("(prefers-color-scheme: dark)").matches; }
+    document.documentElement.dataset.theme = dark ? "dark" : "light";
+  };
+  applyTheme();
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyTheme);
+  try {
+    new MutationObserver(applyTheme).observe(parent.document.documentElement, { attributes: true, attributeFilter: ["class"] });
+  } catch (e) {}
+
+  // ---------- data (Wei et al. 2022, Table 2) ----------
+  const MODELS = [ // sizes in billions of parameters
+    { name: "LaMDA", sizes: [0.42, 2, 8, 68, 137], ticks: [[0.42, "0.4"], [8, "8"], [137, "137"]], xr: [-0.62, 2.38] },
+    { name: "GPT", sizes: [0.35, 1.3, 6.7, 175], ticks: [[0.35, "0.4"], [6.7, "7"], [175, "175"]], xr: [-0.72, 2.5] },
+    { name: "PaLM", sizes: [8, 62, 540], ticks: [[8, "8"], [62, "62"], [540, "540"]], xr: [0.72, 2.92] },
+  ];
+  const DATASETS = [
+    { name: "GSM8K", prior: 55, yr: [-3, 65], ticks: [0, 20, 40, 60], runs: {
+      LaMDA: { std: [2.6, 3.6, 3.2, 5.7, 6.5], cot: [0.4, 1.9, 1.6, 8.2, 14.3] },
+      GPT:   { std: [2.2, 2.4, 4.0, 15.6], cot: [0.5, 0.5, 2.4, 46.9] },
+      PaLM:  { std: [4.9, 9.6, 17.9], cot: [4.1, 29.9, 56.9] } } },
+    { name: "SVAMP", prior: 47.3, yr: [-5, 85], ticks: [0, 20, 40, 60, 80], runs: {
+      LaMDA: { std: [2.5, 3.3, 4.3, 13.6, 29.5], cot: [1.6, 2.4, 3.4, 18.8, 37.5] },
+      GPT:   { std: [1.4, 1.5, 6.1, 65.7], cot: [0.8, 1.7, 3.1, 68.9] },
+      PaLM:  { std: [15.1, 48.2, 69.4], cot: [16.8, 46.7, 79.0] } } },
+    { name: "MAWPS", prior: 88.4, yr: [-5, 105], ticks: [0, 25, 50, 75, 100], runs: {
+      LaMDA: { std: [3.2, 3.9, 5.3, 21.6, 43.2], cot: [0.9, 3.1, 4.8, 30.6, 57.9] },
+      GPT:   { std: [2.4, 3.1, 8.8, 72.7], cot: [1.1, 1.7, 3.5, 87.1] },
+      PaLM:  { std: [26.2, 61.8, 79.2], cot: [30.5, 80.3, 93.3] } } },
+  ];
+
+  // ---------- legend: one row, centered; spacing uses measured text widths, so wait for NCM ----------
+  const legend = el("g");
+  document.fonts.ready.then(() => {
+    const ITEMS = [
+      [g => { el("line", { class: "std", x1: 0, x2: 28, y1: 0, y2: 0 }, g); el("circle", { class: "std", cx: 14, cy: 0, r: 2.5 }, g); }, "Standard prompting"],
+      [g => { el("line", { class: "cot", x1: 0, x2: 28, y1: 0, y2: 0 }, g); el("circle", { class: "cot", cx: 14, cy: 0, r: 7 }, g); }, "Chain-of-thought prompting"],
+      [g => el("line", { class: "prior", x1: 1, x2: 28, y1: 0, y2: 0 }, g), "Prior supervised best"],
+    ];
+    let x = 0;
+    for (const [draw, text] of ITEMS) {
+      const g = el("g", { transform: `translate(${x} 0)` }, legend);
+      draw(g);
+      const t = el("text", { class: "legend", x: 35, y: 5 }, g);
+      t.textContent = text;
+      x += 35 + t.getComputedTextLength() + 16;
+    }
+    const width = x - 16, room = 584, k = Math.min(1, room / width);
+    legend.setAttribute("transform", `translate(${(600 - width * k) / 2} 26) scale(${k})`);
+  });
+
+  // ---------- grid of panels ----------
+  const X0 = 140, W = 132, GX = 18, Y0 = 98, H = 148, GY = 26;
+  const panels = [];
+  MODELS.forEach((m, c) => {
+    const x0 = X0 + c * (W + GX);
+    el("text", { class: "head", x: x0 + W / 2, y: Y0 - 14 }).textContent = m.name;
+  });
+  DATASETS.forEach((d, r) => {
+    const y0 = Y0 + r * (H + GY);
+    const sy = v => y0 + H - (v - d.yr[0]) / (d.yr[1] - d.yr[0]) * H;
+    const rl = el("text", { class: "label", transform: `translate(${X0 - 64} ${y0 + H / 2}) rotate(-90)` });
+    el("tspan", { x: 0, dy: -4, "font-size": 21 }, rl).textContent = d.name;
+    el("tspan", { x: 0, dy: 22 }, rl).textContent = "solve rate (%)";
+    MODELS.forEach((m, c) => {
+      const x0 = X0 + c * (W + GX);
+      const sx = s => x0 + (log10(s) - m.xr[0]) / (m.xr[1] - m.xr[0]) * W;
+      const g = el("g");
+      el("path", { class: "axis", d: `M${x0},${y0}V${y0 + H}H${x0 + W}` }, g);
+      for (const v of d.ticks) {
+        el("line", { class: "axis", x1: x0, x2: x0 + 4, y1: sy(v), y2: sy(v) }, g);
+        if (c === 0) el("text", { class: "tick", x: x0 - 8, y: sy(v) + 6, "text-anchor": "end" }, g).textContent = v;
+      }
+      for (const [s, lab] of m.ticks) {
+        el("line", { class: "axis", x1: sx(s), x2: sx(s), y1: y0 + H, y2: y0 + H - 4 }, g);
+        if (r === DATASETS.length - 1) el("text", { class: "tick", x: sx(s), y: y0 + H + 26, "text-anchor": "middle" }, g).textContent = lab;
+      }
+      // Lines are revealed by a clip rect sweeping across model scale.
+      const cid = `sw${r}${c}`;
+      const sweep = el("rect", { x: x0, y: y0 - 12, width: 0, height: H + 24 }, el("clipPath", { id: cid }, el("defs", {}, g)));
+      const lines = el("g", { "clip-path": `url(#${cid})` }, g);
+      const run = d.runs[m.name];
+      const marks = [];
+      for (const kind of ["std", "cot"]) {
+        const pts = m.sizes.map((s, i) => [sx(s), sy(run[kind][i])]);
+        el("path", { class: kind, d: pts.map((q, i) => (i ? "L" : "M") + q[0].toFixed(1) + "," + q[1].toFixed(1)).join("") }, lines);
+        pts.forEach(([x, y]) => marks.push({ x, c: el("circle", { class: `${kind} mk`, cx: x, cy: y, r: kind === "cot" ? 7 : 2.5 }, g) }));
+      }
+      // Prior-best line spills past the panel's right edge, as in the original.
+      const prior = el("line", { class: "prior", x1: x0, x2: x0 + W + GX * 0.7, y1: sy(d.prior), y2: sy(d.prior) }, g);
+      panels.push({ x0, sweep, lines, marks, prior });
+    });
+  });
+  el("text", { class: "label", x: X0 + (3 * W + 2 * GX) / 2, y: Y0 + 3 * H + 2 * GY + 66, "font-size": 20 }).textContent =
+    "Model scale (# parameters in billions)";
+
+  // ---------- animation ----------
+  // The prior-best bar draws first; then every panel sweeps left to right across
+  // model scale, so the chain-of-thought curve visibly breaks away from standard
+  // prompting only at the largest models. Hold, fade, repeat. CYCLE is shared by
+  // every animated figure in the book (10 s), and the phase comes from the wall
+  // clock, so they all move in step.
+  const PRIOR = 700, SWEEP = 4400, HOLD = 4200, FADE = 700;
+  const CYCLE = PRIOR + SWEEP + HOLD + FADE;
+  const ease = t => t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2;
+  const clamp = t => Math.max(0, Math.min(1, t));
+  const priorLen = W + GX * 0.7;
+  const frame = t => {
+    const p = ease(clamp(t / PRIOR));
+    const s = ease(clamp((t - PRIOR) / SWEEP));
+    const fade = clamp((t - CYCLE + FADE) / FADE);
+    for (const P of panels) {
+      P.prior.setAttribute("x2", P.x0 + priorLen * p);
+      P.sweep.setAttribute("width", s * (W + 10));
+      for (const m of P.marks) {
+        m.c.classList.toggle("on", s > 0 && m.x <= P.x0 + s * W + 2);
+        m.c.style.opacity = fade > 0 ? 1 - fade : "";
+      }
+      P.lines.style.opacity = P.prior.style.opacity = 1 - fade;
+    }
+  };
+
+  if (location.hash === "#final" || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.body.classList.add("static");
+    frame(CYCLE - FADE);
+  } else {
+    // Loop only while on screen; scrolling back in rejoins the shared clock.
+    frame(0);
+    let raf = null, elapsed = 0;
+    const step = () => {
+      const prev = elapsed;
+      elapsed = Date.now() % CYCLE;
+      if (elapsed < prev) { // wrapped: reset markers instantly, not via their pop-in transitions
+        document.body.classList.add("static");
+        frame(elapsed);
+        void document.body.offsetWidth;
+        document.body.classList.remove("static");
+      } else frame(elapsed);
+      raf = requestAnimationFrame(step);
+    };
+    new IntersectionObserver(entries => {
+      const visible = entries[entries.length - 1].isIntersecting;
+      cancelAnimationFrame(raf);
+      raf = null;
+      if (visible) { elapsed = CYCLE; raf = requestAnimationFrame(step); }
+    }, { threshold: 0.3 }).observe(svg);
+  }
+})();
+</script>
+</body>
+</html>

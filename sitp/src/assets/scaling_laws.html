@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scaling Laws</title>
+<!-- Animated recreation of Figure 1 from Kaplan et al. (2020), "Scaling Laws for
+     Neural Language Models" (arXiv:2001.08361). Embedded in ch. III via iframe.
+     Fit lines use the paper's published constants; the scatter points and the
+     learning curves in the compute panel are synthesized to match the figure. -->
+<style>
+  /* Same New Computer Modern faces as the book body (theme/fonts/fonts.css); src/fonts/ ships them. */
+  @font-face { font-family: "New Computer Modern"; font-style: normal; font-weight: 400; src: url("../fonts/NewCM10-Regular.woff2") format("woff2"); }
+  @font-face { font-family: "New Computer Modern"; font-style: italic; font-weight: 400; src: url("../fonts/NewCM10-Italic.woff2") format("woff2"); }
+  @font-face { font-family: "New Computer Modern"; font-style: normal; font-weight: 700; src: url("../fonts/NewCM10-Bold.woff2") format("woff2"); }
+  :root {
+    --fg: #111; --muted: #666; --axis: #222; --grid: #000;
+    --curve: rgba(70, 120, 180, 0.28); --env: #000;
+    --orange: #e8962a; --pt: #3a6db5; --fit: #6b6b6b;
+    --legend-bg: rgba(255, 255, 255, 0.9); --legend-border: #ccc;
+  }
+  :root[data-theme="dark"] {
+    --fg: #e6e6e6; --muted: #9a9a9a; --axis: #c8c8c8;
+    --curve: rgba(120, 170, 235, 0.30); --env: #f4f4f4;
+    --orange: #f2a443; --pt: #78a8f0; --fit: #a8a8a8;
+    --legend-bg: rgba(20, 20, 20, 0.6); --legend-border: #555;
+  }
+  html, body { margin: 0; padding: 0; background: transparent; overflow: hidden; }
+  body, svg text { color: var(--fg); font-family: "New Computer Modern", "CMU Serif", "Latin Modern Roman", "Times New Roman", serif; }
+  svg { display: block; width: 100%; height: auto; }
+  .tick { font-size: 16px; fill: var(--fg); }
+  .title { font-size: 22px; font-weight: 700; fill: var(--fg); text-anchor: middle; }
+  .sub { font-size: 16px; fill: var(--muted); text-anchor: middle; }
+  .ylabel { font-size: 22px; font-weight: 700; fill: var(--fg); text-anchor: middle; }
+  .frame { fill: none; stroke: var(--axis); stroke-width: 1; }
+  .tk { stroke: var(--axis); stroke-width: 1; }
+  .legend rect { fill: var(--legend-bg); stroke: var(--legend-border); rx: 4; }
+  .legend text { font-size: 15px; fill: var(--fg); font-style: italic; }
+  .legend { opacity: 0; transition: opacity 600ms ease; }
+  .legend.on { opacity: 1; }
+  .pt { fill: var(--pt); opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(0.2);
+        transition: opacity 250ms ease, transform 250ms cubic-bezier(.3, 1.6, .5, 1); }
+  .pt.on { opacity: 1; transform: scale(1); }
+  .static .pt, .static .legend { transition: none; }
+</style>
+</head>
+<body>
+<div style="position: relative">
+  <svg id="fig" viewBox="0 0 1200 395" xmlns="http://www.w3.org/2000/svg" role="img"
+       aria-label="Test loss falls as a power law in compute, dataset size, and parameter count"></svg>
+</div>
+<script>
+(() => {
+  const NS = "http://www.w3.org/2000/svg";
+  const svg = document.getElementById("fig");
+  const el = (tag, attrs = {}, parent = svg) => {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    parent.appendChild(e);
+    return e;
+  };
+  const log10 = Math.log10;
+  const rng = (seed => () => { // mulberry32, so the synthetic curves are stable across loads
+    seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+    let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  })(7);
+
+  // ---------- theme: follow the book's mdbook theme, else the OS ----------
+  const darkThemes = ["coal", "navy", "ayu"];
+  const applyTheme = () => {
+    let dark;
+    try {
+      if (parent === window) throw 0; // opened standalone, not embedded in the book
+      dark = darkThemes.some(t => parent.document.documentElement.classList.contains(t));
+    } catch (e) { dark = matchMedia("(prefers-color-scheme: dark)").matches; }
+    document.documentElement.dataset.theme = dark ? "dark" : "light";
+  };
+  applyTheme();
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyTheme);
+  try {
+    new MutationObserver(applyTheme).observe(parent.document.documentElement, { attributes: true, attributeFilter: ["class"] });
+  } catch (e) {}
+
+  // ---------- panel scaffolding ----------
+  const TOP = 20, H = 270, W = 310;
+  const panel = (x0, xr, yr) => {
+    const g = el("g");
+    const sx = u => x0 + (u - xr[0]) / (xr[1] - xr[0]) * W;
+    const sy = L => TOP + H - (log10(L) - log10(yr[0])) / (log10(yr[1]) - log10(yr[0])) * H;
+    const id = "clip" + x0;
+    const cp = el("clipPath", { id }, el("defs", {}, g));
+    el("rect", { x: x0, y: TOP, width: W, height: H }, cp);
+    const sweepId = "sweep" + x0;
+    const sp = el("clipPath", { id: sweepId }, g.querySelector("defs"));
+    const sweep = el("rect", { x: x0, y: TOP - 10, width: 0, height: H + 20 }, sp);
+    const plot = el("g", { "clip-path": `url(#${id})` }, g);
+    const data = el("g", { "clip-path": `url(#${sweepId})` }, plot);
+    el("rect", { class: "frame", x: x0, y: TOP, width: W, height: H }, g);
+    return { g, plot, data, sweep, sx, sy, x0, xr, yr };
+  };
+
+  const pow10Label = (parent, x, y, e) => {
+    const t = el("text", { class: "tick", x, y, "text-anchor": "middle" }, parent);
+    t.textContent = "10";
+    const s = el("tspan", { dy: -7, "font-size": 11 }, t);
+    s.textContent = String(e).replace("-", "−");
+  };
+
+  const xTicks = (p, labeled, minorDecades) => {
+    const yb = TOP + H;
+    for (let d = Math.floor(p.xr[0]); d <= Math.ceil(p.xr[1]); d++) {
+      const subs = minorDecades ? [2, 3, 4, 5, 6, 7, 8, 9] : [];
+      for (const m of subs) {
+        const u = d + log10(m);
+        if (u > p.xr[0] && u < p.xr[1]) el("line", { class: "tk", x1: p.sx(u), x2: p.sx(u), y1: yb, y2: yb - 3 }, p.g);
+      }
+      if (d >= p.xr[0] && d <= p.xr[1]) {
+        el("line", { class: "tk", x1: p.sx(d), x2: p.sx(d), y1: yb, y2: yb - 6 }, p.g);
+        if (labeled.includes(d)) pow10Label(p.g, p.sx(d), yb + 26, d);
+      }
+    }
+  };
+  const yTicks = (p, vals, fmt = v => v.toFixed(1)) => {
+    for (const v of vals) {
+      const y = p.sy(v);
+      el("line", { class: "tk", x1: p.x0, x2: p.x0 + 6, y1: y, y2: y }, p.g);
+      const t = el("text", { class: "tick", x: p.x0 - 8, y: y + 5, "text-anchor": "end" }, p.g);
+      t.textContent = fmt(v);
+    }
+  };
+  const titles = (p, a, b) => {
+    const cx = p.x0 + W / 2;
+    el("text", { class: "title", x: cx, y: 350 }, p.g).textContent = a;
+    el("text", { class: "sub", x: cx, y: 377 }, p.g).textContent = b;
+  };
+  const pathD = pts => pts.map((q, i) => (i ? "L" : "M") + q[0].toFixed(2) + "," + q[1].toFixed(2)).join("");
+
+  // Legend with the fitted law, e.g. L = (X / a · 10^b)^c
+  const legend = (p, x, y, w, { dash, color, sym, sub, a, b, c }) => {
+    const g = el("g", { class: "legend" }, p.g);
+    el("rect", { x, y, width: w, height: 34 }, g);
+    el("line", { x1: x + 10, x2: x + 44, y1: y + 17, y2: y + 17, stroke: color, "stroke-width": 2,
+                 "stroke-dasharray": dash ? "6 4" : "none" }, g);
+    const t = el("text", { x: x + 54, y: y + 22 }, g);
+    const span = (txt, attrs = {}) => { const s = el("tspan", attrs, t); s.textContent = txt; return s; };
+    span(`L = (${sym}`);
+    if (sub) { span(sub, { dy: 4, "font-size": 10, "font-style": "normal" }); span("", { dy: -4 }); }
+    span(`/${a}·10`, { "font-style": "normal" });
+    span(String(b), { dy: -7, "font-size": 10, "font-style": "normal" });
+    span(")", { dy: 7, "font-style": "normal" });
+    span(c.replace("-", "−"), { dy: -8, "font-size": 10, "font-style": "normal" });
+    return g;
+  };
+
+  const fitLine = (p, f, color, dashed) => {
+    const pts = [];
+    for (let i = 0; i <= 200; i++) {
+      const u = p.xr[0] + (p.xr[1] - p.xr[0]) * i / 200;
+      pts.push([p.sx(u), p.sy(f(u))]);
+    }
+    const path = el("path", { d: pathD(pts), fill: "none", stroke: color, "stroke-width": dashed ? 2 : 1.8 }, p.plot);
+    return { path, dashed };
+  };
+
+  // ---------- (1) compute ----------
+  const P1 = panel(95, [-9, 1], [2, 7.6]);
+  xTicks(P1, [-9, -7, -5, -3, -1, 1], false);
+  yTicks(P1, [2, 3, 4, 5, 6, 7], v => String(v));
+  titles(P1, "Compute", "PF-days, non-embedding");
+  const ylab = el("text", { class: "ylabel", transform: `translate(52 ${TOP + H / 2}) rotate(-90)` });
+  ylab.textContent = "Test Loss";
+
+  // Fitted frontier, log10 L as a function of u = log10 C.
+  const lc = log10(2.3e8);
+  const front = u => -0.05 * (u - lc);
+
+  // Synthetic learning curves L(C) = A (1 + 10^{-g (u - c)}), one per model size N.
+  // A is the converged loss from the paper's L(N) fit; c is solved so each curve
+  // just kisses the frontier, which makes the lower envelope trace the fit.
+  const g = 0.85, grid = [];
+  for (let u = -14; u <= 4; u += 0.01) grid.push(u);
+  const curves = [];
+  const K = 46;
+  for (let i = 0; i < K; i++) {
+    const logN = 3.4 + (9.4 - 3.4) * i / (K - 1) + (rng() - 0.5) * 0.08;
+    const A = Math.pow(8.8e13 / Math.pow(10, logN), 0.076);
+    const shape = u => log10(A * (1 + Math.pow(10, -g * u)));
+    let minD = Infinity, argU = 0;
+    for (const u of grid) { const d = shape(u) - front(u); if (d < minD) { minD = d; argU = u; } }
+    const lift = 0.014 * Math.exp(-(((logN - 5.2) / 1.3) ** 2)) + rng() * 0.003; // sits a hair above the fit mid-range, as in the paper
+    const c = -(minD - lift) / 0.05;
+    const tangent = argU + c;
+    const end = Math.min(tangent + 1.4 + rng() * 1.2, 0.75 + rng() * 0.3);
+    let walk = 0;
+    const pts = [];
+    for (let u = -9.2; u <= end; u += 0.02) {
+      const prog = Math.max(0, (u - tangent) / 2);
+      walk = 0.9 * walk + (rng() - 0.5) * 0.006 * (0.3 + prog);
+      pts.push([u, shape(u - c) + walk]);
+    }
+    curves.push({ pts, tangent, end });
+  }
+  for (const cv of curves) {
+    el("path", { d: pathD(cv.pts.map(([u, y]) => [P1.sx(u), P1.sy(10 ** y)])), fill: "none",
+                 stroke: "var(--curve)", "stroke-width": 1.4 }, P1.data);
+  }
+  // Lower envelope = compute-efficient frontier (the black line).
+  const envStart = -8.6, envEnd = Math.max(...curves.map(c => c.tangent).filter(t => t < 0)) ;
+  const env = [];
+  for (let u = envStart; u <= envEnd; u += 0.02) {
+    let m = Infinity;
+    for (const cv of curves) {
+      if (u > cv.end) continue;
+      const k = Math.round((u + 9.2) / 0.02);
+      if (cv.pts[k]) m = Math.min(m, cv.pts[k][1]);
+    }
+    if (m < Infinity) env.push([P1.sx(u), P1.sy(10 ** m)]);
+  }
+  el("path", { d: pathD(env), fill: "none", stroke: "var(--env)", "stroke-width": 2.2 }, P1.data);
+  const fit1 = fitLine(P1, u => 10 ** front(u), "var(--orange)", true);
+  const leg1 = legend(P1, P1.x0 + 12, TOP + H - 46, 254,
+    { dash: true, color: "var(--orange)", sym: "C", sub: "min", a: "2.3", b: 8, c: "-0.050" });
+
+  // ---------- (2) dataset size ----------
+  const P2 = panel(480, [7.22, 9.22], [2.67, 4.25]);
+  xTicks(P2, [8, 9], true);
+  yTicks(P2, [2.7, 3.0, 3.3, 3.6, 3.9, 4.2]);
+  titles(P2, "Dataset Size", "tokens");
+  const dPts = [[21.6e6, 4.14], [43e6, 3.83], [86e6, 3.565], [172e6, 3.34], [344e6, 3.15], [688e6, 2.925], [1.376e9, 2.745]];
+  const fit2 = fitLine(P2, u => Math.pow(10 ** u / 5.4e13, -0.095), "var(--fit)", false);
+  el("path", { d: pathD(dPts.map(([d, L]) => [P2.sx(log10(d)), P2.sy(L)])), fill: "none",
+               stroke: "var(--pt)", "stroke-width": 2 }, P2.data);
+  const pts2 = dPts.map(([d, L]) => ({ u: log10(d), c: el("circle", { class: "pt", cx: P2.sx(log10(d)), cy: P2.sy(L), r: 4 }, P2.plot) }));
+  const leg2 = legend(P2, P2.x0 + 92, TOP + 10, 208,
+    { dash: false, color: "var(--fit)", sym: "D", a: "5.4", b: 13, c: "-0.095" });
+
+  // ---------- (3) parameters ----------
+  const P3 = panel(865, [3.45, 9.45], [2.05, 6.1]);
+  xTicks(P3, [5, 7, 9], false);
+  yTicks(P3, [2.4, 3.2, 4.0, 4.8, 5.6]);
+  titles(P3, "Parameters", "non-embedding");
+  const nLaw = u => Math.pow(10 ** u / 8.8e13, -0.076);
+  const nU = [3.88, 4.78, 5.0, 5.4, 5.65, 5.8, 6.0, 6.2, 6.38, 6.55, 6.98, 7.03, 7.32, 7.48, 7.7, 8.03, 8.08, 8.32, 8.62, 8.93, 9.18];
+  const nJit = [0.04, 0.03, 0.02, 0.035, 0.0, 0.02, 0.01, 0.0, 0.01, 0.0, -0.005, 0.0, 0.0, 0.0, 0.0, 0.01, -0.005, 0.0, 0.0, 0.01, 0.025];
+  const nPts = nU.map((u, i) => [u, nLaw(u) * (1 + nJit[i])]);
+  const fit3 = fitLine(P3, nLaw, "var(--fit)", false);
+  el("path", { d: pathD(nPts.map(([u, L]) => [P3.sx(u), P3.sy(L)])), fill: "none",
+               stroke: "var(--pt)", "stroke-width": 2 }, P3.data);
+  const pts3 = nPts.map(([u, L]) => ({ u, c: el("circle", { class: "pt", cx: P3.sx(u), cy: P3.sy(L), r: 4 }, P3.plot) }));
+  const leg3 = legend(P3, P3.x0 + 88, TOP + 10, 212,
+    { dash: false, color: "var(--fit)", sym: "N", a: "8.8", b: 13, c: "-0.076" });
+
+  // ---------- animation ----------
+  // All three panels sweep left to right on one clock (the compute panel's x axis
+  // is literally training compute), then the power-law fits are drawn over the data,
+  // the finished figure holds, the data fades out, and the cycle repeats. CYCLE is
+  // shared by every animated figure in the book (10 s), and the phase comes from
+  // the wall clock, so they all move in step.
+  const SWEEP = 5000, FIT = 1300, HOLD = 3000, FADE = 700;
+  const CYCLE = SWEEP + FIT + HOLD + FADE;
+  const panels = [P1, P2, P3];
+  const fits = [fit1, fit2, fit3].map(f => ({ ...f, len: f.path.getTotalLength() }));
+  const legends = [leg1, leg2, leg3];
+  const points = [...pts2.map(p => ({ ...p, P: P2 })), ...pts3.map(p => ({ ...p, P: P3 }))];
+  const ease = t => t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2;
+
+  const setFit = (f, t) => {
+    f.path.style.strokeDasharray = `${f.len} ${f.len}`;
+    f.path.style.strokeDashoffset = f.len * (1 - t);
+    if (t >= 1 && f.dashed) { f.path.style.strokeDasharray = "7 5"; f.path.style.strokeDashoffset = 0; }
+    else if (t >= 1) f.path.style.strokeDasharray = "none";
+  };
+  const frame = t => { // t in ms since the start of the current cycle
+    const s = ease(Math.min(1, t / SWEEP));
+    for (const P of panels) P.sweep.setAttribute("width", s * W + 10);
+    for (const p of points) p.c.classList.toggle("on", p.P.sx(p.u) <= p.P.x0 + s * W + 2);
+    const f = Math.max(0, Math.min(1, (t - SWEEP + 200) / FIT));
+    fits.forEach(fl => setFit(fl, ease(f)));
+    const fade = Math.max(0, Math.min(1, (t - SWEEP - FIT - HOLD) / FADE));
+    for (const P of panels) P.plot.style.opacity = 1 - fade;
+    legends.forEach(l => l.classList.toggle("on", f > 0 && fade === 0));
+  };
+
+  if (location.hash === "#final" || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.body.classList.add("static");
+    frame(SWEEP + FIT);
+  } else {
+    // Loop only while on screen; scrolling back in rejoins the shared clock.
+    frame(0);
+    let raf = null, elapsed = 0;
+    const step = () => {
+      const prev = elapsed;
+      elapsed = Date.now() % CYCLE;
+      if (elapsed < prev) { // wrapped: reset markers instantly, not via their pop-in transitions
+        document.body.classList.add("static");
+        frame(elapsed);
+        void document.body.offsetWidth;
+        document.body.classList.remove("static");
+      } else frame(elapsed);
+      raf = requestAnimationFrame(step);
+    };
+    new IntersectionObserver(entries => {
+      const visible = entries[entries.length - 1].isIntersecting;
+      cancelAnimationFrame(raf);
+      raf = null;
+      if (visible) { elapsed = CYCLE; raf = requestAnimationFrame(step); }
+    }, { threshold: 0.5 }).observe(svg);
+  }
+})();
+</script>
+</body>
+</html>

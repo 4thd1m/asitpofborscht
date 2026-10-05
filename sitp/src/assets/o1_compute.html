@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>o1 Compute Scaling</title>
+<!-- Animated recreation of the train-/test-time compute figure from OpenAI (2024),
+     "Learning to Reason with LLMs" (openai.com/index/learning-to-reason-with-llms).
+     Embedded in ch. III via iframe. OpenAI published no numbers and no x-axis units
+     for this plot, so the points are read off the original image; x positions are
+     in decades of an unlabeled log axis. -->
+<style>
+  /* Same New Computer Modern faces as the book body (theme/fonts/fonts.css); src/fonts/ ships them. */
+  @font-face { font-family: "New Computer Modern"; font-style: normal; font-weight: 400; src: url("../fonts/NewCM10-Regular.woff2") format("woff2"); }
+  :root { --fg: #111; --axis: #222; --pt: #111; }
+  :root[data-theme="dark"] { --fg: #e6e6e6; --axis: #c8c8c8; --pt: #f2f2f2; }
+  html, body { margin: 0; padding: 0; background: transparent; overflow: hidden; }
+  body, svg text { color: var(--fg); font-family: "New Computer Modern", "CMU Serif", "Latin Modern Roman", "Times New Roman", serif; }
+  svg { display: block; width: 100%; height: auto; }
+  .tick { font-size: 18px; fill: var(--fg); }
+  .title { font-size: 20px; fill: var(--fg); text-anchor: middle; }
+  .label { font-size: 19px; fill: var(--fg); text-anchor: middle; }
+  .axis { stroke: var(--axis); stroke-width: 1.2; }
+  .pt { fill: var(--pt); opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(0.2);
+        transition: opacity 250ms ease, transform 300ms cubic-bezier(.3, 1.6, .5, 1); }
+  .pt.on { opacity: 1; transform: scale(1); }
+  .static .pt { transition: none; }
+</style>
+</head>
+<body>
+<svg id="fig" viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="o1 AIME pass@1 accuracy rises smoothly with both train-time and test-time compute"></svg>
+<script>
+(() => {
+  const NS = "http://www.w3.org/2000/svg";
+  const svg = document.getElementById("fig");
+  const el = (tag, attrs = {}, parent = svg) => {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    parent.appendChild(e);
+    return e;
+  };
+
+  // ---------- theme: follow the book's mdbook theme, else the OS ----------
+  const darkThemes = ["coal", "navy", "ayu"];
+  const applyTheme = () => {
+    let dark;
+    try {
+      if (parent === window) throw 0; // opened standalone, not embedded in the book
+      dark = darkThemes.some(t => parent.document.documentElement.classList.contains(t));
+    } catch (e) { dark = matchMedia("(prefers-color-scheme: dark)").matches; }
+    document.documentElement.dataset.theme = dark ? "dark" : "light";
+  };
+  applyTheme();
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyTheme);
+  try {
+    new MutationObserver(applyTheme).observe(parent.document.documentElement, { attributes: true, attributeFilter: ["class"] });
+  } catch (e) {}
+
+  // ---------- data: [log10 compute (arbitrary origin), pass@1 accuracy] ----------
+  const PANELS = [
+    { title: ["o1 AIME accuracy", "during training"], xlabel: "train-time compute (log scale)",
+      x0: 120, xr: [-0.355, 1.727],
+      pts: [[-0.27, 33.0], [0.268, 43.5], [0.614, 52.3], [0.905, 53.0], [1.009, 56.1], [1.209, 58.5], [1.409, 59.7], [1.632, 68.8]] },
+    { title: ["o1 AIME accuracy", "at test time"], xlabel: "test-time compute (log scale)",
+      x0: 700, xr: [-0.013, 3.027],
+      pts: [[0.12, 20.7], [0.593, 25.3], [1.227, 36.5], [1.647, 47.2], [2.1, 58.4], [2.733, 71.5], [2.887, 74.9]] },
+  ];
+
+  // ---------- layout ----------
+  const TOP = 80, H = 255, BOT = TOP + H, W = 440;
+  const sy = v => BOT - v / 100 * H;
+  const points = [];
+  for (const p of PANELS) {
+    const g = el("g");
+    const sx = u => p.x0 + (u - p.xr[0]) / (p.xr[1] - p.xr[0]) * W;
+    el("text", { class: "title", x: p.x0 + W / 2, y: 28 }, g).textContent = p.title[0];
+    el("text", { class: "title", x: p.x0 + W / 2, y: 52 }, g).textContent = p.title[1];
+    el("text", { class: "label", x: p.x0 + W / 2, y: BOT + 40 }, g).textContent = p.xlabel;
+    el("text", { class: "label", transform: `translate(${p.x0 - 62} ${TOP + H / 2}) rotate(-90)` }, g).textContent = "pass@1 accuracy";
+    for (let v = 0; v <= 100; v += 20) {
+      el("line", { class: "axis", x1: p.x0 - 6, x2: p.x0, y1: sy(v), y2: sy(v) }, g);
+      el("text", { class: "tick", x: p.x0 - 12, y: sy(v) + 6, "text-anchor": "end" }, g).textContent = v;
+    }
+    // Unlabeled log axis: a tick at every k·10^d, longer at the decades.
+    for (let d = Math.floor(p.xr[0]); d <= Math.ceil(p.xr[1]); d++) {
+      for (let k = 1; k <= 9; k++) {
+        const u = d + Math.log10(k);
+        if (u < p.xr[0] || u > p.xr[1]) continue;
+        el("line", { class: "axis", x1: sx(u), x2: sx(u), y1: BOT, y2: BOT + (k === 1 ? 7 : 4) }, g);
+      }
+    }
+    // Despined like the original: only the left and bottom axes.
+    el("line", { class: "axis", x1: p.x0, x2: p.x0, y1: TOP, y2: BOT }, g);
+    el("line", { class: "axis", x1: p.x0, x2: p.x0 + W, y1: BOT, y2: BOT }, g);
+    p.pts.forEach(([u, v], i) => points.push({ i, n: p.pts.length, c: el("circle", { class: "pt", cx: sx(u), cy: sy(v), r: 5 }, g) }));
+  }
+
+  // ---------- animation ----------
+  // Both panels reveal their points left to right on one clock (more compute ->
+  // higher accuracy), the finished figure holds, the points fade, and it repeats.
+  const REVEAL = 4200, HOLD = 3200, FADE = 700;
+  const CYCLE = REVEAL + HOLD + FADE;
+  const frame = t => {
+    const fade = Math.max(0, Math.min(1, (t - REVEAL - HOLD) / FADE));
+    for (const p of points) {
+      // spread each panel's points evenly over the reveal, so both finish together
+      p.c.classList.toggle("on", t >= (p.i + 0.5) / p.n * REVEAL * 0.9);
+      p.c.style.opacity = fade > 0 ? 1 - fade : "";
+    }
+  };
+
+  if (location.hash === "#final" || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.body.classList.add("static");
+    frame(REVEAL);
+  } else {
+    // Loop only while on screen; scrolling away pauses mid-cycle, and scrolling
+    // back resumes from the same spot.
+    frame(0);
+    let raf = null, elapsed = 0, last = 0;
+    const step = now => {
+      const prev = elapsed;
+      elapsed = (elapsed + now - last) % CYCLE;
+      last = now;
+      if (elapsed < prev) { // wrapped: hide points instantly, not via their fade-in transition
+        document.body.classList.add("static");
+        frame(elapsed);
+        void document.body.offsetWidth;
+        document.body.classList.remove("static");
+      } else frame(elapsed);
+      raf = requestAnimationFrame(step);
+    };
+    new IntersectionObserver(entries => {
+      const visible = entries[entries.length - 1].isIntersecting;
+      cancelAnimationFrame(raf);
+      raf = null;
+      if (visible) raf = requestAnimationFrame(now => { last = now; step(now); });
+    }, { threshold: 0.5 }).observe(svg);
+  }
+})();
+</script>
+</body>
+</html>

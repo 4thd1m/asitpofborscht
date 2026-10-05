@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Emergent Abilities</title>
+<!-- Animated recreation of Figure 2 from Wei et al. (2022), "Emergent Abilities
+     of Large Language Models" (arXiv:2206.07682). Embedded in ch. III via iframe.
+     The paper gives no table for this figure, so every point is read off the
+     original image: x is log10 training FLOPs, y the panel's metric in %. -->
+<style>
+  /* Same New Computer Modern faces as the book body (theme/fonts/fonts.css); src/fonts/ ships them. */
+  @font-face { font-family: "New Computer Modern"; font-style: normal; font-weight: 400; src: url("../fonts/NewCM10-Regular.woff2") format("woff2"); }
+  @font-face { font-family: "New Computer Modern"; font-style: normal; font-weight: 700; src: url("../fonts/NewCM10-Bold.woff2") format("woff2"); }
+  :root {
+    --fg: #111; --axis: #222;
+    --lamda: #2f6db3; --gpt3: #7a5a8e; --gopher: #2a6a3a; --chinchilla: #9a7553; --palm: #2f6db3; --random: #de4479;
+  }
+  :root[data-theme="dark"] {
+    --fg: #e6e6e6; --axis: #c8c8c8;
+    --lamda: #6fa3ea; --gpt3: #b48fcb; --gopher: #55b26a; --chinchilla: #cb9d74; --palm: #6fa3ea; --random: #f06a9c;
+  }
+  html, body { margin: 0; padding: 0; background: transparent; overflow: hidden; }
+  body, svg text { color: var(--fg); font-family: "New Computer Modern", "CMU Serif", "Latin Modern Roman", "Times New Roman", serif; }
+  svg { display: block; width: 100%; height: auto; }
+  .tick { font-size: 18px; fill: var(--fg); }
+  .title { font-size: 21px; font-weight: 700; fill: var(--fg); text-anchor: middle; }
+  .label { font-size: 19px; fill: var(--fg); text-anchor: middle; }
+  .legend { font-size: 19px; fill: var(--fg); }
+  .axis { stroke: var(--axis); stroke-width: 1; fill: none; }
+  .random { stroke: var(--random); stroke-width: 2.5; stroke-dasharray: 7 5; }
+  .mk { opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(0.2);
+        transition: opacity 200ms ease, transform 280ms cubic-bezier(.3, 1.6, .5, 1); }
+  .mk.on { opacity: 1; transform: scale(1); }
+  .static .mk { transition: none; }
+</style>
+</head>
+<body>
+<svg id="fig" viewBox="0 0 1200 760" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="Eight tasks where few-shot accuracy stays at random until a model scale threshold, then rises sharply"></svg>
+<script>
+(() => {
+  const NS = "http://www.w3.org/2000/svg";
+  const svg = document.getElementById("fig");
+  const el = (tag, attrs = {}, parent = svg) => {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    parent.appendChild(e);
+    return e;
+  };
+
+  // ---------- theme: follow the book's mdbook theme, else the OS ----------
+  const darkThemes = ["coal", "navy", "ayu"];
+  const applyTheme = () => {
+    let dark;
+    try {
+      if (parent === window) throw 0; // opened standalone, not embedded in the book
+      dark = darkThemes.some(t => parent.document.documentElement.classList.contains(t));
+    } catch (e) { dark = matchMedia("(prefers-color-scheme: dark)").matches; }
+    document.documentElement.dataset.theme = dark ? "dark" : "light";
+  };
+  applyTheme();
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyTheme);
+  try {
+    new MutationObserver(applyTheme).observe(parent.document.documentElement, { attributes: true, attributeFilter: ["class"] });
+  } catch (e) {}
+
+  // ---------- model families: marker shape, size, line width ----------
+  const FAM = {
+    lamda:      { name: "LaMDA",      shape: "circle",   r: 4.5, lw: 2 },
+    gpt3:       { name: "GPT-3",      shape: "square",   r: 4.5, lw: 2 },
+    gopher:     { name: "Gopher",     shape: "diamond",  r: 6,   lw: 2 },
+    chinchilla: { name: "Chinchilla", shape: "triangle", r: 6,   lw: 2 },
+    palm:       { name: "PaLM",       shape: "pentagon", r: 9,   lw: 3 },
+  };
+  const marker = (fam, x, y, parent, extra = {}) => {
+    const { shape, r } = FAM[fam];
+    const fill = `var(--${fam})`;
+    if (shape === "circle") return el("circle", { cx: x, cy: y, r, fill, ...extra }, parent);
+    const poly = (n, rot, rad) => Array.from({ length: n }, (_, i) => {
+      const a = rot + i * 2 * Math.PI / n;
+      return `${(x + rad * Math.cos(a)).toFixed(1)},${(y + rad * Math.sin(a)).toFixed(1)}`;
+    }).join(" ");
+    const pts = { square: poly(4, Math.PI / 4, r * 1.3), diamond: poly(4, 0, r * 1.15),
+                  triangle: poly(3, -Math.PI / 2, r * 1.2), pentagon: poly(5, -Math.PI / 2, r) }[shape];
+    return el("polygon", { points: pts, fill, ...extra }, parent);
+  };
+
+  // ---------- data: [log10 training FLOPs, %] per family, read off the figure ----------
+  const LAMDA_X = [18.62, 19.62, 20.07, 20.27, 20.73, 21.07, 21.4, 21.67, 22.0, 22.53, 23.28, 23.95];
+  const GPT3_TOP = [20.45, 20.85, 21.15, 21.45, 21.8, 22.2, 22.57, 23.75];
+  const GPT3_BOT = [20.33, 20.77, 21.12, 21.38, 21.66, 22.08, 22.36, 23.49];
+  const GOPHER_X = [20.82, 21.38, 22.08, 23.77];
+  const PALM_X = [22.57, 23.49, 24.42];
+  const zip = (xs, ys) => ys.map((y, i) => [xs[i], y]);
+  const TOP_ROW = { xr: [17.5, 24.8], yr: [-3, 52], yticks: [0, 10, 20, 30, 40, 50], xticks: [18, 20, 22, 24] };
+  const BOT_ROW = { xr: [19.4, 24.7], yr: [-4, 72], yticks: [0, 10, 20, 30, 40, 50, 60, 70], xticks: [20, 22, 24] };
+  const PANELS = [
+    { title: "(A) Mod. arithmetic", ylabel: "Accuracy (%)", random: 0, row: 0, series: {
+      lamda: zip(LAMDA_X, [0.3, 0.3, 0.2, 0.2, 0.4, 0.5, 0.5, 0.6, 0.8, 1.0, 7.7, 15.8]),
+      gpt3: zip(GPT3_TOP, [0.6, 0.6, 0.7, 0.8, 0.8, 1.7, 8.7, 33.1]) } },
+    { title: "(B) IPA transliterate", ylabel: "BLEU (%)", random: 0, row: 0, series: {
+      lamda: zip(LAMDA_X, [0.2, 0.2, 0.4, 0.5, 0.3, 0.5, 0.6, 0.7, 0.8, 1.0, 15.2, 22.5]),
+      gpt3: zip(GPT3_TOP, [0.5, 0.4, 0.4, 0.6, 2.5, 3.8, 4.8, 22.8]) } },
+    { title: "(C) Word unscramble", ylabel: "Exact match (%)", random: 0, row: 0, series: {
+      lamda: zip(LAMDA_X, [1.0, 0.2, 0.2, 0.2, 0.5, 1.0, 1.2, 1.5, 2.5, 2.0, 10.7, 12.3]) } },
+    { title: "(D) Persian QA", ylabel: "Exact match (%)", random: 25, row: 0, series: {
+      lamda: zip(LAMDA_X, [25.9, 22.8, 23.8, 25.2, 23.6, 23.9, 23.1, 25.0, 25.9, 24.0, 23.7, 23.6]),
+      gpt3: zip(GPT3_TOP, [25.0, 24.1, 24.2, 24.4, 25.9, 24.8, 24.2, 24.3]),
+      palm: zip([22.65, 23.6, 24.55], [24.5, 29.2, 45.2]) } },
+    { title: "(E) TruthfulQA", ylabel: "Accuracy (%)", random: 22.6, row: 1, series: {
+      gpt3: zip(GPT3_BOT.slice(4, 7).concat(23.49), [21.0, 20.5, 20.0, 20.5]),
+      gopher: zip(GOPHER_X.slice(1), [21.0, 23.3, 43.2]) } },
+    { title: "(F) Grounded mappings", ylabel: "Accuracy (%)", random: 16.7, row: 1, series: {
+      gpt3: zip([20.28, 20.73, 21.08, 21.33, 24.09], [11.0, 12.0, 8.0, 10.0, 45.0]) } },
+    { title: "(G) Multi-task NLU", ylabel: "Accuracy (%)", random: 25, row: 1, series: {
+      gpt3: zip([22.03, 22.32, 23.49], [25.0, 26.0, 43.9]),
+      gopher: zip(GOPHER_X, [25.8, 27.5, 29.5, 60.0]),
+      chinchilla: zip(GOPHER_X.slice(1), [25.0, 28.0, 67.6]) } },
+    { title: "(H) Word in context", ylabel: "Accuracy (%)", random: 50, row: 1, series: {
+      gpt3: zip(GPT3_BOT, [50.0, 50.2, 50.3, 49.4, 49.5, 50.4, 49.9, 48.6]),
+      chinchilla: zip([20.87, 21.4, 21.92, 23.79], [49.6, 50.0, 47.8, 50.4]),
+      palm: zip(PALM_X, [47.2, 48.5, 63.3]) } },
+  ];
+
+  // ---------- legend ----------
+  const legend = el("g");
+  document.fonts.ready.then(() => { // spacing uses measured text widths, so wait for NCM
+  let lx = 255;
+  for (const fam of Object.keys(FAM)) {
+    el("line", { x1: lx, x2: lx + 44, y1: 26, y2: 26, stroke: `var(--${fam})`, "stroke-width": FAM[fam].lw }, legend);
+    marker(fam, lx + 22, 26, legend);
+    const t = el("text", { class: "legend", x: lx + 54, y: 32 }, legend);
+    t.textContent = FAM[fam].name;
+    lx += 54 + t.getComputedTextLength() + 30;
+  }
+  el("line", { class: "random", x1: lx, x2: lx + 40, y1: 26, y2: 26 }, legend);
+  el("text", { class: "legend", x: lx + 52, y: 32 }, legend).textContent = "Random";
+  });
+
+  // ---------- panels ----------
+  const W = 210, ROWS = [{ top: 110, h: 205 }, { top: 440, h: 230 }];
+  const panels = [];
+  PANELS.forEach((p, k) => {
+    const c = k % 4, R = ROWS[p.row], ax = p.row ? BOT_ROW : TOP_ROW;
+    const x0 = 100 + c * 288, top = R.top, bot = top + R.h;
+    const sx = u => x0 + (u - ax.xr[0]) / (ax.xr[1] - ax.xr[0]) * W;
+    const sy = v => bot - (v - ax.yr[0]) / (ax.yr[1] - ax.yr[0]) * R.h;
+    const g = el("g");
+    el("text", { class: "title", x: x0 + W / 2, y: top - 16 }, g).textContent = p.title;
+    el("text", { class: "label", transform: `translate(${x0 - 50} ${top + R.h / 2}) rotate(-90)` }, g).textContent = p.ylabel;
+    el("path", { class: "axis", d: `M${x0},${top}V${bot}H${x0 + W}` }, g);
+    for (const v of ax.yticks) {
+      el("line", { class: "axis", x1: x0, x2: x0 + 4, y1: sy(v), y2: sy(v) }, g);
+      el("text", { class: "tick", x: x0 - 8, y: sy(v) + 6, "text-anchor": "end" }, g).textContent = v;
+    }
+    for (let d = Math.ceil(ax.xr[0]); d <= ax.xr[1]; d++) {
+      const major = ax.xticks.includes(d);
+      el("line", { class: "axis", x1: sx(d), x2: sx(d), y1: bot, y2: bot - (major ? 5 : 3) }, g);
+      if (major) {
+        const t = el("text", { class: "tick", x: sx(d), y: bot + 26, "text-anchor": "middle" }, g);
+        t.textContent = "10";
+        el("tspan", { dy: -8, "font-size": 13 }, t).textContent = d;
+      }
+    }
+    const random = el("line", { class: "random", x1: x0, x2: x0, y1: sy(p.random), y2: sy(p.random) }, g);
+    const cid = `sw${k}`;
+    const sweep = el("rect", { x: x0, y: top - 20, width: 0, height: R.h + 40 }, el("clipPath", { id: cid }, el("defs", {}, g)));
+    const lines = el("g", { "clip-path": `url(#${cid})` }, g);
+    const marks = [];
+    for (const fam in p.series) {
+      const pts = p.series[fam].map(([u, v]) => [sx(u), sy(v)]);
+      el("path", { d: pts.map((q, i) => (i ? "L" : "M") + q[0].toFixed(1) + "," + q[1].toFixed(1)).join(""),
+                   fill: "none", stroke: `var(--${fam})`, "stroke-width": FAM[fam].lw }, lines);
+      pts.forEach(([x, y]) => marks.push({ x, c: marker(fam, x, y, g, { class: "mk" }) }));
+    }
+    panels.push({ x0, random, sweep, lines, marks });
+  });
+  el("text", { class: "label", x: 100 + (3 * 288 + W) / 2, y: 745, "font-size": 21 }).textContent = "Model scale (training FLOPs)";
+
+  // ---------- animation ----------
+  // The random-chance baseline draws first; then every panel sweeps left to right
+  // across training FLOPs, so each curve sits flat on "random" until it suddenly
+  // takes off. Hold, fade, repeat. PERIOD is shared by every animated figure in
+  // the book, and the phase comes from the wall clock, so they all move in step.
+  const PERIOD = 10000, BASE = 700, SWEEP = 4400, FADE = 700;
+  const ease = t => t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2;
+  const clamp = t => Math.max(0, Math.min(1, t));
+  const frame = t => {
+    const b = ease(clamp(t / BASE));
+    const s = ease(clamp((t - BASE) / SWEEP));
+    const fade = clamp((t - PERIOD + FADE) / FADE);
+    for (const P of panels) {
+      P.random.setAttribute("x2", P.x0 + W * b);
+      P.sweep.setAttribute("width", s * (W + 12));
+      for (const m of P.marks) {
+        m.c.classList.toggle("on", s > 0 && m.x <= P.x0 + s * W + 2);
+        m.c.style.opacity = fade > 0 ? 1 - fade : "";
+      }
+      P.lines.style.opacity = P.random.style.opacity = 1 - fade;
+    }
+  };
+
+  if (location.hash === "#final" || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.body.classList.add("static");
+    frame(PERIOD - FADE);
+  } else {
+    // Loop only while on screen; scrolling back in rejoins the shared clock.
+    frame(0);
+    let raf = null, elapsed = 0;
+    const step = () => {
+      const prev = elapsed;
+      elapsed = Date.now() % PERIOD;
+      if (elapsed < prev) { // wrapped: hide markers instantly, not via their pop-in transition
+        document.body.classList.add("static");
+        frame(elapsed);
+        void document.body.offsetWidth;
+        document.body.classList.remove("static");
+      } else frame(elapsed);
+      raf = requestAnimationFrame(step);
+    };
+    new IntersectionObserver(entries => {
+      const visible = entries[entries.length - 1].isIntersecting;
+      cancelAnimationFrame(raf);
+      raf = null;
+      if (visible) { elapsed = PERIOD; raf = requestAnimationFrame(step); }
+    }, { threshold: 0.3 }).observe(svg);
+  }
+})();
+</script>
+</body>
+</html>
