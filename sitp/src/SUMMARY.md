@@ -3,7 +3,7 @@
 [Preface](./pref.md)
 [I. Elements of Networks](./1.md)
 [II. Neural Networks](./2.md)
-[III. Scaling Networks](./3.md)
+<!-- [III. Scaling Networks](./3.md) -->
 [Afterword](./after.md)
 [Appendix](./ap.md)
 [Bibliography](./ref.md)
