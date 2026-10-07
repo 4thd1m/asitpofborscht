@@ -5,9 +5,9 @@
 
 ## The Structure and Interpretation of The AI Curriculum
 
-todo
+<!-- todo
 - curriculum. nanochat. muon optimizer. muon kernels.
-- progressive closure, knuth's deliberate lying.
+- progressive closure, knuth's deliberate lying. -->
 
 
 <div class="dropcap">
