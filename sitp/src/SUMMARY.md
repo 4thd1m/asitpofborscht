@@ -7,3 +7,4 @@
 [Afterword](./after.md)
 [Appendix](./ap.md)
 [Bibliography](./ref.md)
+[Index](./ind.md)

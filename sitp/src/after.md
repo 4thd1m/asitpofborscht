@@ -9,7 +9,7 @@ state of the art neural net architecture and deep learning systems at the fronti
 Good luck on your journey.<br>
 I'll see you at work.
 
-## Afterword Table of Contents
+<!-- ## Afterword Table of Contents
 
 <div class="toc toc-root">
 
@@ -76,4 +76,4 @@ I'll see you at work.
 
 #### From `borscht.optim` to [`torch.optim`](https://docs.pytorch.org/docs/2.13/optim.html)
 
-#### From `borscht.dnn` to [`cuDNN`](https://docs.nvidia.com/deeplearning/cudnn/latest/)
+#### From `borscht.dnn` to [`cuDNN`](https://docs.nvidia.com/deeplearning/cudnn/latest/) -->
