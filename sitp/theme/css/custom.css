@@ -1087,6 +1087,24 @@ h2:has(+ p > small > a[href="#table-of-contents"]) {
   margin-bottom: 0;
 }
 
+/* Section nav under a heading: prev on the left, up (table of contents) centered,
+   next on the right. Each link is a flex item; the outer two take equal space so
+   the middle one sits on the true center whatever the label lengths. With no
+   prev section, an empty <span> holds the left slot. */
+small.secnav {
+  display: flex;
+  align-items: baseline;
+}
+small.secnav > * {
+  flex: 1;
+}
+small.secnav > :nth-child(2) {
+  flex: 0 0 auto;
+}
+small.secnav > :last-child {
+  text-align: right;
+}
+
 p:has(+ ul) {
   margin-bottom: 0;
 }
@@ -1618,6 +1636,18 @@ html.ayu img.neuron_linreg {
   content: url("../../assets/neuron_linreg_dark.png");
 }
 
+html.coal img.vocabindexmap,
+html.navy img.vocabindexmap,
+html.ayu img.vocabindexmap {
+  content: url("../../assets/vocabindexmap_dark.png");
+}
+
+html.coal img.onehot,
+html.navy img.onehot,
+html.ayu img.onehot {
+  content: url("../../assets/onehot_dark.png");
+}
+
 html.coal img.discriminant_decisionbad,
 html.navy img.discriminant_decisionbad,
 html.ayu img.discriminant_decisionbad {
@@ -2126,18 +2156,16 @@ html.ayu  .ref-item a[href*="wikipedia.org"]::before { filter: invert(1) brightn
 /* Where the quote comes from: the name of the section it sits in, or a chapter's
    own title for a bare chapter link. A quote that carries its own heading — a
    section, a numbered box — gets none, since that heading rides in the run
-   itself. It names a heading, so it is set like one — the same
-   real small caps and 0.02em tracking as `main h1`-`h4` above, in the body
-   face — and is held apart from the prose under it by color rather than by
-   size. (`text-transform: uppercase` would defeat this: `smcp` needs real
-   lowercase letters to lower, and pre-uppercased text comes through as plain
-   capitals.) */
+   itself. It names a heading, so it is set like one — the same real small caps,
+   0.02em tracking and ink as `main h1`-`h4` above, in the body face — and is
+   held apart from the prose under it by small caps and size. (`text-transform:
+   uppercase` would defeat this: `smcp` needs real lowercase letters to lower,
+   and pre-uppercased text comes through as plain capitals.) */
 .doc-preview-xref .xref-title {
   font-variant-caps: small-caps;
   font-variant: small-caps;
   letter-spacing: 0.02em;
   font-size: 1.25rem;
-  color: var(--nb-prompt);
   margin-bottom: 0.45rem;
 }
 /* A run too long for the card is capped rather than allowed to fill the screen
@@ -2198,7 +2226,7 @@ html.ayu  .ref-item a[href*="wikipedia.org"]::before { filter: invert(1) brightn
 /* A heading the reader has scrolled down onto. The card's quote runs on past
    the section it was opened for (see `blocks` in theme/js/custom.js), so these
    are the boundaries it crosses on the way, and they are set like the card's
-   own title one size down — same real small caps, same tracking, same color —
+   own title one size down — same real small caps, same tracking, same ink —
    so that a section met halfway down the card reads as the same kind of thing
    as the one named at the top of it. The rule above each is what a heading's
    whitespace does on the page: `h2, h3` carry a 2.5em block start in
@@ -2208,7 +2236,6 @@ html.ayu  .ref-item a[href*="wikipedia.org"]::before { filter: invert(1) brightn
   font-variant: small-caps;
   letter-spacing: 0.02em;
   font-size: 1.2rem;
-  color: var(--nb-prompt);
   margin: 0 0 0.45em;
   padding-top: 0.9em;
   border-top: 1px solid var(--nb-in-border);
