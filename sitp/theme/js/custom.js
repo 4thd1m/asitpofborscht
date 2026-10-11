@@ -647,7 +647,7 @@ document.addEventListener("DOMContentLoaded", function () {
       return li.matches(".toc ul ul > li") && !!li.querySelector(":scope > ul");
     }
     // How far a card will read out from the block it was opened for, in each
-    // direction. Not a measure of the card, which is a fixed 16em and scrolls: a
+    // direction. Not a measure of the card, which is capped at 28em and scrolls: a
     // measure of how much of a chapter is worth carrying into one, past which
     // the reader who is still going wants the chapter itself and the link is
     // right there.

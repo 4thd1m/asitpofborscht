@@ -2165,7 +2165,7 @@ html.ayu  .ref-item a[href*="wikipedia.org"]::before { filter: invert(1) brightn
 .doc-preview-xref .xref-body {
   --fade-top: 0px;
   --fade-bottom: 0px;
-  max-height: 16em;
+  max-height: min(28em, 60vh);
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: thin;
