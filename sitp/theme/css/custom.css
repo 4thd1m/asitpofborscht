@@ -696,6 +696,58 @@ html.coal, html.navy, html.ayu {
   background-clip: padding-box;
 }
 
+/* VS Code-style semantic colors for the In[] code: Light+ on the light themes,
+   Dark+ on the dark ones. mdBook's highlight.js 10 grammar only knows keywords,
+   strings, comments, numbers and one lumped `built_in`; the `.nb-*` token
+   classes (function, type/module, variable, control keyword, bracket depth)
+   are added after it runs by the Python pass in theme/js/custom.js. Colors go on
+   spans only, never on <code>'s background, so the `hl=` bands above survive. */
+.nb-in-code {
+  --nb-c-fg: #1f1f1f;
+  --nb-c-kw: #0000ff;       /* def, class, lambda, and/or/not, True/None */
+  --nb-c-ctrl: #af00db;     /* import, for, in, if, return, ... */
+  --nb-c-fn: #795e26;
+  --nb-c-var: #001080;
+  --nb-c-type: #267f99;     /* classes and modules */
+  --nb-c-str: #a31515;
+  --nb-c-num: #098658;
+  --nb-c-com: #008000;
+  --nb-c-br1: #0431fa;      /* bracket pair colorization, by nesting depth */
+  --nb-c-br2: #319331;
+  --nb-c-br3: #7b3814;
+}
+html.coal .nb-in-code, html.navy .nb-in-code, html.ayu .nb-in-code {
+  --nb-c-fg: #cccccc;
+  --nb-c-kw: #569cd6;
+  --nb-c-ctrl: #c586c0;
+  --nb-c-fn: #dcdcaa;
+  --nb-c-var: #9cdcfe;
+  --nb-c-type: #4ec9b0;
+  --nb-c-str: #ce9178;
+  --nb-c-num: #b5cea8;
+  --nb-c-com: #6a9955;
+  --nb-c-br1: #ffd700;
+  --nb-c-br2: #da70d6;
+  --nb-c-br3: #179fff;
+}
+.nb-in-code code.language-python { color: var(--nb-c-fg); }
+.nb-in-code code.language-python span { font-style: normal; font-weight: normal; }
+.nb-in-code .hljs-keyword, .nb-in-code .hljs-literal { color: var(--nb-c-kw); }
+.nb-in-code .hljs-string { color: var(--nb-c-str); }
+.nb-in-code .hljs-subst { color: var(--nb-c-fg); }
+.nb-in-code .hljs-number { color: var(--nb-c-num); }
+.nb-in-code .hljs-comment { color: var(--nb-c-com); }
+.nb-in-code .hljs-title, .nb-in-code .hljs-meta,
+.nb-in-code .hljs-built_in, .nb-in-code .nb-fn { color: var(--nb-c-fn); }
+.nb-in-code .hljs-params { color: inherit; }
+.nb-in-code .hljs-keyword.nb-ctrl { color: var(--nb-c-ctrl); }
+.nb-in-code .hljs-built_in.nb-type, .nb-in-code .nb-type { color: var(--nb-c-type); }
+.nb-in-code .nb-var { color: var(--nb-c-var); }
+.nb-in-code .nb-fbrace { color: var(--nb-c-kw); }
+.nb-in-code .nb-br1 { color: var(--nb-c-br1); }
+.nb-in-code .nb-br2 { color: var(--nb-c-br2); }
+.nb-in-code .nb-br3 { color: var(--nb-c-br3); }
+
 /* Output: no box, warm-brown monospace, aligned to the code column. */
 .nb-out {
   margin: 0.25rem 0 0.1rem;

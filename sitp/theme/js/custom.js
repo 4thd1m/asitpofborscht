@@ -4,6 +4,97 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
+// VS Code-style semantic coloring for notebook In[] cells (mdbook-nb). book.js
+// has already run highlight.js 10 synchronously, but its Python grammar leaves
+// identifiers and brackets as bare text and lumps `print` with `int` under
+// `built_in`. This pass refines those spans and wraps the bare text in
+// `.nb-fn` / `.nb-type` / `.nb-var` / `.nb-brN` classes, colored in custom.css.
+// It works from regexes, not a real type checker: a name is a module if it was
+// imported in the same cell, a type if it is a builtin class or CamelCase, a
+// function if `(` follows it, and otherwise a variable.
+document.addEventListener("DOMContentLoaded", function () {
+  var TYPES = new Set(["int", "float", "complex", "bool", "str", "bytes",
+    "bytearray", "list", "tuple", "dict", "set", "frozenset", "object", "type",
+    "range", "enumerate", "zip", "map", "filter", "reversed", "slice",
+    "property", "staticmethod", "classmethod", "super", "memoryview"]);
+  var CTRL = new Set(["import", "from", "as", "for", "while", "in", "if",
+    "elif", "else", "return", "break", "continue", "try", "except", "finally",
+    "raise", "with", "yield", "await", "pass", "assert", "del", "match", "case"]);
+  // Spans whose text is already fully classified; their contents are skipped.
+  var DONE = /\bhljs-(string|comment|number|keyword|literal|built_in|meta|title)\b/;
+  var OPEN = "([{", CLOSE = ")]}";
+
+  document.querySelectorAll(".nb-in-code code.language-python").forEach(function (code) {
+    var full = code.textContent;
+    var modules = new Set();
+    full.replace(/^[ \t]*import[ \t]+([\w.]+)(?:[ \t]+as[ \t]+(\w+))?/gm, function (_, mod, alias) {
+      modules.add(alias || mod.split(".")[0]);
+    });
+    full.replace(/^[ \t]*from[ \t]+[\w.]+[ \t]+import[ \t]+[\w.]+[ \t]+as[ \t]+(\w+)/gm, function (_, alias) {
+      modules.add(alias);
+    });
+
+    code.querySelectorAll(".hljs-keyword").forEach(function (s) {
+      if (CTRL.has(s.textContent)) s.classList.add("nb-ctrl");
+    });
+    code.querySelectorAll(".hljs-built_in").forEach(function (s) {
+      if (TYPES.has(s.textContent)) s.classList.add("nb-type");
+    });
+
+    // Collect text nodes first (with their offset into `full`), then rewrite.
+    var nodes = [], offset = 0;
+    var walker = document.createTreeWalker(code, NodeFilter.SHOW_TEXT);
+    for (var n = walker.nextNode(); n; n = walker.nextNode()) {
+      var skip = false, inSubst = false;
+      for (var p = n.parentElement; p && p !== code; p = p.parentElement) {
+        if (p.classList.contains("hljs-subst")) { inSubst = true; break; }
+        if (DONE.test(p.className)) { skip = true; break; }
+      }
+      if (!skip) nodes.push({ node: n, at: offset, subst: inSubst });
+      offset += n.nodeValue.length;
+    }
+
+    var depth = 0;
+    nodes.forEach(function (e) {
+      var text = e.node.nodeValue, frag = document.createDocumentFragment();
+      var re = /[A-Za-z_]\w*|[()[\]{}]/g, last = 0, m;
+      function wrap(s, cls) {
+        var span = document.createElement("span");
+        span.className = cls;
+        span.textContent = s;
+        frag.appendChild(span);
+      }
+      while ((m = re.exec(text))) {
+        var tok = m[0], at = e.at + m.index, cls;
+        frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+        last = m.index + tok.length;
+        if (OPEN.indexOf(tok) >= 0 || CLOSE.indexOf(tok) >= 0) {
+          // An f-string's own `{`/`}` delimit the substitution, not a pair.
+          var edge = e.subst && (at === e.at && tok === "{" ||
+            at === e.at + text.length - 1 && tok === "}");
+          if (edge) { wrap(tok, "nb-fbrace"); continue; }
+          if (CLOSE.indexOf(tok) >= 0) depth = Math.max(depth - 1, 0);
+          wrap(tok, "nb-br" + (depth % 3 + 1));
+          if (OPEN.indexOf(tok) >= 0) depth++;
+          continue;
+        }
+        if (/^\d/.test(tok)) { frag.appendChild(document.createTextNode(tok)); continue; }
+        var call = /^\s*\(/.test(full.slice(at + tok.length));
+        var attr = full[at - 1] === ".";
+        if (!attr && modules.has(tok)) cls = "nb-type";
+        else if (TYPES.has(tok) && !attr) cls = "nb-type";
+        else if (/^[A-Z][a-z]+(?:[A-Z][a-z0-9]*)*$/.test(tok)) cls = "nb-type";
+        else if (call) cls = "nb-fn";
+        else cls = "nb-var";
+        wrap(tok, cls);
+      }
+      if (last === 0) return;
+      frag.appendChild(document.createTextNode(text.slice(last)));
+      e.node.parentNode.replaceChild(frag, e.node);
+    });
+  });
+});
+
 // Custom "> [!QUESTION]" admonition. mdBook's built-in GFM-style alerts only
 // recognize NOTE/TIP/IMPORTANT/WARNING/CAUTION (hardcoded in the mdBook
 // binary, not configurable from book.toml), so an unrecognized tag like
