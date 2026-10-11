@@ -257,16 +257,11 @@ def render_cell(cell, max_traceback, filename=None, href=None, hl=None, where=""
     cls = "nb-cell nb-full" if "full-output" in tags else "nb-cell"
     parts = ['<div class="%s">' % cls]
     if filename:
-        # Ahead of the prompt in the DOM on purpose: .nb-prompt is absolutely
-        # positioned with no `top`, so it hangs at its static position — after
-        # this label, i.e. level with the top of the code box.
         label = html.escape(filename)
         if href:
             label = '<a href="%s">%s</a>' % (html.escape(href, quote=True), label)
         parts.append('<div class="nb-file">%s</div>' % label)
     if "remove-input" not in tags:
-        n = cell.get("execution_count")
-        parts.append(_prompt("nb-in-prompt", "In [%s]:" % ("" if n is None else n)))
         # Fenced code so mdBook's own highlighter styles it. Blank lines around
         # the fence are required for pulldown-cmark to parse it as Markdown
         # inside the surrounding raw-HTML block; the browser re-nests the
