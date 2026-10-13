@@ -12,6 +12,7 @@ classifiers = [
 ]
 dynamic = ["version"]
 dependencies = [
+    "pytest>=9.1.1",
     "torch>=2.13.0",
 ]
 [project.optional-dependencies]

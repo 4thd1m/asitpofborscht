@@ -5,7 +5,16 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
+    "borscht",
     "matplotlib>=3.11.2",
     "numpy>=2.5.4",
     "torch>=2.14.1",
+]
+
+[tool.uv.sources]
+borscht = { path = "../../borscht", editable = true }
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.4.0",
 ]
