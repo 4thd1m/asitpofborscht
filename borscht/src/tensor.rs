@@ -22,6 +22,9 @@ struct Tensor {
     storage: Vec<Dtype>
 }
 
+// c=a*b dispatcher -> tensor iterator -> cudacachingallocator -> quack/fa -> CuTeDSL (Layouts)
+// c.backward()
+
 // ---------------------------------------------------------------------------
 // op surface required by 3.1_fnn.ipynb and 3.5_gpt2.ipynb
 //
@@ -41,7 +44,19 @@ impl Tensor {
     }
     pub fn sum(&self) -> Self { todo!() }
     pub fn mul(&self, _rhs: &Self) -> Self { todo!() }
-    pub fn backward(&self) -> Self { todo!() }
+    pub fn backward(&self) -> Self {
+        // # topological order all of the children in the graph
+        // topo = []
+        // visited = set()
+        // def build_topo(v):
+        //     if v not in visited:
+        //         visited.add(v)
+        //         for child in v._prev:
+        //             build_topo(child)
+        //         topo.append(v)
+        // build_topo(self)
+        todo!()
+    }
 }
 
 #[cfg(test)]
