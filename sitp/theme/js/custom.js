@@ -1804,3 +1804,69 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+
+// KaTeX for mdbook-quiz. mdbook-katex renders chapter math at build time, but
+// a quiz is inlined after it (book.toml orders quiz `after = ["katex"]`) and
+// drawn client-side by React, so its `$…$` arrives as raw text. This loads
+// KaTeX + auto-render (same version as mdbook-katex's stylesheet) only on
+// pages with a quiz, then re-typesets each quiz whenever React redraws it:
+// next question, revealed answer, explanation. Write quiz math in TOML literal
+// strings ('''…''') so backslashes survive, and avoid markdown escapes like
+// `\{` (use \lbrace) since the quiz's markdown pass eats them.
+document.addEventListener("DOMContentLoaded", function () {
+  var quizzes = document.querySelectorAll(".quiz-placeholder");
+  if (!quizzes.length) return;
+
+  var CDN = "https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/";
+  // Mirror of katex_macros.txt, which only reaches the build-time renderer.
+  var MACROS = {
+    "\\cin": "\\htmlClass{okabe-blue}{#1}",
+    "\\cparam": "\\htmlClass{okabe-purple}{#1}",
+    "\\cfun": "\\htmlClass{okabe-green}{#1}",
+    "\\cout": "\\htmlClass{okabe-orange}{#1}",
+  };
+  var OPTIONS = {
+    delimiters: [
+      { left: "$$", right: "$$", display: true },
+      { left: "$", right: "$", display: false },
+    ],
+    macros: MACROS,
+    trust: true,
+    throwOnError: false,
+  };
+
+  function load(src) {
+    return new Promise(function (resolve, reject) {
+      var s = document.createElement("script");
+      s.src = CDN + src;
+      s.onload = resolve;
+      s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  }
+
+  load("katex.min.js")
+    .then(function () { return load("contrib/auto-render.min.js"); })
+    .then(function () {
+      quizzes.forEach(function (quiz) {
+        var pending = false;
+        var observer = new MutationObserver(function () {
+          if (pending) return;
+          pending = true;
+          requestAnimationFrame(function () {
+            pending = false;
+            // Our own edits would otherwise retrigger the observer.
+            observer.disconnect();
+            renderMathInElement(quiz, OPTIONS);
+            observe();
+          });
+        });
+        function observe() {
+          observer.observe(quiz, { childList: true, subtree: true, characterData: true });
+        }
+        renderMathInElement(quiz, OPTIONS);
+        observe();
+      });
+    })
+    .catch(function (e) { console.warn("quiz KaTeX failed to load", e); });
+});
