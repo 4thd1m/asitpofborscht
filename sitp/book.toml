@@ -10,8 +10,6 @@ title = "The Structure and Interpretation of Tensor Programs"
 [build]
 extra-watch-dirs = ["notebooks"]
 
-[preprocessor.aquascope]
-
 [preprocessor.katex]
 after = ["links"]
 # `trust` enables KaTeX's \html* extensions. Used for \htmlClass, which is the
@@ -20,6 +18,14 @@ after = ["links"]
 # See the .okabe-* classes in theme/css/custom.css.
 trust = true
 macros = "katex_macros.txt"
+
+[preprocessor.aquascope]
+
+[preprocessor.quiz]
+# Inline quizzes only after katex has run, or katex would render the `$…$` in a
+# quiz's JSON data attribute and corrupt it. Quiz math is instead rendered in
+# the browser (see the KaTeX auto-render block in theme/js/custom.js).
+after = ["katex"]
 
 [output.html]
 additional-css = ["theme/css/custom.css", "theme/css/lean.css"]
@@ -42,8 +48,6 @@ nb-dir = "notebooks"
 # Filename labels link here (directive path appended), so a reader can open the
 # executed notebook itself.
 src-url = "https://github.com/j4orz/asitpofborscht/blob/master/sitp/notebooks/"
-
-[preprocessor.quiz]
 
 # Links the successive (vaguer -> preciser) definitions of one concept into a
 # ladder the reader can step through. Tag each occurrence with the same key —
