@@ -1,6 +1,7 @@
 [Front Matter](./front.md)
 [Dedication](./dedi.md)
-[Preface](./pref.md)
+[Syllabus](./syl.md)
+<!-- [Preface](./pref.md) -->
 [I. Elements of Networks](./1.md)
 [II. Neural Networks](./2.md)
 [III. Scaling Networks]()
