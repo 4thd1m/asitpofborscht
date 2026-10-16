@@ -1,0 +1,15 @@
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = "What three properties determines a valid probability distribution?"
+prompt.distractors = [
+  "Every outcome must have equal probability.",
+]
+answer.answer = [
+  "Every probability is non-negative.",
+  "The probabilities over the sample space sum to 1.",
+  "The probability of a union of disjoint events is the sum of their probabilities.",
+]
+context = """
+Immutable means "not mutable", or not changeable.
+"""
+id = "dd398045-02ed-444a-9f95-f69697971ac3"

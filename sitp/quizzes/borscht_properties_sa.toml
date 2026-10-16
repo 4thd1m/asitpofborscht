@@ -1,0 +1,52 @@
+[[questions]]
+type = "ShortAnswer"
+prompt.prompt = """
+What is the data-oriented type of a vector that lives in n-dimensional space over the real numbers?
+"""
+answer.answer = "borscht.Tensor"
+answer.alternatives = ["Tensor", "tensor", "borscht.tensor"]
+context = '''
+Rather than a vanilla Python list, a vector $\mathbf{x} \in \R^n$ is stored as a
+`borscht.Tensor` whose `.shape` is `(n,)`.
+'''
+id = "a53786b6-fcfa-4aeb-9f17-4b64468afafe"
+
+[[questions]]
+type = "ShortAnswer"
+prompt.prompt = """
+What is the functional-oriented type of a vector that lives in n-dimensional space over the real numbers?
+"""
+answer.answer = "{0, ..., n-1} -> R"
+answer.alternatives = ["[n] -> R", "N -> R", "{0,...,n-1} -> R", "[n] → ℝ", "N → ℝ"]
+context = '''
+A vector is a function from indices to values, $\mathbf{x} : \lbrace 0, \dots, n-1 \rbrace \to \R$,
+just as a distribution is a function $p : \N \to [0,1]$.
+'''
+id = "080856a0-d111-4f30-8ce1-fb18055c1bd6"
+
+[[questions]]
+type = "ShortAnswer"
+prompt.prompt = '''
+Given that we know some vector $x$ has support in $\R^{d1}$,
+what is the property of `borscht.Tensor` to return it's approximating number system?
+'''
+answer.answer = ".dtype"
+answer.alternatives = ["dtype", "x.dtype", "borscht.Tensor.dtype"]
+context = '''
+`.dtype` reports the floating point format (e.g. `float32`) used to *approximately*
+represent the reals $\R$.
+'''
+id = "4b6ec477-4b95-4486-bd0a-051712e65f54"
+
+[[questions]]
+type = "ShortAnswer"
+prompt.prompt = '''
+Given that we know some matrix $x$ has support in $\R^{d1 \times d2}$,
+what is the property of `borscht.Tensor` to return the dimensions of that space?
+'''
+answer.answer = ".shape"
+answer.alternatives = ["shape", "x.shape", "borscht.Tensor.shape"]
+context = '''
+`.shape` returns one entry per dimension, so for $x \in \R^{d1 \times d2}$ it is `(d1, d2)`.
+'''
+id = "69cff64f-6f8a-4282-8e1f-8b0de549fd7e"
