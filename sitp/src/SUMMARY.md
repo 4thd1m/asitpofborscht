@@ -1,6 +1,7 @@
 [Front Matter](./front.md)
 [Dedication](./dedi.md)
-[Syllabus](./syl.md)
+[Syllabus Core (Starfleet Academy)](./syl.md)
+[Syllabus Advanced (Singularity Systems)](./syl2.md)
 <!-- [Preface](./pref.md) -->
 [I. Elements of Networks](./1.md)
 [II. Neural Networks](./2.md)
