@@ -3,7 +3,7 @@
 
 <div class="dropcap">
 
-Welcome to Singularity Systems, the online course for a self-guided study
+Welcome to Starfleet Academy, the online course for a self-guided study
 which provides an accelerated introduction to deep learning networks and deep learning systems.
 
 </div>
@@ -100,14 +100,9 @@ learning probes, observable, signals, channels for feedback
 interactive learning
 -> no longer producing code (hieroglyphics)
 
+[concept inventory (Hestenes et al., 1992)](https://gwern.net/doc/science/physics/1992-hestenes.pdf)
+
 Software 2.0, following [(Krishnamurthi and Fisler 2020)](https://cs.brown.edu/people/sk/Publications/Papers/Published/kf-data-centric/)
-
-Books as Software, following [](https://cs.brown.edu/people/sk/Memos/Books-as-Software/)
-
-
-foobar
-- "cure cancer"
-- "go to mars"
 
 - Lectures
 - Readings (with concreteness fading following [(Fyfe et al.,)](https://eric.ed.gov/?id=EJ1036777)) (with interactive quizzes following [(Crichton and Krishnamurthi 2024](https://willcrichton.net/#ck:profiling-learning)) with SITP
