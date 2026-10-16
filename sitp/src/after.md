@@ -1,3 +1,7 @@
+![](./assets/pref.jpeg)
+
+<small>*Presenting an early outline of <span class="smallcaps">SITP</span> at [Toronto School of Foundation Modeling Season 1 (2025)](https://tsfm.ca/schedule)*</small>
+
 # Afterword
 
 <div class="dropcap">
