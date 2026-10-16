@@ -102,6 +102,10 @@ interactive learning
 
 Software 2.0, following [(Krishnamurthi and Fisler 2020)](https://cs.brown.edu/people/sk/Publications/Papers/Published/kf-data-centric/)
 
+Books as Software, following [](https://cs.brown.edu/people/sk/Memos/Books-as-Software/)
+
+
+foobar
 - "cure cancer"
 - "go to mars"
 
