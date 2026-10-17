@@ -1,1 +1,1 @@
-# Syllabus (Singularity Systems)
+# Syllabus
