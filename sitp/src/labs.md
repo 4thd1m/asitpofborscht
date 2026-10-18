@@ -2,29 +2,24 @@
 
 <div class="toc">
 
-- [Lab 1. Elements of Tensors](#lab-1)
-- [Lab 2. Tensors and Kernels](#lab-2)
-- Lab 3. Unstable Kernels
-- Lab 4. Matrix Decompositions
-- Lab 5. Static Representations
-- Lab 6. Dynamic Representations
-- Lab 7. Hyperparameter Alchemy
-- [Lab 8. Automatic Differentiation]()
-- [Lab 9. Tensor Cores]()
-- Lab 10. Assistants
-- Lab 11. Reasoners
-- Lab 12. Tensor Compilers
+- [Lab 1. ✍️ Elements of Tensors](#lab-1)
+- Lab 2. ✍️ Solvers with Matrix Decompositions
+- Lab 3. 🤖 Unstable Kernels
+- Lab 4. ✍️ Embedding Projector
+- Lab 5. 🤖 Autoresearch `nanogpt`
+- [Lab 6. ✍️ Vision Language Action Model]()
+- [Lab 7. ✍️ Accelerating VLA with Tiles and Layouts]()
 
 </div>
 
 ## Lab 1. Elements of Tensors
 
-## Lab 2. Tensors and Kernels
+## Lab 2. Solvers with Matrix Decompositions
 
-## Lab 5. Multi-Layer Perceptron
+## Lab 3. Matmuls with Tiles and Layouts
 
-## Lab 6. Generative Pretrained Transformer
+## Lab 4. Profiling Nanogpt
 
-## Lab 8. Automatic Differentiation
+## Lab 7. Vision Language Action Model
 
-## Lab 9. Tensor Cores
+## Lab 8. Custom Backwards
