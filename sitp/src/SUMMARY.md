@@ -1,7 +1,8 @@
 [Front Matter](./front.md)
 [Dedication](./dedi.md)
-[Syllabus Core](./syl.md)
-[Syllabus Advanced](./syl2.md)
+[Syllabus](./syl.md)
+[Lectures](./lec.md)
+[Labs](./labs.md)
 <!-- [Preface](./pref.md) -->
 [I. Elements of Networks](./1.md)
 [II. Neural Networks](./2.md)
