@@ -1,4 +1,3 @@
-![](./assets/pref.jpeg)
 # Lectures
 
 > Any sufficiently advanced technology is indistinguishable from magic. <span class="sidenote-number"></span><span class="sidenote front-note">*Thanks, Arthur C. Clarke (1917-2008)*</span><br>
