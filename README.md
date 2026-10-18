@@ -1,4 +1,4 @@
-![](https://sitp.ai/assets/flammarion_borscht.png)
+![](https://sitp.ai/assets/sitp_banner.png)
 
 # a sitpofborscht
 
