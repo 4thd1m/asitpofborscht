@@ -12,6 +12,7 @@ class Tensor:
       #  out_storage = gemv(self.storage, other.storage)
       #  out_tensor = Tensor()
       #  return gemv(self.storage, other.storage)
+      return NotImplementedError("")
 
     def gemm(self, other):
        return NotImplementedError("")

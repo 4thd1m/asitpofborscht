@@ -1,8 +1,5 @@
 use pyo3::prelude::*;
-mod nn;
-mod optim;
-mod linalg;
-mod tensor;
+mod engine;
 mod kernels;
 
 /// A Python module implemented in Rust.
