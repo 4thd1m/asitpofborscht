@@ -7,12 +7,12 @@ from .borscht import *
 # mod kernels (level 0) quack,fa(CuTe)
 # mod tensor (level -1) CuTe?
 
-from . import nn           # level 2
-from . import optim        # level 2
-from . import linalg       # level 1
-from .tensor import Tensor # level 0
-from . import engine       # level 0
-from . import kernels      # level -1
+from . import nn
+from . import optim
+from . import linalg
+from .tensor import Tensor # lab 3
+from . import engine # lab 7
+from . import kernels # lab 4
 
 
 __doc__ = borscht.__doc__

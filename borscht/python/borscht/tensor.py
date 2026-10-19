@@ -1,4 +1,4 @@
-class Tensor:
+class Tensor: # lab 3: Tensor++ and Matrix Decompositions
     def __init__(self, shape, dtype):
       self.shape = 3
       self.dtype = 8
@@ -16,3 +16,11 @@ class Tensor:
 
     def gemm(self, other):
        return NotImplementedError("")
+
+class Dispatcher():
+   def __init__(self):
+    return
+
+class TensorIterator():
+   def __init__(self):
+      return
