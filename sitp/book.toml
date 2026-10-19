@@ -31,7 +31,7 @@ after = ["katex"]
 additional-css = ["theme/css/custom.css", "theme/css/lean.css"]
 additional-js = ["theme/js/highlight-lean.min.js", "theme/js/custom.js", "theme/js/lean.js"]
 default-theme = "light"
-preferred-dark-theme = "ayu"
+preferred-dark-theme = "navy"
 
 # Embeds committed, already-executed Jupyter notebooks as static In[]/Out[]
 # cells via `{{#nb file.ipynb}}` / `{{#nb file.ipynb:tag}}`. Replaced the old

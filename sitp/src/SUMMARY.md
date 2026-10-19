@@ -9,4 +9,5 @@
 [Afterword](./after.md)
 [Appendix](./ap.md)
 [Bibliography](./ref.md)
+[Labs](./lab.md)
 [Index](./ind.md)
