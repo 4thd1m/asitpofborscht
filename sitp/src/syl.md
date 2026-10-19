@@ -57,7 +57,7 @@ Optional Reading
 - Read [📖 Chapter 2.1 Virtualizing Shapes with Strides](./1.md#21-virtualizing-shapes-with-strides)
 - Read [📖 Chapter 2.2 Accelerating Basic Linear Algebra on CPUs](./1.md#22-accelerating-basic-linear-algebra-on-cpus)
 - Read [📖 Chapter 2.3 From Performance Primitives to Linear Solvers](./1.md#23-from-performance-primitives-to-linear-solvers)
-- Write [✍️ Lab 3. Solvers with Matrix Decompositions]()
+- Write [✍️ Lab 3. Tensor++ and Matrix Decompositions](./lab.md#lab-3-tensor-and-matrix-decompositions)
 
 Optional Reading
 - Read [A Set of Level 3 Basic Linear Algebra Subprograms (Dongarra et al., 1990)](https://dl.acm.org/doi/pdf/10.1145/77626.79170)
@@ -70,7 +70,7 @@ Optional Reading
 
 - Watch [▶️ Lecture 4]()
 - Read [📖 Chapter 2.4 Accelerating Matrix Multiplication on GPUs](./1.md#24-accelerating-matrix-multiplication-on-gpus)
-- Write [✍️ Lab 4. Accelerating Matmul with Tiles and Layouts]()
+- Write [✍️ Lab 4. Accelerating Matmul with Tiles and Layouts](./lab.md#lab-4-accelerating-matmul-with-tiles-and-layouts)
 
 ## Week 5. King - Man + Queen = 👸
 
@@ -90,8 +90,9 @@ Optional Reading
 ## Week 7. AutoNabla (≧∇≦)
 
 - Watch [▶️ Lecture 7]()
-- Read [📖 Chapter 4.1 Gradient Based Optimization with Automatic Differentiation](./2.md#41-gradient-based-optimization-with-automatic-differentation)
-- Write [✍️ Lab 7. Accelerating VLA with Tiles and Layouts]()
+- Read [📖 Chapter 4.1 Automatic Differentiation](./2.md#41-automatic-differentation)
+- Read [📖 Chapter 4.2 Gradient Based Optimization](./2.md#42-gradient-based-optimization)
+- Write [✍️ Lab 7. Custom Autograd Backwards for VLA](./lab.md#lab-7-custom-autograd-backwards-for-vla)
 
 ## Week 8. Don't Think 🤔
 

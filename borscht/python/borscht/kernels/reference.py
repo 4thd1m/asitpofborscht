@@ -1,4 +1,4 @@
-def axpy(x: bytes, b: bytes) -> bytes:
+def axpy(x: bytes, b: bytes) -> bytes: # lab 4
   raise NotImplementedError("")
 
 def gemv(x: bytes, b: bytes) -> bytes:
