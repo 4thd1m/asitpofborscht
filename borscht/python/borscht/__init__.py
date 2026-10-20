@@ -1,19 +1,13 @@
 from .borscht import *
 
-# mod nn (level 2)
-# mod optim (level 2)
-# mod linalg (level 1)
-
-# mod kernels (level 0) quack,fa(CuTe)
-# mod tensor (level -1) CuTe?
-
 from . import nn
 from . import optim
 from . import linalg
+from . import compile      # lab 10  DEEP EMBEDDING via SOURCE TRANSFORMATION (DYNAMO)
 from .tensor import Tensor # lab 3
-from . import func
-from . import engine # lab 7
-from . import kernels # lab 4
+from . import func         # lab 7
+from . import engine       # lab 7   SHALLOW EMBEDDING via OPERATOR OVERLOADING
+from . import kernels      # lab 4
 
 
 __doc__ = borscht.__doc__
