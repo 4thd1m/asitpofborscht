@@ -12,7 +12,7 @@
 <!-- <small>*`with`[`🇱 Lean`](https://www.python.org/)`,`[`🐍 Python`](https://www.python.org/)`,`[`🦀 Rust`](https://rust-lang.org/)`, and`[`🦀🚀 CUDA Rust`](https://nvlabs.github.io/cuda-oxide/)`programming languages!`*</small><br/> -->
 
 
-*A new breadth of computer science for the world of software 2.0*<br/>
+*A new breadth of computer science and data science for the world of artificial intelligence*<br/>
 *Made with 🖤🪻 by [Jeffrey Zhang](https://x.com/j4orz), [University of Waterloo (BMath)](https://academic-calendar-archive.uwaterloo.ca/undergraduate-studies/2022-2023/group/u-Waterloo-Faculty-of-Mathematics.html)*
 <br/>
 *Made possible by [Lambda Labs Research Grant](https://lambda.ai/research)*<br/>
