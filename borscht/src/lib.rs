@@ -1,4 +1,5 @@
 use pyo3::prelude::*;
+mod tensor;
 mod engine;
 mod kernels;
 
