@@ -11,6 +11,7 @@ from . import nn
 from . import optim
 from . import linalg
 from .tensor import Tensor # lab 3
+from . import func
 from . import engine # lab 7
 from . import kernels # lab 4
 

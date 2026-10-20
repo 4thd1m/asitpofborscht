@@ -1,4 +1,9 @@
-def axpy(x: bytes, b: bytes) -> bytes: # lab 4
+# ch2.1 strides
+# ch2.2 accelerating gemms with cpu
+# ch2.3 linear solvers
+# lab 3: Tensor++ and Matrix Decompositions
+
+def axpy(x: bytes, b: bytes) -> bytes:
   raise NotImplementedError("")
 
 def gemv(x: bytes, b: bytes) -> bytes:

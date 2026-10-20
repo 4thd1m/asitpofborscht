@@ -1,4 +1,8 @@
-class Tensor: # lab 3: Tensor++ and Matrix Decompositions
+# scaffold ch2.1 strides
+# scaffold ch2.2 accelerating gemms with cpu
+# scaffold ch2.3 linear solvers
+# extend lab 3: Tensor++ and Matrix Decompositions
+class Tensor:
     def __init__(self, shape, dtype):
       self.shape = 3
       self.dtype = 8
@@ -17,10 +21,5 @@ class Tensor: # lab 3: Tensor++ and Matrix Decompositions
     def gemm(self, other):
        return NotImplementedError("")
 
-class Dispatcher():
-   def __init__(self):
-    return
-
-class TensorIterator():
-   def __init__(self):
-      return
+    def backwards(self):
+       return NotImplementedError("")
