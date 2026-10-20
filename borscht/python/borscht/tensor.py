@@ -1,14 +1,27 @@
+# scaffold ch2.2 accelerating gemms with cpu
+# extend lab 3: Tensor++ and Matrix Decompositions
+class Dispatcher():
+   def __init__(self):
+      return
+
+class TensorIterator():
+   def __init__(self):
+      return
+
 class Tensor:
     def __init__(self, shape, dtype):
         # scaffold ch2.1 strides
-        # scaffold ch2.2 accelerating gemms with cpu
-        # scaffold ch2.3 linear solvers
         # extend lab 3: Tensor++ and Matrix Decompositions
         self.shape = ()
-        self.stride = ()
+        self.stride = ()           # TODO: CuTe Layouts????
         self.dtype = True
         self.storage = bytearray() # 🎨 DESIGN CHOICE ALIASING/BINDING: MUTABLE vs IMMUTABLE)
                                    # in borscht/torch views share storage (MUTATION)
+
+                                   # TODO: no Storage concept, direct Tensor to Tensor aliasing????
+
+
+
 
     # 🎨 DESIGN CHOICE (DEEP vs SHALLOW embedding)
     # in borscht/pt1/hips-autograd, AD is implemented via operator overloading and tape
@@ -26,6 +39,13 @@ class Tensor:
     def gemm(self, other):
        return NotImplementedError("")
 
+
+
+
+
+
+
+
     # scaffold ch.4.1 automatic difefrentiation
     # extend Lab 7: Custom Autograd Backwards for VLA
     def backwards(self):
@@ -35,15 +55,3 @@ class Tensor:
         # see: Uwe's `dco` vs `dcr`
         self.grad = Tensor()
         return NotImplementedError("")
-
-# scaffold ch2.1 strides
-# scaffold ch2.2 accelerating gemms with cpu
-# scaffold ch2.3 linear solvers
-# extend lab 3: Tensor++ and Matrix Decompositions
-class Dispatcher():
-   def __init__(self):
-      return
-
-class TensorIterator():
-   def __init__(self):
-      return
