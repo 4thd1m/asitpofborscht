@@ -12,6 +12,14 @@
   pointer-events: none;
 }
 
+/* Blackboard bold (\mathbb, \R, \N, ...) in STIX Two's outlined double-struck
+   rather than KaTeX_AMS; see "SITP Double Struck" in theme/fonts/fonts.css.
+   katex.min.css loads after this file, hence the `span` to outrank its
+   `.katex .mathbb`. KaTeX_AMS stays as the fallback for anything unmapped. */
+.katex span.mathbb {
+  font-family: "SITP Double Struck", KaTeX_AMS;
+}
+
 /* .katex-display>.katex {
   text-align: left !important;
 } */

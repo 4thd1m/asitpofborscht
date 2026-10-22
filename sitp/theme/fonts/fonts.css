@@ -218,6 +218,26 @@
   font-display: swap;
 }
 
+/* ===== SITP Double Struck (blackboard bold) =====
+   STIX Two Math's double-struck letters, outlined throughout like the ℝ of a
+   Times-set calculus text, in place of KaTeX_AMS's msbm where only the stem is
+   doubled. The cmap is remapped so plain ASCII A-Z/a-z/0-9 draw the
+   double-struck glyphs, which is what lets KaTeX's `.mathbb` spans (holding a
+   literal "R") use it directly; see preprocessors/gen-double-struck-font.py
+   and the `.mathbb` rule in custom.css. Renamed from STIX per its OFL
+   ("STIX Two OFL.txt").
+
+   size-adjust lifts STIX's 0.657em cap height to Computer Modern's 0.683em so
+   ℝ stands as tall as the R of the surrounding text. */
+@font-face {
+  font-family: "SITP Double Struck";
+  font-style: normal;
+  font-weight: 400;
+  src: url("SITPDoubleStruck-Regular.woff2") format("woff2");
+  size-adjust: 104%;
+  font-display: swap;
+}
+
 /* ===== Goudy Initialen drop caps =====
    Frederic W. Goudy's floriated initials (Lanston Monotype No. 296, c. 1918):
    a roman capital on a vine-and-leaf ground inside a ruled square, after the
