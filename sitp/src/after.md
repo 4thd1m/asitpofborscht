@@ -37,7 +37,7 @@ I'll see you at work.
 
 <div class="dropcap">
 
-Borscht is an array programming language with support for automatic differentiation and gpu acceleration following PyTorch1's eager mode outlined in [(Paszke et al., 2019)](https://arxiv.org/pdf/1912.01703) as well as compilation and distributed training following PyTorch2's graph mode outlined in [(Ansel et al., 2024)](https://dl.acm.org/doi/pdf/10.1145/3620665.3640366).
+Borscht is an array programming language with support for automatic differentiation and gpu acceleration following PyTorch1's eager mode outlined in [(Paszke et al. 2019)](https://arxiv.org/pdf/1912.01703) as well as compilation and distributed training following PyTorch2's graph mode outlined in [(Ansel et al. 2024)](https://dl.acm.org/doi/pdf/10.1145/3620665.3640366).
 
 </div>
 
