@@ -1265,6 +1265,60 @@ p:has(+ ul) {
   }
 }
 
+/* A plotting cell's outputs hang in the left gutter, mirroring the code's
+   overhang into the right one, so the row reads plot | math | code. Same pair
+   as above: prose or math, then a notebook cell. The whole `.nb-outputs` stack
+   moves, so an Out[] printed beside the plot travels with it, in order. There
+   the grid is exactly the measure wide, so with the `.dual` as containing block
+   the stack reuses `.defnote`'s gutter geometry as-is, and `top: 0` sits it
+   level with the row instead of down at its static position under the code.
+
+   For the `.dual` to be the containing block the cell has to stop being one.
+   The gutter leaves no room left of an output for its Out[] prompt, so the
+   prompt sits above it, as below the breakpoint. Each output shrinks to its
+   content and hugs the measure like `.defnote-embed`, keeping its own lines
+   left-aligned, and wraps rather than scrolling sideways in the narrow column.
+   The 0.3rem top margin is every gutter note's; the restack sweep in custom.js
+   adds its pushes on top of it, which keeps the stack and a nearby note off
+   each other. Stacked, the outputs stay under their code. */
+@media (width > 1000px) {
+  .dual:not(.dual-margin):has(> *:not(pre, .nb-cell) + .nb-cell:last-child .nb-out-img) {
+    position: relative;
+  }
+
+  .dual:not(.dual-margin) > *:not(pre, .nb-cell) + .nb-cell:last-child:has(.nb-out-img) {
+    position: static;
+  }
+
+  .dual:not(.dual-margin) > *:not(pre, .nb-cell) + .nb-cell:last-child .nb-outputs:has(.nb-out-img) {
+    position: absolute;
+    top: 0;
+    left: calc(-1 * var(--margin-note-offset));
+    width: 35%;
+    margin-top: 0.3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .dual:not(.dual-margin) > *:not(pre, .nb-cell) + .nb-cell:last-child .nb-outputs:has(.nb-out-img) > .nb-out {
+    max-width: 100%;
+  }
+
+  .dual:not(.dual-margin) > *:not(pre, .nb-cell) + .nb-cell:last-child .nb-outputs:has(.nb-out-img) .nb-prompt {
+    position: static;
+    display: block;
+    width: auto;
+    text-align: left;
+    padding: 0 0 0.15rem 0;
+  }
+
+  .dual:not(.dual-margin) > *:not(pre, .nb-cell) + .nb-cell:last-child .nb-outputs:has(.nb-out-img) .nb-out-text {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+}
+
 .doc-preview-xref .xref-body .dual > :is(pre, .nb-cell):last-child {
   margin-right: 0 !important;
 }
