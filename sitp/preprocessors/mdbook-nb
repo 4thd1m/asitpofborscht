@@ -276,10 +276,17 @@ def render_cell(cell, max_traceback, filename=None, href=None, hl=None, where=""
                     html.escape(spec, quote=True), html.escape(style, quote=True))
         parts.append('<div class="nb-in-code"%s>\n\n```python\n%s\n```\n\n</div>' % (attrs, code))
     if "remove-output" not in tags:
+        outs = []
         for out in cell.get("outputs", []):
             frag = render_output(out, max_traceback)
             if frag:
-                parts.append(frag)
+                outs.append(frag)
+        if outs:
+            # One wrapper so the outputs can move as a stack: a math/code `.dual`
+            # hangs a plotting cell's outputs in the left gutter (custom.css).
+            parts.append('<div class="nb-outputs">')
+            parts.extend(outs)
+            parts.append("</div>")
     parts.append("</div>")
     return "\n".join(parts)
 
