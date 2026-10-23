@@ -37,7 +37,7 @@ Optional Reading
 - Read [An Example of Statistical Investigation of the Text Eugene
 Onegin Concerning the Connection of Samples in Chains (Markov 1913)](https://alpha60.de/research/markov/DavidLink_AnExampleOfStatistical_MarkovTrans_2007.pdf)
 - Read [A Mathematical Theory of Communication (Shannon 1948)](https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf)
-- Read [A Proposal for the Dartmouth Summer Research Project on Artificial Intelligence (McCarthy et al., 1955)](http://jmc.stanford.edu/articles/dartmouth/dartmouth.pdf)
+- Read [A Proposal for the Dartmouth Summer Research Project on Artificial Intelligence (McCarthy et al. 1955)](http://jmc.stanford.edu/articles/dartmouth/dartmouth.pdf)
 
 ## Week 2. I Perceive You 👀
 
@@ -60,11 +60,11 @@ Optional Reading
 - Write [✍️ Lab 3. Tensor++ and Matrix Decompositions](./lab.md#lab-3-tensor-and-matrix-decompositions)
 
 Optional Reading
-- Read [A Set of Level 3 Basic Linear Algebra Subprograms (Dongarra et al., 1990)](https://dl.acm.org/doi/pdf/10.1145/77626.79170)
-- Read [Anatomy of High-Performance Matrix Multiplication (Goto and van de Geijn 2008)](https://www.cs.utexas.edu/~flame/pubs/GotoTOMS_revision.pdf)
+- Read [A Set of Level 3 Basic Linear Algebra Subprograms (Dongarra et al. 1990)](https://dl.acm.org/doi/pdf/10.1145/77626.79170)
+- Read [Anatomy of High-Performance Matrix Multiplication (Goto and van de Geijn 2008a)](https://www.cs.utexas.edu/~flame/pubs/GotoTOMS_revision.pdf)
 - Read [The History of Fortran I, II, and III (Backus 1978)](https://softwarepreservation.computerhistory.org/FORTRAN/paper/p165-backus.pdf)
 - Read [A History of MATLAB (Moler and Little 2020)](https://dl.acm.org/doi/pdf/10.1145/3386331)
-- Read [Array Programming with NumPy (Harris et al., 2020)](https://www.nature.com/articles/s41586-020-2649-2)
+- Read [Array Programming with NumPy (Harris et al. 2020)](https://www.nature.com/articles/s41586-020-2649-2)
 
 ## Week 4. GPUs Go Brrr 🏎️
 

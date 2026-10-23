@@ -19,7 +19,7 @@ as it's goal is to serve a similar role for software 2.0 as
 Written by Harold Abelson and Gerald Sussman with Julie Sussman, <span class="smallcaps">SICP</span> took learners on a whimsical whirlwind tour throughout the essence of computation
 starting with the elements of programs with functional programming, higher order functions, data abstraction, streams,
 and ending with programming their own programming languages with virtual interpreters and compilers to register machines.
-Although perhaps somewhat more inconspicuous, there also exists [*The Structure and Interpretation of Classical Mechanics*](https://groups.csail.mit.edu/mac/users/gjs/6946/sicm-html/book.html) <span class="smallcaps">(SICM)</span> (Sussman et al., 2001) and [*Functional Differential Geometry*](https://library.oapen.org/handle/20.500.12657/26057) <span class="smallcaps">(FDM)</span> (Sussman et al., 2013) which cover classical and quantum mechanics of physics respectively.
+Although perhaps somewhat more inconspicuous, there also exists [*The Structure and Interpretation of Classical Mechanics*](https://groups.csail.mit.edu/mac/users/gjs/6946/sicm-html/book.html) <span class="smallcaps">(SICM)</span> (Sussman and Wisdom 2001) and [*Functional Differential Geometry*](https://library.oapen.org/handle/20.500.12657/26057) <span class="smallcaps">(FDG)</span> (Sussman and Wisdom 2013) which cover classical and quantum mechanics of physics respectively.
 We'd like to imagine if Sussman and other Schemers had more energy, the next text would perhaps not cover thermodynamics,
 but rather deep learning.
 We thus present [*The Structure and Interpretation of Tensor Programs*](./front.md) (<span class="smallcaps">SITP</span>).
@@ -48,7 +48,7 @@ and I wasn't sure how to bridge myself to industrial deep learning systems like 
 <div class="defnote defnote-embed"><blockquote class="twitter-tweet" data-width="300"><p lang="en" dir="ltr">I think taste is conveyed in things like<br>- what problems we choose<br>- what RQs we ask<br>- how we approach answering those RQs<br>- how we convey our findings<br>and more. ↵</p>&mdash; Shriram Krishnamurthi (primary: Bluesky) (@ShriramKMurthi) <a href="https://x.com/ShriramKMurthi/status/2053097307055300627?ref_src=twsrc%5Etfw">May 9, 2026</a></blockquote></div>
 
 Shortly after, I decided to take the plunge and started drinking from the firehose of deep learning canon:
-Hastie et al.,, Murphy, Goodfellow et al.,, you name it.
+Hastie et al., Murphy, Goodfellow et al., you name it.
 The one thought I could not get out of my head was *where is the <span class="smallcaps">SICP</span> for software 2.0*?
 While I found two excellent resources on building your own torch-like autograd by Tianqi Chen's 10-414 Carnegie Mellon and Alexander Rush's CS5781 at Cornell,
 I personally would have enjoyed a more unified resource that took me from math, to deep learning, to deep learning systems in a *single unbroken sequence of thought*,
@@ -57,8 +57,8 @@ and perhaps others would feel similarly. That is the genesis story for this book
 <div class="defnote defnote-embed"><blockquote class="twitter-tweet" data-conversation="none" data-width="300"><p lang="en" dir="ltr">We really could use a SICP for DL. We have the Little Lisper for DL (<a href="https://t.co/su31hFJeUe">https://t.co/su31hFJeUe</a>) but that&#39;s a different type of book entirely.</p>&mdash; Shriram Krishnamurthi (primary: Bluesky) (@ShriramKMurthi) <a href="https://x.com/ShriramKMurthi/status/2051049923617968353?ref_src=twsrc%5Etfw">May 3, 2026</a></blockquote></div>
 
 Pur shortly, <span class="smallcaps">SITP</span>, is a function that maps learners from the product type of
-an introductory computer science book such as [<span class="smallcaps">DCIC</span> (Fisler et al., 2025)](https://dcic-world.org/) and an introductory systems programming book such as [<span class="smallcaps">TRPL</span> (Klabnick et al., 2026)]() with experimental modifications (Crichton et al.,)
-to a frontier model report such as the frontier technical report of [The Llama 3 Herd of Models (Meta 2024)](https://arxiv.org/abs/2407.21783) and frontier systems book such as Hugging Face's [Ultra Scale Book (Tazi et al., 2025)](https://huggingface.co/spaces/nanotron/ultrascale-playbook).
+an introductory computer science book such as [<span class="smallcaps">DCIC</span> (Fisler et al. 2025)](https://dcic-world.org/) and an introductory systems programming book such as [<span class="smallcaps">TRPL</span> (Klabnik et al. 2026)](https://doc.rust-lang.org/book/) with experimental modifications [(Crichton et al. 2023)](https://rust-book.cs.brown.edu/experiment-intro.html)
+to a frontier model report such as the frontier technical report of [The Llama 3 Herd of Models (Meta 2024)](https://arxiv.org/abs/2407.21783) and frontier systems book such as Hugging Face's [Ultra Scale Book (Tazi et al. 2025)](https://huggingface.co/spaces/nanotron/ultrascale-playbook).
 
 $$
 \begin{aligned}
@@ -73,13 +73,13 @@ where the function $\text{HTDP}(\cdot)$ is the systematic and principled design 
 In the same way that we use non-intersective adjectives in the distinctions of fake gun vs gun, non-tight language model vs language model, there is also the teaching professor vs professor<span class="sidenote-number"></span><span class="sidenote">*"I think of the position as having “twice” the teaching and “half” the research as an assistant professor (of course individual approaches can and do differ!)." -- [@JoePolitz, September 5, 2024](https://x.com/JoePolitz/status/1831797256871375332)*</span>.
 That is, <span class="smallcaps">SITP</span> applies the form of <span class="smallcaps">HTDP</span> developed by such teaching professors to the substance of deep learning. What then, is such a form?
 
-The [How to Design Programs](https://htdp.org/) <span class="smallcaps">HTDP</span> text  <span class="sidenote-number"></span><span class="sidenote">*This was the actual text used at my alma matter. Thank you to [Professor Ragde](https://cs.uwaterloo.ca/~plragde/flaneries/) for bringing it over, and to [Professor Vasiga](https://cs.uwaterloo.ca/~tmjvasig/) for bringing it to life.*</span> was also seminal in that it was the first computer science text to treat curriculum design *as* scientific research and an engineering problem [(Felleisen et al., 2004)](https://cs.brown.edu/people/sk/Publications/Papers/Published/fffk-htdp-vs-sicp-journal/), building *off* the shoulders of the giant that <span class="smallcaps">SICP</span> (Abelseon et al., 1985) is.
+The [How to Design Programs](https://htdp.org/) <span class="smallcaps">HTDP</span> text  <span class="sidenote-number"></span><span class="sidenote">*This was the actual text used at my alma matter. Thank you to [Professor Ragde](https://cs.uwaterloo.ca/~plragde/flaneries/) for bringing it over, and to [Professor Vasiga](https://cs.uwaterloo.ca/~tmjvasig/) for bringing it to life.*</span> was also seminal in that it was the first computer science text to treat curriculum design *as* scientific research and an engineering problem [(Felleisen et al. 2004)](https://cs.brown.edu/people/sk/Publications/Papers/Published/fffk-htdp-vs-sicp-journal/), building *off* the shoulders of the giant that <span class="smallcaps">SICP</span> (Abelson and Sussman 1996) is.
 
 >  First, the book discusses explicitly how programs should be constructed. Second, to tame the complexity of programming, it defines a series of teaching languages based on Scheme that represent five distinct knowledge levels through which students pass during their first course. The levels correspond to the complexity of data definitions that the program design guidelines use. Third, the book uses exercises to reinforce the explicit guidelines on program design; few, if any, exercises are designed for the sake of domain knowledge. Finally, the book uses more accessible forms of domain knowledge than <span class="smallcaps">SICP</span>. Because of this shift in emphasis, we gave our book the title How to Design Programs (<span class="smallcaps">HTDP</span>).
 
-*the concreteness fading [(Fyfe et al., 2014)](https://eric.ed.gov/?id=EJ1036777) of declarative concepts in mathematics [(Hestenes et al., 1992)](https://gwern.net/doc/science/physics/1992-hestenes.pdf)* by presenting  notions just in time by defining them by their context, and iteratively refining (progressive disclosure) such concepts from the informal to formal ending in HtDP-style Intermezzos<span class="sidenote-number"></span><span class="sidenote">*Which present the formal syntax and semantics of a language.*</span>.
+*the concreteness fading [(Fyfe et al. 2014)](https://eric.ed.gov/?id=EJ1036777) of declarative concepts in mathematics [(Hestenes et al. 1992)](https://gwern.net/doc/science/physics/1992-hestenes.pdf)* by presenting  notions just in time by defining them by their context, and iteratively refining (progressive disclosure) such concepts from the informal to formal ending in HtDP-style Intermezzos<span class="sidenote-number"></span><span class="sidenote">*Which present the formal syntax and semantics of a language.*</span>.
 
-that *transfer [(Bransford, Shwartz 1999)](https://journals.sagepub.com/doi/abs/10.3102/0091732x024001061) to procedural skills of computation* [(Price et al., 2021)](https://www.lifescied.org/doi/pdf/10.1187/cbe.20-12-0276) in the context of deep learning. Such transfer is possible because the computational discipline of deep learning has lots of structural similarity with mathematics, and is why we have books such as [Deisenroth et al., (2020)](https://mml-book.github.io/), and subsequent courses follwing such book.
+that *transfer [(Bransford and Schwartz 1999)](https://journals.sagepub.com/doi/abs/10.3102/0091732x024001061) to procedural skills of computation* [(Price et al. 2021)](https://www.lifescied.org/doi/pdf/10.1187/cbe.20-12-0276) in the context of deep learning. Such transfer is possible because the computational discipline of deep learning has lots of structural similarity with mathematics, and is why we have books such as [Deisenroth et al. (2020)](https://mml-book.github.io/), and subsequent courses follwing such book.
 
 <iframe height="400px" width="100%" loading="lazy" src="https://www.youtube.com/embed/5c0BvOlR5gs?si=WpT3iVQbpjMMB6Ku"  title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
@@ -87,16 +87,16 @@ When it comes to the discipline of deep learning, there are two large jumps of *
 The first one is that a learner must learn the mathematics *for* machine learning, while although elementary, has a non-trivial breadth of probability theory, linear algebra, differential calculus, and if the learner has the time,
 to deepen such concepts with information theory, measure theory, and analysis.
 One of the primary texts that seeks to provide a unified treatment in such mathematics *for* machine learning
-is [(Deisenroth et al., 2020)](https://mml-book.github.io/)<span class="sidenote-number"></span><span class="sidenote">*"For instance, [Princeton's](https://www.cs.princeton.edu/courses/archive/spring21/cos302/) [COS302](https://www.youtube.com/playlist?list=PLCO4cUaBLHFEHo42HVIVWaSOvbAiH30uc) offered by Ryan Adams, which turns out to be the lab that created created [HIPS/autograd](https://github.com/hips/autograd) (led by Matthew Johnson, Dougal Maclaurin, and David Duvenaud), which inspired PyTorch! See [https://soumith.ch/blog/2023-12-17-pytorch-design-origins.md.html#/origins](https://soumith.ch/blog/2023-12-17-pytorch-design-origins.md.html#/origins)*</span>., which provides an excellent two part structure
+is [(Deisenroth et al. 2020)](https://mml-book.github.io/)<span class="sidenote-number"></span><span class="sidenote">*"For instance, [Princeton's](https://www.cs.princeton.edu/courses/archive/spring21/cos302/) [COS302](https://www.youtube.com/playlist?list=PLCO4cUaBLHFEHo42HVIVWaSOvbAiH30uc) offered by Ryan Adams, which turns out to be the lab that created created [HIPS/autograd](https://github.com/hips/autograd) (led by Matthew Johnson, Dougal Maclaurin, and David Duvenaud), which inspired PyTorch! See [https://soumith.ch/blog/2023-12-17-pytorch-design-origins.md.html#/origins](https://soumith.ch/blog/2023-12-17-pytorch-design-origins.md.html#/origins)*</span>., which provides an excellent two part structure
 with the foundational mathematics, followed by the applied.
 The core motivation is that any gaps in mathematics can be filled, preparing a learner for a text like
-such [(Goodfellow et al., 2017)]() to deepen their understanding in neural network architecture.
+such [(Goodfellow et al. 2016)](https://www.deeplearningbook.org/) to deepen their understanding in neural network architecture.
 
-More recently, with the advent of scaling large language models [(Kaplan et al., 2020)](https://arxiv.org/pdf/2001.08361)
+More recently, with the advent of scaling large language models [(Kaplan et al. 2020)](https://arxiv.org/pdf/2001.08361)
 and the slowing of Moore's Law [(Moore 1965)](http://cva.stanford.edu/classes/cs99s/papers/moore-crammingmorecomponents.pdf),
 another jump of *transfer* the learner must make is how to efficiently map their architecture and optimizers to massively parallel hardware at the level of a single graphics processing unit (<span class="smallcaps">GPU</span>) and multi <span class="smallcaps">GPU</span>.
-The two canonical texts for this are [(Hwu et al., 2026)]() for systems, and more recently
-[(Tazi et al., 2025)](https://huggingface.co/spaces/nanotron/ultrascale-playbook)<span class="sidenote-number"></span><span class="sidenote">*"Alternatively, JAX Scaling Book (link.)*</span>.
+The two canonical texts for this are [(Hwu et al. 2022)](https://www.educate.elsevier.com/book/details/9780323912310) for systems, and more recently
+[(Tazi et al. 2025)](https://huggingface.co/spaces/nanotron/ultrascale-playbook)<span class="sidenote-number"></span><span class="sidenote">*"Alternatively, JAX Scaling Book (link.)*</span>.
 
 As someone opening up PMPP, it was extremely frustrating to read the appendix that briefly covered the process of deep learning
 without a proper foundation in the modeling of architecture and optimizers.
@@ -120,7 +120,7 @@ unity/intertwined mathematics and programming
 - Computation (Systems): Rooflines of processors $\text{max}(compute, communication)$
 
 
-For instance, the traditional ordering one might approach to the discipline of deep learning is to *synthetically deduce* definitions starting from what is considered to be elementary (i.e your choice of foundations which you pay lip service to as a working mathematician: ZFC or DTT). The benefits of this approach is that the *transfer [(Bransford, Shwartz 1999)](https://journals.sagepub.com/doi/abs/10.3102/0091732x024001061)* of concepts is maximized — afterall, studying mathematics is simply generic programming. While this is no doubt the standard for most mathematical texts, this is what was special about the textbook How to Design Programs, an explicitly curriculum designed and engineered for transfer [(Felleisen, Findler, Flatt, Krishnamurthi 2004)](https://cs.brown.edu/people/sk/Publications/Papers/Published/fffk-htdp-vs-sicp-journal/) expositing programming based off the principles of set theory (whatever that may mean).
+For instance, the traditional ordering one might approach to the discipline of deep learning is to *synthetically deduce* definitions starting from what is considered to be elementary (i.e your choice of foundations which you pay lip service to as a working mathematician: ZFC or DTT). The benefits of this approach is that the *transfer [(Bransford and Schwartz 1999)](https://journals.sagepub.com/doi/abs/10.3102/0091732x024001061)* of concepts is maximized — afterall, studying mathematics is simply generic programming. While this is no doubt the standard for most mathematical texts, this is what was special about the textbook How to Design Programs, an explicitly curriculum designed and engineered for transfer [(Felleisen et al. 2004)](https://cs.brown.edu/people/sk/Publications/Papers/Published/fffk-htdp-vs-sicp-journal/) expositing programming based off the principles of set theory (whatever that may mean).
 
 all in the context of autoregressive language modeling, culminating in the transformers architecture
 
@@ -184,7 +184,7 @@ foo
   moore's law, hardware software codesign, researchers writing kernels
   chapter 1 and 3 seem quite different than chapters 2 and 4, but they are really unified in this era of deep learning systems
   for research engineers, chapters 2 and 4 might be "the how", but they are really "the what" because performance matters.
-- position paper by [Krishnamurthi and Fisler (2020)]() which has been operationalized at the school-level with [Bootstrap:Data Science](https://www.bootstrapworld.org/materials/data-science/) and at the collegiate-level with [Data Centric Introduction to Computing](https://dcic-world.org/)
+- position paper by [Krishnamurthi and Fisler (2020)](https://cs.brown.edu/people/sk/Publications/Papers/Published/kf-data-centric/) which has been operationalized at the school-level with [Bootstrap:Data Science](https://www.bootstrapworld.org/materials/data-science/) and at the collegiate-level with [Data Centric Introduction to Computing](https://dcic-world.org/)
 - explicit instruction, and a process for performing procedural skills
 - The difference between design and research seems to be a question of new versus good. Design doesn't have to be new, but it has to be good. Research doesn't have to be good, but it has to be new.
 - problem of exposition (3B1B quote)
@@ -475,25 +475,25 @@ learning probes, observable, signals, channels for feedback
 interactive learning
 -> no longer producing code (hieroglyphics)
 
-[concept inventory (Hestenes et al., 1992)](https://gwern.net/doc/science/physics/1992-hestenes.pdf)
+[concept inventory (Hestenes et al. 1992)](https://gwern.net/doc/science/physics/1992-hestenes.pdf)
 
 Software 2.0, following [(Krishnamurthi and Fisler 2020)](https://cs.brown.edu/people/sk/Publications/Papers/Published/kf-data-centric/)
 
 - Lectures
-- Readings (with concreteness fading following [(Fyfe et al.,)](https://eric.ed.gov/?id=EJ1036777)) (with interactive quizzes following [(Crichton and Krishnamurthi 2024](https://willcrichton.net/#ck:profiling-learning)) with SITP
+- Readings (with concreteness fading following [(Fyfe et al. 2014)](https://eric.ed.gov/?id=EJ1036777)) (with interactive quizzes following [(Crichton and Krishnamurthi 2024)](https://willcrichton.net/#ck:profiling-learning)) with SITP
   - Declarative concepts
     - property based testing
     - tradeoff between x and y
     - system design/system invariants
-- Labs (with Agentic Coding following [(Fisler et al., 2026)](https://cs.brown.edu/people/sk/Publications/Papers/Published/fkl-teach-nov-agentic-ai-era/))
+- Labs (with Agentic Coding following [(Fisler et al. 2026)](https://cs.brown.edu/people/sk/Publications/Papers/Published/fkl-teach-nov-agentic-ai-era/))
   - Procedural skills
     - write a good design doc/test suite
     - code review
 - centered around the Teaching Array Programming Language <img class="icon" src="./assets/borscht.png" alt="" style="aspect-ratio: 736 / 510;
-">[`borscht.Tensor`]() with language levels following the form of [(Felleisen et al., 2004)](https://cs.brown.edu/people/sk/Publications/Papers/Published/fffk-htdp-vs-sicp-journal/paper.pdf) but with the substance of <span class="smallcaps">NETSOR</span> and <span class="smallcaps">NETSOR$\top$</span> from [(Yang 2021)](https://arxiv.org/pdf/1910.12478) and [(Yang 2020)](https://arxiv.org/abs/2006.14548) as well as PTX, CUDA, CuTeDSL, Cutile.
+">[`borscht.Tensor`]() with language levels following the form of [(Felleisen et al. 2004)](https://cs.brown.edu/people/sk/Publications/Papers/Published/fffk-htdp-vs-sicp-journal/paper.pdf) but with the substance of <span class="smallcaps">NETSOR</span> and <span class="smallcaps">NETSOR$\top$</span> from [(Yang 2019)](https://arxiv.org/pdf/1910.12478) and [(Yang 2020)](https://arxiv.org/abs/2006.14548) as well as PTX, CUDA, CuTeDSL, Cutile.
 
 Future Directions
-- integrate a trimmed version of such curricula with highschool mathematics, following [(Felleisen, Krishnamurthi 2009)](https://cs.brown.edu/people/sk/Publications/Papers/Published/fk-why-cs-doesnt-matter/) and [Guzdial](https://computinged.wordpress.com/2019/10/04/computing-education-research-issues-in-task-specific-programming-precalculus-tsp-part-5-of-5/)
+- integrate a trimmed version of such curricula with highschool mathematics, following [(Felleisen and Krishnamurthi 2009)](https://cs.brown.edu/people/sk/Publications/Papers/Published/fk-why-cs-doesnt-matter/) and [Guzdial](https://computinged.wordpress.com/2019/10/04/computing-education-research-issues-in-task-specific-programming-precalculus-tsp-part-5-of-5/)
 - collect profile data to suggest pedagogic interventions to imporove learner outcomes
 - actually encapsulate language levels like racket-like `#lang` with julia metaprogramming
 - map out the semantic space of language features with a Standard Model of APLs following [(Krishnamurthi 2008)](https://dl.acm.org/doi/pdf/10.1145/1480828.1480846)
