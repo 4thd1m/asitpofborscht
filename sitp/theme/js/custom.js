@@ -268,14 +268,9 @@ document.addEventListener("DOMContentLoaded", function () {
 // sweep for the same reason a .lecnote does — and gains the same pairing for
 // free: one written right after a term's defnote ties with it on `top` and the
 // stable sort drops it directly under that label.
-//
-// A plotting cell's outputs, hung in the gutter beside its code (a math/code
-// `.dual`, see custom.css), join for the same reason. Every `.dual` cell's
-// outputs are collected, since whether they hang depends on the cell and the
-// breakpoint; each pass keeps only those the stylesheet has taken out of flow.
 document.addEventListener("DOMContentLoaded", function () {
   const defnotes = Array.prototype.slice.call(
-    document.querySelectorAll(".defnote, .lecnote, .cppnote, .dual .nb-outputs")
+    document.querySelectorAll(".defnote, .lecnote, .cppnote")
   );
   if (defnotes.length === 0) return;
 
@@ -287,10 +282,9 @@ document.addEventListener("DOMContentLoaded", function () {
       n.style.marginTop = "";
     });
 
-    // Skip hidden notes (mobile collapses .defnote to display:none) and
-    // outputs left in flow.
+    // Skip hidden notes (mobile collapses .defnote to display:none).
     const visible = defnotes.filter(function (n) {
-      return n.offsetParent !== null && getComputedStyle(n).position === "absolute";
+      return n.offsetParent !== null;
     });
 
     // Snapshot each note's natural geometry before mutating any margins, so
