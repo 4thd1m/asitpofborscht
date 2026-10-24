@@ -26,6 +26,8 @@ Peter, Marc, Deisenroth Aldo, Faisal Cheng, and Soon Ong. 2020. Mathematics for 
 
 Stewart, James, Daniel Clegg, and Saleem Watson. 2020. Calculus: Early Transcendentals. 9th ed. Cengage Learning.
 
+Stepanov, Alexander A, and Daniel E Rose. 2014. From Mathematics to Generic Programming. Addison-Wesley Professional.
+
 Tao, Terence. 2022. Analysis I Fourth Edition. Springer Nature. <https://terrytao.wordpress.com/books/analysis-i/>
 
 <!-- Ansel, Jason, Edward Yang, Horace He, Natalia Gimelshein, Animesh Jain, Michael Voznesensky, Bin Bao, et al. 2024. “PyTorch 2: Faster Machine Learning Through Dynamic Python Bytecode Transformation and Graph Compilation.” In *Proceedings of the 29th ACM International Conference on Architectural Support for Programming Languages and Operating Systems (ASPLOS ’24)*. ACM. <https://doi.org/10.1145/3620665.3640366>. -->

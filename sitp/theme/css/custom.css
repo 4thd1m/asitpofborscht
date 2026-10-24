@@ -1265,44 +1265,39 @@ p:has(+ ul) {
   }
 }
 
-/* A plotting cell's outputs hang in the left gutter, mirroring the code's
-   overhang into the right one, so the row reads plot | math | code. Same pair
-   as above: prose or math, then a notebook cell. The whole `.nb-outputs` stack
-   moves, so an Out[] printed beside the plot travels with it, in order. There
-   the grid is exactly the measure wide, so with the `.dual` as containing block
-   the stack reuses `.defnote`'s gutter geometry as-is, and `top: 0` sits it
-   level with the row instead of down at its static position under the code.
+/* A plotting cell gives the right gutter to its outputs instead, so the row
+   reads math | code | plot. Same pair as above: prose or math, then a notebook
+   cell. The math narrows to a fifth of the measure and the code takes the other
+   four fifths without overhanging, while the whole `.nb-outputs` stack (the
+   plot and any Out[] printed beside it, in order) hangs where a `.sidenote`
+   would. The grid is exactly the measure wide, so with the `.dual` as
+   containing block the stack reuses `.sidenote`'s gutter geometry as-is, and
+   `top: 0` sits it level with the row instead of down at its static position
+   under the code.
 
    For the `.dual` to be the containing block the cell has to stop being one.
    The gutter leaves no room left of an output for its Out[] prompt, so the
-   prompt sits above it, as below the breakpoint. Each output shrinks to its
-   content and hugs the measure like `.defnote-embed`, keeping its own lines
-   left-aligned, and wraps rather than scrolling sideways in the narrow column.
-   The 0.3rem top margin is every gutter note's; the restack sweep in custom.js
-   adds its pushes on top of it, which keeps the stack and a nearby note off
-   each other. Stacked, the outputs stay under their code. */
+   prompt sits above it, as below the breakpoint, and output wraps rather than
+   scrolling sideways in the narrow column. Nothing keeps the stack clear of a
+   sidenote hung from just above the row. Stacked, the outputs stay under their
+   code. */
 @media (width > 1000px) {
   .dual:not(.dual-margin):has(> *:not(pre, .nb-cell) + .nb-cell:last-child .nb-out-img) {
     position: relative;
+    grid-template-columns: 1fr 4fr;
   }
 
   .dual:not(.dual-margin) > *:not(pre, .nb-cell) + .nb-cell:last-child:has(.nb-out-img) {
     position: static;
+    margin-right: 0 !important;
   }
 
   .dual:not(.dual-margin) > *:not(pre, .nb-cell) + .nb-cell:last-child .nb-outputs:has(.nb-out-img) {
     position: absolute;
     top: 0;
-    left: calc(-1 * var(--margin-note-offset));
+    right: calc(-1 * var(--margin-note-offset));
     width: 35%;
     margin-top: 0.3rem;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-  }
-
-  .dual:not(.dual-margin) > *:not(pre, .nb-cell) + .nb-cell:last-child .nb-outputs:has(.nb-out-img) > .nb-out {
-    max-width: 100%;
   }
 
   .dual:not(.dual-margin) > *:not(pre, .nb-cell) + .nb-cell:last-child .nb-outputs:has(.nb-out-img) .nb-prompt {
