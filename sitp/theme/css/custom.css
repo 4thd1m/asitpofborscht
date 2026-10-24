@@ -1147,6 +1147,27 @@ h2:has(+ p > small > a[href="#table-of-contents"]) {
   margin-bottom: 0;
 }
 
+/* Chapter banner: an engraving and its caption set directly above the chapter's
+   h2, so the caption and heading hug the plate instead of floating below it.
+   The img goes block so the inline baseline gap under it doesn't pad the caption.
+   :has() can't nest, so the image paragraph's lookahead is two chained :has(). */
+p:has(> img):has(+ p > small:only-child):has(+ p + h2) {
+  margin-bottom: 0;
+}
+
+p:has(> img):has(+ p > small:only-child):has(+ p + h2) > img {
+  display: block;
+}
+
+p:has(> img) + p:has(> small:only-child):has(+ h2) {
+  margin-top: 0.25em;
+  margin-bottom: 0;
+}
+
+p:has(> img) + p:has(> small:only-child) + h2 {
+  margin-top: 0.5em;
+}
+
 /* Section nav under a heading: prev on the left, up (table of contents) centered,
    next on the right. Each link is a flex item; the outer two take equal space so
    the middle one sits on the true center whatever the label lengths. With no
