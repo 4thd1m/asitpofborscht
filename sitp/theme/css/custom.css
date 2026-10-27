@@ -1586,6 +1586,21 @@ main h1 .katex, main h2 .katex, main h3 .katex, main h4 .katex {
   letter-spacing: normal;
 }
 
+/* A sidenote hung off a heading floats out of it but still inherits its type,
+   so it came out in bold small caps. Set it back to an ordinary note. */
+main :is(h1, h2, h3, h4, h5, h6) :is(.sidenote, .sidenote-number) {
+  font-variant-caps: normal;
+  font-variant: normal;
+  letter-spacing: normal;
+  font-weight: normal;
+}
+
+/* mdBook's sidebar outline clones each heading's contents wholesale (toc.js
+   `filterHeader`), so a heading's sidenote would ride along into the nav. */
+.header-in-summary :is(.sidenote, .sidenote-number) {
+  display: none;
+}
+
 /* Acronyms set like the headings above. The heading rule only lowers *lowercase*
    letters into small caps, so an already-uppercase acronym would come through
    unchanged; `all-small-caps` adds `c2sc` on top of `smcp` (NCM ships both) so
