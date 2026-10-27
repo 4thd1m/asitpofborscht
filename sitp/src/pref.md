@@ -9,6 +9,16 @@
 - curriculum. nanochat. muon optimizer. muon kernels.
 - progressive closure, knuth's deliberate lying. -->
 
+a textbook that weaves four threads
+whose curriculum's basis that spans four dimensions
+
+- Alyssa P. Hacker ()
+- Louis Reasoner (Intermezzo)
+- Eva Lu Ator (Deep Learning Systems)
+- Ben Bitdiddle (High Performance Kernels)
+
+book as software.
+(modular).
 
 <div class="dropcap">
 
@@ -18,7 +28,7 @@ as it's goal is to serve a similar role for software 2.0 as
 (<span class="smallcaps">SICP</span>) did for software 1.0.
 Written by Harold Abelson and Gerald Sussman with Julie Sussman, <span class="smallcaps">SICP</span> took learners on a whimsical whirlwind tour throughout the essence of computation
 starting with the elements of programs with functional programming, higher order functions, data abstraction, streams,
-and ending with programming their own programming languages with virtual interpreters and compilers to register machines.
+and ending with programming their own programming languages with virtual interpreters and compilers to register machines<span class="sidenote-number"></span><span class="sidenote">*"All great artists steal. This format was in turn inspired by [Algorithms+Data Structures = Programs (Wirth)](https://www.cl72.org/110dataAlgo/Algorithms%20%20%20Data%20Structures%20=%20Programs%20%5BWirth%201976-02%5D.pdf)*</span>.
 Although perhaps somewhat more inconspicuous, there also exists [*The Structure and Interpretation of Classical Mechanics*](https://groups.csail.mit.edu/mac/users/gjs/6946/sicm-html/book.html) <span class="smallcaps">(SICM)</span> (Sussman and Wisdom 2001) and [*Functional Differential Geometry*](https://library.oapen.org/handle/20.500.12657/26057) <span class="smallcaps">(FDG)</span> (Sussman and Wisdom 2013) which cover classical and quantum mechanics of physics respectively.
 We'd like to imagine if Sussman and other Schemers had more energy, the next text would perhaps not cover thermodynamics,
 but rather deep learning.

@@ -20,6 +20,8 @@ Jurafsky, Daniel, and James H. Martin. 2026. *Speech and Language Processing*. 3
 
 Lay, David C, Steven R Lay, and Judith Mcdonald. 2011. Linear Algebra and Its Applications. Pearson Education Limited.
 
+New, Stephen. 2022. MATH 145 Algebra. Course notes, University of Waterloo https://www.math.uwaterloo.ca/~snew/PMATH333/math145notes.pdf.
+
 Newstead, Clive. 2026. *An Infinite Descent into Pure Mathematics*. Last modified June 25, 2026. <https://infinitedescent.org/>.
 
 Peter, Marc, Deisenroth Aldo, Faisal Cheng, and Soon Ong. 2020. Mathematics for Machine Learning. <https://mml-book.github.io/book/mml-book.pdf>
