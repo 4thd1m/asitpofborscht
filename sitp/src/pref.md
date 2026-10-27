@@ -12,9 +12,9 @@
 a textbook that weaves four threads
 whose curriculum's basis that spans four dimensions
 
-- Alyssa P. Hacker ()
-- Louis Reasoner (Intermezzo)
-- Eva Lu Ator (Deep Learning Systems)
+- Alyssa P. Hacker () bridge to architecture and optimization research
+- Louis Reasoner (Intermezzo) bridge to pl and pl research for agents (liquid types)
+- Eva Lu Ator (Deep Learning Systems) bridge to deep learning systems
 - Ben Bitdiddle (High Performance Kernels)
 
 book as software.

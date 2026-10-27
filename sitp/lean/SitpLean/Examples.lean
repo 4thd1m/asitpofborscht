@@ -1,5 +1,8 @@
+import Mathlib
+
 #check 9 + 10
-#eval 9 + 10
+#check (3 : ℚ) / 4
+#check Real.pi
 #eval String.append "Hello, " "World!"
 
 #check 9 + 10
