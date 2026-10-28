@@ -25,20 +25,41 @@ echo "netlify: sitp toolchain is $TOOLCHAIN"
 # its toolchain, so none of this depends on a default being configured.
 rustup toolchain install --no-self-update stable
 
+# The Rust tools install under TOOLS_HOME, which the sitp-tool-cache plugin
+# (netlify/plugins/) restores before this command and saves after a successful
+# build. cargo install skips a crate already installed at the same version and
+# source, so a cached tool is not recompiled. It does not check rustc, though,
+# and aquascope_front links against the pinned nightly's compiler libraries, so
+# each toolchain gets its own install root, and roots for any other toolchain
+# are deleted so the cache does not keep stale tools.
+TOOLS_HOME="$HOME/.sitp-tools"
+TOOLS="$TOOLS_HOME/$TOOLCHAIN"
+mkdir -p "$TOOLS"
+find "$TOOLS_HOME" -mindepth 1 -maxdepth 1 ! -name "$TOOLCHAIN" -exec rm -rf {} +
+export PATH="$TOOLS/bin:$PATH"
+
 # The mdbook preprocessors build against stable; only aquascope_front needs the
 # rustc-dev nightly that sitp is pinned to.
-cargo +stable install mdbook --version 0.5.2 --locked
-cargo +stable install mdbook-katex --git https://github.com/lzanini/mdbook-katex
-cargo +stable install mdbook-aquascope --locked
-cargo +stable install mdbook-quiz --locked
-cargo "+$TOOLCHAIN" install aquascope_front --git https://github.com/cognitive-engineering-lab/aquascope --tag v0.4.0
+cargo +stable install --root "$TOOLS" mdbook --version 0.5.2 --locked
+cargo +stable install --root "$TOOLS" mdbook-katex --git https://github.com/lzanini/mdbook-katex
+cargo +stable install --root "$TOOLS" mdbook-aquascope --locked
+cargo +stable install --root "$TOOLS" mdbook-quiz --locked
+cargo "+$TOOLCHAIN" install --root "$TOOLS" aquascope_front --git https://github.com/cognitive-engineering-lab/aquascope --tag v0.4.0
 
 curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain none
 export PATH="$HOME/.elan/bin:$PATH"
 
+# Mathlib has thousands of modules, far more than a deploy has time to compile.
+# Download its prebuilt .olean files instead, so the `lake build` that
+# mdbook-lean runs finds Mathlib up to date and builds only SubVerso and SitpLean.
+(cd sitp/lean && lake exe cache get)
+
 cd sitp && mdbook build
 '''
 publish = "sitp/book"
+
+[[plugins]]
+package = "./netlify/plugins/sitp-tool-cache"
 
 # Same-origin passthrough for the doc hover previews in theme/js/custom.js.
 # Those previews fetch a doc page and lift out its signature + summary, which
