@@ -1286,6 +1286,29 @@ p:has(+ ul) {
   }
 }
 
+/* A formula beside its code takes the same split as the math | code | plot row
+   below: the math gets a fifth of the measure and the code the other four
+   fifths, so the divider sits in one place whether or not a plot follows. The
+   code stays inside the measure, as it does beside a plot, rather than
+   overhanging the gutter like the pairs above.
+
+   A formula wider than its fifth widens its track to fit (`max-content`) and
+   the code gives up the difference rather than being drawn over, down to a
+   floor of 40% of the measure. Only a formula too wide to share a row at all
+   runs under the code past that, as it would at an even split. Only math gets
+   this split, since an image in a fifth of the measure would be a thumbnail.
+   `:has()` cannot nest, so the math and the code are asked for in two separate
+   `:has`. A plot row is left to the rules below, and a doc preview stacks. */
+@media (width > 1000px) {
+  .dual:not(.dual-margin, .xref-body *):has(> :nth-last-child(2) > .katex-display):has(> :is(pre, .nb-cell):last-child):not(:has(.nb-out-img)) {
+    grid-template-columns: minmax(calc((100% - 1.5rem) / 5), max-content) minmax(40%, 1fr);
+  }
+
+  .dual:not(.dual-margin) > :nth-last-child(2):has(> .katex-display) + :is(pre, .nb-cell):last-child {
+    margin-right: 0 !important;
+  }
+}
+
 /* A plotting cell gives the right gutter to its outputs instead, so the row
    reads math | code | plot. Same pair as above: prose or math, then a notebook
    cell. The math narrows to a fifth of the measure and the code takes the other
