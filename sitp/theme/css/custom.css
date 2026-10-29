@@ -536,6 +536,33 @@ img.icon {
   color: rgb(0, 150, 207);
 }
 
+/* A reply set against a list item's statement, right-aligned on a line three
+   quarters of the way across the item, so the replies read as one column near
+   their statements. Absolute rather than a float: a sidenote on the same item
+   is a right float with `clear: right`, so a floated answer would bump it down
+   a line. Auto top keeps the answer on the line where it sits in flow. */
+li:has(> .answer) {
+  position: relative;
+}
+
+.answer {
+  position: absolute;
+  right: 25%;
+}
+
+/* On a phone three quarters of the item is shorter than a statement, so the
+   answer goes to the item's edge instead (sidenotes are hidden by now, leaving
+   it free) and the padding wraps a long statement short of it. */
+@media (max-width: 600px) {
+  li:has(> .answer) {
+    padding-right: 7em;
+  }
+
+  .answer {
+    right: 0;
+  }
+}
+
 .content {
   counter-reset: sidenote-counter;
 }
