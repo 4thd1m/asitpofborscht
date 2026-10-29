@@ -275,9 +275,13 @@ p.em-only {
    Both gutters use it — the left one through `left`, the right one through a
    negative `margin-right` — so the two are mirror images and the page keeps one
    symmetric margin rather than two unrelated ones. With notes 35% wide it also
-   fixes the gap between note and text at 2% on each side. */
+   fixes the gap between note and text at 2% on each side.
+   `--defnote-offset` is the left gutter's copy of it. It differs only on a
+   tablet-width screen, where the left gutter gives up room so the right one
+   fits (see the tablet block above the mobile breakpoint). */
 :root {
   --margin-note-offset: 37%;
+  --defnote-offset: var(--margin-note-offset);
 }
 
 .sidenote {
@@ -334,8 +338,8 @@ blockquote .sidenote {
 .defnote,
 .lecnote {
   position: absolute;
-  left: calc(-1 * var(--margin-note-offset));
-  width: 35%;
+  left: calc(-1 * var(--defnote-offset));
+  width: calc(var(--defnote-offset) - 2%);
   /* `--margin-note-raise` lifts one note off the line it would otherwise take,
      for when a tall item hangs lower than the things it sits beside. Set it
      per-note in the markdown (`style="--margin-note-raise: 48px"`); the restack
@@ -352,7 +356,7 @@ blockquote .sidenote {
 
 blockquote .defnote,
 blockquote .lecnote {
-  left: calc(-1 * var(--margin-note-offset) - 20px);
+  left: calc(-1 * var(--defnote-offset) - 20px);
 }
 
 /* == C++ notes ============================================================
@@ -380,8 +384,8 @@ blockquote .lecnote {
    entirely out of muted gray. */
 .cppnote {
   position: absolute;
-  left: calc(-1 * var(--margin-note-offset));
-  width: 35%;
+  left: calc(-1 * var(--defnote-offset));
+  width: calc(var(--defnote-offset) - 2%);
   margin-top: calc(0.3rem - var(--margin-note-raise, 0px));
   margin-bottom: 0;
   font-size: 1.2rem;
@@ -391,7 +395,7 @@ blockquote .lecnote {
 }
 
 blockquote .cppnote {
-  left: calc(-1 * var(--margin-note-offset) - 20px);
+  left: calc(-1 * var(--defnote-offset) - 20px);
 }
 
 /* `.cppnote-item` is the mobile echo: under 1000px there is no gutter, and
@@ -903,6 +907,55 @@ html.ayu  .nb-out-img .nb-img-light { display: none; }
     width: auto;
     text-align: left;
     padding: 0 0 0.15rem 0;
+  }
+}
+
+/* Tablet widths (an iPad, a narrow laptop window): too wide to drop the
+   margins, too narrow for two 37% gutters round the 750px measure. That takes
+   750 × 1.74 = 1305px of column plus 40px of page and content padding, and a
+   centered column short of it lets the sidenotes run off the right edge.
+
+   So the gutters stop being mirror images. The sidenotes keep their full 37%:
+   they are prose and need the width. The left gutter only has to hold
+   definitions, which are a few words each, and drops to 20%. Then the measure
+   shrinks to whatever leaves room for both, 100% / (1 + 0.37 + 0.20), still
+   capped at 750px, and the column is pushed left until the right gutter is
+   exactly 37% of it. Every `%` in `.content main` resolves against the content
+   area, so this holds with the sidebar open too. At 1345px the push has run
+   out — the left margin is 37% of 750px again — so the column meets the
+   centered layout above without a jump. Only the definitions widen there.
+
+   A full-bleed figure is centered on the column, which is no longer centered.
+   It is put back on the middle of the screen by measuring from the right
+   gutter's edge, the one edge this layout pins: that edge is 137% of the
+   column from its left side, and sits `--page-padding` + 5px of `.content`
+   padding in from the viewport.
+
+   A tweet card in the left gutter has a fixed minimum width of its own and
+   would spill over the text, so it goes. Its quote also stands as a numbered
+   sidenote in the prose (see `.defnote-embed`). A blockquote's notes lose the
+   20px push their desktop rule gives them, which here would run them off the
+   left edge. */
+@media (1000px < width < 1345px) {
+  :root {
+    --defnote-offset: 20%;
+  }
+
+  .content main {
+    max-width: min(var(--content-max-width), 100% / 1.57);
+    margin-inline-start: calc(100% - 1.37 * min(var(--content-max-width), 100% / 1.57));
+  }
+
+  :is(.full-bleed, .full-bleed-side, .video-row) {
+    left: calc(137% - 50vw + var(--page-padding) + 5px);
+  }
+
+  blockquote :is(.defnote, .lecnote, .cppnote) {
+    left: calc(-1 * var(--defnote-offset));
+  }
+
+  .defnote-embed {
+    display: none;
   }
 }
 
