@@ -9,7 +9,7 @@
 - curriculum. nanochat. muon optimizer. muon kernels.
 - progressive closure, knuth's deliberate lying. -->
 
-a textbook that weaves four threads
+<!-- a textbook that weaves four threads
 whose curriculum's basis that spans four dimensions
 
 - Alyssa P. Hacker () bridge to architecture and optimization research
@@ -18,7 +18,7 @@ whose curriculum's basis that spans four dimensions
 - Ben Bitdiddle (High Performance Kernels)
 
 book as software.
-(modular).
+(modular). -->
 
 <div class="dropcap">
 
