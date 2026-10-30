@@ -544,11 +544,12 @@ img.icon {
    quarters of the way across the item, so the replies read as one column near
    their statements. Absolute rather than a float: a sidenote on the same item
    is a right float with `clear: right`, so a floated answer would bump it down
-   a line. Auto top keeps the answer on the line where it sits in flow. */
-li:has(> .answer) {
-  position: relative;
-}
-
+   a line. Auto top keeps the answer on the line where it sits in flow.
+   The item is deliberately NOT positioned: that would make it the containing
+   block for any .defnote/.lecnote/.cppnote on the same line, so their `%`
+   gutter geometry would resolve against the indented item instead of
+   `.content main` and the note would land on the list marker. Measured from
+   `main`, `right: 25%` is the same right edge a top-level item has. */
 .answer {
   position: absolute;
   right: 25%;
