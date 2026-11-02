@@ -1,6 +1,4 @@
-![](./assets/pref.jpeg)
-
-<small>*Presenting an early outline of <span class="smallcaps">SITP</span> at [Toronto School of Foundation Modeling Season 1 (2025)](https://tsfm.ca/schedule)*</small>
+![](./assets/sitp_banner.png)
 
 # Afterword
 
@@ -15,7 +13,7 @@ I'll see you at work.
 
 </div>
 
-## Afterward Table of Contents
+## From SITP to Elsewhere
 
 <div class="toc toc-root">
 
@@ -24,7 +22,7 @@ I'll see you at work.
 
 </div>
 
-## A. From `nanochat` to `marin`
+<!-- ## A. From `nanochat` to `marin`
 
 <div class="toc">
 
@@ -203,4 +201,4 @@ Step
 
 ### B.2 Graph Mode with PyTorch2
 
-### B.3 Inference with vLLM
+### B.3 Inference with vLLM -->

@@ -24,8 +24,16 @@
   text-align: left !important;
 } */
 
-#first-edition {
-  margin-top: 0;
+/* "First Edition" under the title, set like an h3 (UA size and weight, small
+   caps as in `main h3`) but kept a <p>: mdBook's sidebar outline collects every
+   h2-h6 on the page, and this would show up nested under Front Matter. */
+.edition {
+  font-size: 1.17em;
+  font-weight: bold;
+  font-variant-caps: small-caps;
+  font-variant: small-caps;
+  letter-spacing: 0.02em;
+  margin-block: 0 1em;
 }
 
 #of-tensor-programs {
@@ -1750,12 +1758,6 @@ html.ayu img.owl {
   content: url("../../assets/owl3.png");
 }
 
-html.navy img.owl-forest,
-html.ayu img.owl-forest,
-html.coal img.owl-forest {
-  content: url("../../assets/owl_forest2.png");
-}
-
 html.navy img.hipowl,
 html.ayu img.hipowl,
 html.coal img.hipowl {
@@ -1817,22 +1819,10 @@ html.ayu img.jointmatrix {
   content: url("../../assets/jointmatrix_dark.png");
 }
 
-html.coal img.stochastic_matrix,
-html.navy img.stochastic_matrix,
-html.ayu img.stochastic_matrix {
-  content: url("../../assets/stochastic_matrix_dark.png");
-}
-
 html.coal img.jointmatrixmarginal,
 html.navy img.jointmatrixmarginal,
 html.ayu img.jointmatrixmarginal {
   content: url("../../assets/jointmatrixmarginal_dark.png");
-}
-
-html.coal img.broadcast,
-html.navy img.broadcast,
-html.ayu img.broadcast {
-  content: url("../../assets/broadcast_dark.png");
 }
 
 html.coal img.hand-flame,
@@ -1941,12 +1931,6 @@ html.coal img.discriminant_weight,
 html.navy img.discriminant_weight,
 html.ayu img.discriminant_weight {
   content: url("../../assets/discriminant_weight_dark.png");
-}
-
-html.coal img.semanticgap,
-html.navy img.semanticgap,
-html.ayu img.semanticgap {
-  content: url("../../assets/semanticgap_dark.png");
 }
 
 html.coal img.venn,

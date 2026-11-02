@@ -18,15 +18,9 @@ Forrest, Barbara, and Brian Forrest. 2020. “Math 147 Honours Calculus 1 Advanc
 
 Jurafsky, Daniel, and James H. Martin. 2026. *Speech and Language Processing*. 3rd ed. draft. <https://web.stanford.edu/~jurafsky/slp3/>.
 
-Lay, David C, Steven R Lay, and Judith Mcdonald. 2011. Linear Algebra and Its Applications. Pearson Education Limited.
-
 New, Stephen. 2022. MATH 145 Algebra. Course notes, University of Waterloo https://www.math.uwaterloo.ca/~snew/PMATH333/math145notes.pdf.
 
 Newstead, Clive. 2026. *An Infinite Descent into Pure Mathematics*. Last modified June 25, 2026. <https://infinitedescent.org/>.
-
-Peter, Marc, Deisenroth Aldo, Faisal Cheng, and Soon Ong. 2020. Mathematics for Machine Learning. <https://mml-book.github.io/book/mml-book.pdf>
-
-Stewart, James, Daniel Clegg, and Saleem Watson. 2020. Calculus: Early Transcendentals. 9th ed. Cengage Learning.
 
 Stepanov, Alexander A, and Daniel E Rose. 2014. From Mathematics to Generic Programming. Addison-Wesley Professional.
 
