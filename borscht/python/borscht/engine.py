@@ -1,4 +1,4 @@
-# scaffold ch.4.1 automatic difefrentiation
+# scaffold ch.4.1 automatic differentiation, with state
 # extend Lab 7: Custom Autograd Backwards for VLA
 class DynamicLayer():
   def __init__(self):
