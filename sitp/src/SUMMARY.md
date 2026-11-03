@@ -1,5 +1,6 @@
 [Front Matter](./front.md)
 [Dedication](./dedi.md)
+[Playground](./play.md)
 [Course Thesis](./thesis.md)
 [Syllabus](./syl.md)
 [I. Elements of Networks](./1.md)

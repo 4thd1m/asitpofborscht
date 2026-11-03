@@ -2,7 +2,7 @@
 
 ## Lab 1: Elements of Tensors
 
-## Lab 2
+## Lab 2:
 
 ## Lab 3: Tensor++ and Matrix Decompositions
 
