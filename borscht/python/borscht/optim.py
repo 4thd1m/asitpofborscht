@@ -1,15 +1,15 @@
-from typing import overload
+# from typing import overload
 
-class Optimizer():
-    def __init__(self, params):
-      raise NotImplementedError("")
+# class Optimizer():
+#     def __init__(self, params):
+#       raise NotImplementedError("")
 
-    @overload
-    def step(self): ...
+#     @overload
+#     def step(self): ...
 
-class SGD(Optimizer):
-    def __init__(self, params):
-      raise NotImplementedError("")
+# class SGD(Optimizer):
+#     def __init__(self, params):
+#       raise NotImplementedError("")
 
-    def step(self):
-      raise NotImplementedError("")
+#     def step(self):
+#       raise NotImplementedError("")

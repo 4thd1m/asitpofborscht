@@ -2,12 +2,12 @@ from .borscht import *
 
 from . import nn
 from . import optim        # ch4.2/
-from . import linalg       # ch2.3/lab4
-from . import compile      # ch6/lab 10  JAX/PT2: DEEP EMBEDDING via SOURCE TRANSFORMATION TRACING
-from .tensor import Tensor # ch2.1/lab 3
+from . import linalg       # ch2.3/lab4      🎯 Nov
+from . import compile      # ch6/lab 10
+from .tensor import Tensor # ch2.1/lab 3     🎯 Nov
 from . import func         # ch4.1/lab 7
-from . import engine       # ch4.1/lab 7   HIPS/PT1: SHALLOW EMBEDDING via OPERATOR OVERLOADING TAPE
-from . import kernels      # ch2.2,2.4/lab 4
+from . import engine       # ch4.1/lab 7
+from . import kernels      # ch2.2,2.4/lab 4 🎯 Nov
 
 
 __doc__ = borscht.__doc__
