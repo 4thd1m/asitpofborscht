@@ -7,13 +7,13 @@
 # of Tensor Programs
 <p class="edition">First Edition</p>
 
-<code>A Whirlwind Tour to <span class="retype" data-alt="Tensor Programs" data-href="https://thegregyang.com/#tppapers">Deep Learning Alchemy</span> and <span class="retype" data-alt="Tensor Cores" data-href="https://docs.nvidia.com/cuda/parallel-thread-execution/#warp-level-matrix-instructions">Deep Learning Systems</span></code><br>
+<code>The Hacker's Whirlwind Tour to <span class="retype" data-alt="Tensor Programs" data-href="https://thegregyang.com/#tppapers">Deep Learning Alchemy</span> and <span class="retype" data-alt="Tensor Cores" data-href="https://docs.nvidia.com/cuda/parallel-thread-execution/#warp-level-matrix-instructions">Deep Learning Systems</span></code><br>
 <small>*`Run 🤖`[`nanochat`](https://github.com/karpathy/nanochat)`by building` <img class="icon" src="./assets/borscht.png" alt="" style="aspect-ratio: 736 / 510;">[`borscht`](https://github.com/j4orz/asitpofborscht)`from scratch: a hackable subset of 🔥`[`torch`](https://pytorch.org/)*</small><span class="sidenote-number"></span><span class="sidenote front-note">*[What's in a name?](https://en.wikipedia.org/wiki/A_rose_by_any_other_name_would_smell_as_sweet) Borscht is a sour soup with meat from Eastern Europe, most often associated with the variant originating in Ukraine with red beetroots <img class="icon" src="./assets/borscht.png" alt="" style="aspect-ratio: 736 / 510;">. It's a permutation-like pun on `torch`, given how the deep learning framework `borscht` aims to be a rough subset of `torch`. You want a `torch.Tensor`? You get the <img class="icon" src="./assets/borscht.png" alt="" style="aspect-ratio: 736 / 510;">[`borscht.Tensor`](https://github.com/j4orz/asitpofborscht)! Also, my mother in law's borscht is to die for:* **Мне очень нравится ваш борщ, миссис Ким)**</span><br/>
 <!-- <small>*`with`[`🇱 Lean`](https://www.python.org/)`,`[`🐍 Python`](https://www.python.org/)`,`[`🦀 Rust`](https://rust-lang.org/)`, and`[`🦀🚀 CUDA Rust`](https://nvlabs.github.io/cuda-oxide/)`programming languages!`*</small><br/> -->
 
 
 *A new breadth of mathematical computer science for the world of artificial intelligence*<br/>
-*Made with 🖤🪻 by [Jeffrey Zhang](https://x.com/j4orz), [University of Waterloo (BMath)](https://academic-calendar-archive.uwaterloo.ca/undergraduate-studies/2022-2023/group/u-Waterloo-Faculty-of-Mathematics.html)*
+*Made with 🖤🪻 by [Jeffrey Zhang](https://x.com/4thd1m), [University of Waterloo (BMath)](https://academic-calendar-archive.uwaterloo.ca/undergraduate-studies/2022-2023/group/u-Waterloo-Faculty-of-Mathematics.html)*
 <br/>
 *Made possible by [Lambda Labs Research Grant](https://lambda.ai/research)*<br/>
 <!-- *Contributing writers:*

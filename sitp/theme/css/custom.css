@@ -1354,8 +1354,7 @@ p:has(+ ul) {
    so twice `--margin-note-offset` of the cell falls short of the gutter by
    0.37 × 1.5rem; the 0.555rem makes that up.
    A `{{#nb}}` embed (`.nb-cell`) counts as code here just like a bare <pre>.
-   Where both cells are code, neither overhangs: the pair splits the measure
-   evenly and leaves the gutter to the sidenotes. */
+   Where both cells are code, the whole pair bleeds instead (see below). */
 .dual:not(.dual-margin) > *:not(pre, .nb-cell) + :is(pre, .nb-cell):last-child {
   margin-right: calc(-2 * var(--margin-note-offset) - 0.555rem) !important;
 }
@@ -1364,6 +1363,25 @@ p:has(+ ul) {
 @media (max-width: 1000px) {
   .dual:not(.dual-margin) > *:not(pre, .nb-cell) + :is(pre, .nb-cell):last-child {
     margin-right: 0 !important;
+  }
+}
+
+/* Two code listings side by side (the Python | Rust pairs) bleed into both
+   gutters at once: the grid itself widens from the left edge of a `.defnote`
+   to the right edge of a `.sidenote`, and the two tracks split that evenly, so
+   the divider stays on the middle of the measure. Margin percentages resolve
+   against the measure, so the two offsets are exactly the ones the notes use,
+   and they follow the tablet layout's narrower left gutter on their own.
+
+   A sidenote hung from the prose just above would sit under the right-hand
+   listing. The pair stays put and the notes step around it instead, which is
+   custom.js's job (the sidenote sweep after the snackbar block).
+   Only bare <pre>s: a notebook pair hangs In[] prompts off its left side,
+   which would run off the page, and is wrapped in a `.full-bleed` already. */
+@media (width > 1000px) {
+  .dual:not(.dual-margin, .xref-body *, .full-bleed *):has(> pre:first-child + pre:last-child) {
+    margin-left: calc(-1 * var(--defnote-offset));
+    margin-right: calc(-1 * var(--margin-note-offset));
   }
 }
 

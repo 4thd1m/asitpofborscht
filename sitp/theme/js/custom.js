@@ -365,6 +365,125 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+// Keep right-margin notes clear of a code pair that bleeds across the gutters.
+// A Python | Rust `.dual` widens out to the sidenotes' outer edge (see the
+// bleed rule in theme/css/custom.css), so a note hung from the prose just above
+// would land under the right-hand listing. Each pair moves the run of notes it
+// hits rather than itself: up, as one block, until the run ends above the code
+// if the gutter above is free that far; otherwise down, so the run starts under
+// the code. A note stacked down past the pair still belongs to the run, or
+// lifting the rest would let it jump back up beside the code.
+//
+// Notes are floats stacked by `clear: right`, so a margin-top moves a note and
+// every later note follows it, unless a note's own line pins it lower. That is
+// why the lift is applied note by note, each measured after the one above has
+// moved, while the drop only has to move the first.
+//
+// Runs after the snackbar block so the notes it moved into a box's footer are
+// already out of the float stack; the float check skips them either way.
+document.addEventListener("DOMContentLoaded", function () {
+  const main = document.querySelector(".content main");
+  if (!main) return;
+  const pairs = Array.prototype.slice.call(
+    main.querySelectorAll(
+      ".dual:not(.dual-margin, .full-bleed *):has(> pre:first-child + pre:last-child)"
+    )
+  );
+  if (pairs.length === 0) return;
+  // Everything else that spans the right gutter, which a lifted run must stay under.
+  const wide = Array.prototype.slice.call(
+    main.querySelectorAll(".full-bleed, .full-bleed-side, .video-row")
+  );
+  const notes = Array.prototype.slice.call(main.querySelectorAll(".sidenote"));
+
+  const GAP = 12; // px kept between a moved note and its neighbours
+
+  function sweep() {
+    // Reset to CSS base (0.3rem) so measurements reflect natural positions.
+    notes.forEach(function (n) {
+      n.style.marginTop = "";
+    });
+
+    // Margin notes only: below the breakpoint they are hidden, and a
+    // snackbar's notes sit in its footer, unfloated.
+    const gutter = notes.filter(function (n) {
+      return n.offsetParent !== null && getComputedStyle(n).float === "right";
+    });
+    if (gutter.length === 0) return;
+
+    const moved = new Map(); // note -> px moved so far, by earlier pairs too
+    function move(note, delta) {
+      const total = (moved.get(note) || 0) + delta;
+      moved.set(note, total);
+      note.style.marginTop = "calc(0.3rem + " + total + "px)";
+    }
+
+    const column = main.getBoundingClientRect();
+    pairs.forEach(function (pair) {
+      const box = pair.getBoundingClientRect();
+      if (box.right <= column.right + 1) return; // stacked, nothing in the gutter
+
+      // Measured per pair: the pair above may already have moved some notes.
+      const rects = gutter.map(function (n) {
+        return n.getBoundingClientRect();
+      });
+      // A float never rises above its own line, so only notes anchored above
+      // the pair can reach it. They come first in document order, and once
+      // one reaches down to the pair every later one does too: a contiguous run.
+      let first = -1;
+      let last = -1;
+      gutter.forEach(function (n, i) {
+        const above = pair.compareDocumentPosition(n) & Node.DOCUMENT_POSITION_PRECEDING;
+        if (above && rects[i].bottom + GAP > box.top) {
+          if (first < 0) first = i;
+          last = i;
+        }
+      });
+      if (first < 0) return;
+
+      // Lowest edge of anything in the gutter above the pair.
+      let floor = column.top;
+      if (first > 0) floor = Math.max(floor, rects[first - 1].bottom);
+      pairs.concat(wide).forEach(function (el) {
+        const r = el.getBoundingClientRect();
+        if (el !== pair && r.bottom <= box.top) floor = Math.max(floor, r.bottom);
+      });
+
+      const lift = rects[last].bottom + GAP - box.top;
+      if (rects[first].top - lift >= floor + GAP) {
+        for (let i = first; i <= last; i++) {
+          move(gutter[i], rects[i].top - lift - gutter[i].getBoundingClientRect().top);
+        }
+      } else {
+        move(gutter[first], box.bottom + GAP - rects[first].top);
+      }
+    });
+  }
+
+  sweep();
+  window.addEventListener("load", sweep);
+  window.addEventListener("resize", sweep);
+  if (document.fonts) document.fonts.ready.then(sweep);
+
+  // A note's KaTeX or images can settle after load and change its height.
+  // No feedback loop: the sweep only writes margin-top, which is outside the
+  // border box ResizeObserver reports on.
+  if (typeof ResizeObserver === "function") {
+    let pending = false;
+    const observer = new ResizeObserver(function () {
+      if (pending) return;
+      pending = true;
+      requestAnimationFrame(function () {
+        pending = false;
+        sweep();
+      });
+    });
+    notes.concat(pairs).forEach(function (n) {
+      observer.observe(n);
+    });
+  }
+});
+
 // ===========================================================================
 // Hover previews. Two kinds of link get a peek before the reader commits to
 // the jump, and both are the same popup, the same hover-intent delay and the
