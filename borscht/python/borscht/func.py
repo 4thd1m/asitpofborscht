@@ -1,5 +1,5 @@
-# ch.4.1 automatic difefrentiation
-# Lab 7: Custom Autograd Backwards for VLA
+# scaffold ch.4.2 automatic difefrentiation, functionally
+# extend Lab 7: Custom Autograd Backwards for VLA
 
 def grad(func):
   return NotImplementedError("")

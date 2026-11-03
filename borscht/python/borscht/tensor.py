@@ -39,13 +39,6 @@ class Tensor:
     def gemm(self, other):
        return NotImplementedError("")
 
-
-
-
-
-
-
-
     # scaffold ch.4.1 automatic difefrentiation
     # extend Lab 7: Custom Autograd Backwards for VLA
     def backwards(self):
