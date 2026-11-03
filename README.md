@@ -1,6 +1,4 @@
-<img src="https://sitp.ai/assets/borscht.png" width="128">
-
-# asitpofborscht
+# asitpofborscht <img src="https://sitp.ai/assets/borscht.png" width="32">
 
 ## News
 
