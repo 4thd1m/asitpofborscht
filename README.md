@@ -1,8 +1,23 @@
-![](https://sitp.ai/assets/sitp_banner.png)
+<img src="https://sitp.ai/assets/borscht.png" width="128">
 
-# a sitpofborscht
+# asitpofborscht
 
-If you want to read the book in order to develop `nanochat` and `borscht` from scratch, head on over to https://sitp.ai/ on your preferred reading device. It looks great on all displays! Additionally, if you try out the `borscht` autograd in order to run training and inference for neural nets,
+## News
+
+## Installation
+
+## License
+
+Following [GPU MODE](https://x.com/marksaroufim/status/2064442386374369597),
+this project is licensed under the June 9 Researcher Reciprocity License.
+
+The license adapts the Open RAIL-S structure and adds one specific use restriction: training, fine-tuning, distillation, synthetic-data generation for training, embedding for training, or otherwise using this project to improve an AI model or AI service requires Researcher Reciprocity.
+
+If you train on it, you let us generate.
+
+Covered AI model and service providers may not use this project while imposing terms that prevent SITP and borscht project contributors, or authorized researchers from generating outputs, evaluating models, benchmarking, publishing research, or exploring their own research ideas on materially equal terms to ordinary users.
+
+<!-- If you want to read the book in order to develop `nanochat` and `borscht` from scratch, head on over to https://sitp.ai/ on your preferred reading device. It looks great on all displays! Additionally, if you try out the `borscht` autograd in order to run training and inference for neural nets,
 install `borscht` with your preferred package manager:
 
 ```sh
@@ -19,9 +34,9 @@ maturin develop
 python (todo)
 import borscht
 device=gpu (todo)
-```
+``` -->
 
-## Quick Start: SITP Book
+<!-- ## Quick Start: SITP Book
 
 If you want to *modify* the SITP book, follow the installation instructions below:
 
@@ -68,15 +83,4 @@ cd sitp && mdbook serve # make your edits to markdown
 ```
 
 Expect the first build to be slow: aquascope runs every annotated Rust block through Miri, and Lean
-elaborates every `{{#lean}}` example. Both cache afterwards, aquascope in `sitp/.aquascope-cache`.
-
-## License
-
-Following [GPU MODE](https://x.com/marksaroufim/status/2064442386374369597),
-this project is licensed under the June 9 Researcher Reciprocity License.
-
-The license adapts the Open RAIL-S structure and adds one specific use restriction: training, fine-tuning, distillation, synthetic-data generation for training, embedding for training, or otherwise using this project to improve an AI model or AI service requires Researcher Reciprocity.
-
-If you train on it, you let us generate.
-
-Covered AI model and service providers may not use this project while imposing terms that prevent SITP and borscht project contributors, or authorized researchers from generating outputs, evaluating models, benchmarking, publishing research, or exploring their own research ideas on materially equal terms to ordinary users.
+elaborates every `{{#lean}}` example. Both cache afterwards, aquascope in `sitp/.aquascope-cache`. -->
