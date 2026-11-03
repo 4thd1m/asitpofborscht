@@ -63,8 +63,8 @@ a notebook (it makes both the light and dark PNGs transparent and themed).
 
 Regenerating outputs (commit the executed notebook)
 ---------------------------------------------------
-    jupyter nbconvert --to notebook --execute --inplace notebooks/ch1.ipynb
-    git add notebooks/ch1.ipynb
+    jupyter nbconvert --to notebook --execute --inplace ../notebooks/ch1.ipynb
+    git add ../notebooks/ch1.ipynb
 
 Styling lives in `theme/css/custom.css` (`.nb-*`).
 
@@ -72,7 +72,7 @@ Config (book.toml)
 ------------------
     [preprocessor.nb]
     command = "python3 preprocessors/mdbook-nb"
-    nb-dir  = "notebooks"   # notebook root, relative to the book root
+    nb-dir  = "../notebooks"  # notebook root, relative to the book root
     src-url = "https://..." # base URL the .nb-file label links to; the path from
                             #   the directive is appended. Unset -> plain label.
     max-traceback = false   # true -> full ANSI-stripped traceback, not just

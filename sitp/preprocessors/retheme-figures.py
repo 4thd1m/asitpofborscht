@@ -24,9 +24,9 @@ Why not recolor the PNG instead? A raster recolor can't retint anti-aliased
 text/edges cleanly, and can't make an opaque background transparent. Recoloring
 the artists and re-saving is a genuine re-render, so both come out clean.
 
-Usage (with a Python that has the notebooks' imports, e.g. notebooks/.venv):
+Usage (with a Python that has the notebooks' imports, e.g. ../notebooks/.venv):
     python preprocessors/retheme-figures.py [notebook.ipynb ...]
-With no args, processes every .ipynb under notebooks/ (skipping .venv and
+With no args, processes every .ipynb under the repo-root notebooks/ (skipping .venv and
 checkpoints, and notebooks that never import matplotlib).
 
 Caveat: it *executes* cell code (in the notebook's own directory, so relative
@@ -224,7 +224,7 @@ def find_notebooks(root):
 
 def main(argv):
     here = os.path.dirname(os.path.abspath(__file__))
-    default_dir = os.path.normpath(os.path.join(here, "..", "notebooks"))
+    default_dir = os.path.normpath(os.path.join(here, "..", "..", "notebooks"))
     paths = argv[1:] or sorted(find_notebooks(default_dir))
     total = 0
     for p in paths:
