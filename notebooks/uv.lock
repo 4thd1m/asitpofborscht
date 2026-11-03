@@ -22,7 +22,7 @@ wheels = [
 
 [[package]]
 name = "borscht"
-source = { editable = "../../borscht" }
+source = { editable = "../borscht" }
 dependencies = [
     { name = "pytest" },
     { name = "torch" },
@@ -712,7 +712,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "borscht", editable = "../../borscht" },
+    { name = "borscht", editable = "../borscht" },
     { name = "matplotlib", specifier = ">=3.11.2" },
     { name = "numpy", specifier = ">=2.5.4" },
     { name = "torch", specifier = ">=2.14.1" },
