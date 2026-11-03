@@ -1,27 +1,20 @@
 # scaffold ch2.2 accelerating gemms with cpu
-# extend lab 3: Tensor++ and Matrix Decompositions
 class Dispatcher():
    def __init__(self):
       return
-
 class TensorIterator():
    def __init__(self):
       return
-
 class Tensor:
     def __init__(self, shape, dtype):
         # scaffold ch2.1 strides
         # extend lab 3: Tensor++ and Matrix Decompositions
         self.shape = ()
-        self.stride = ()           # TODO: CuTe Layouts????
+        self.stride = ()
         self.dtype = True
         self.storage = bytearray() # 🎨 DESIGN CHOICE ALIASING/BINDING: MUTABLE vs IMMUTABLE)
                                    # in borscht/torch views share storage (MUTATION)
-
                                    # TODO: no Storage concept, direct Tensor to Tensor aliasing????
-
-
-
 
     # 🎨 DESIGN CHOICE (DEEP vs SHALLOW embedding)
     # in borscht/pt1/hips-autograd, AD is implemented via operator overloading and tape
