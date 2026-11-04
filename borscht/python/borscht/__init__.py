@@ -1,4 +1,5 @@
-from .borscht import *
+from . import _borscht
+from ._borscht import *
 
 from . import nn
 from . import optim        # ch4.2/
@@ -10,9 +11,9 @@ from . import engine       # ch4.1/lab 7
 from . import kernels      # ch2.2,2.4/lab 4 🎯 Nov
 
 
-__doc__ = borscht.__doc__
-if hasattr(borscht, "__all__"):
-    __all__ = borscht.__all__
+__doc__ = _borscht.__doc__
+if hasattr(_borscht, "__all__"):
+    __all__ = _borscht.__all__
 
 # // ---------------------------------------------------------------------------
 # // op surface required by 3.1_fnn.ipynb and 3.5_gpt2.ipynb

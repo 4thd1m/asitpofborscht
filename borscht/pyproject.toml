@@ -1,33 +1,45 @@
-[build-system]
-requires = ["maturin>=1.14,<2.0"]
-build-backend = "maturin"
-
 [project]
-name = "borscht"
-requires-python = ">=3.14"
-classifiers = [
-    "Programming Language :: Rust",
-    "Programming Language :: Python :: Implementation :: CPython",
-    "Programming Language :: Python :: Implementation :: PyPy",
-]
-dynamic = ["version"]
-dependencies = [
-    "pytest>=9.1.1",
-    "torch>=2.13.0",
-]
-[project.optional-dependencies]
-tests = [
-    "pytest",
-    "torch",  # reference implementation the linalg suite is checked against
-    "numpy",  # comparison/tolerance checks in conftest.py
-]
-[tool.pytest.ini_options]
-testpaths = ["python/tests"]
+name = "borscht"      # it's delicious!
+requires-python = ">=3.15"
+dynamic = ["version"] # we configure which keys were intentionally unspecified
+                      # see: https://packaging.python.org/en/latest/specifications/pyproject-toml/#dynamic
 
-[tool.maturin]
-python-source = "python"
-exclude = [
-    "**/__pycache__",
+                      # we configure version, so that the maturin build backend
+                      # automagically fills in at build time *from* Cargo.toml's version field
+                      # see: https://www.maturin.rs/metadata.html#dynamic-metadata
+                      # see: https://doc.rust-lang.org/cargo/reference/manifest.html#the-version-field
+
+[dependency-groups]   # borscht uses numpy and torch as oracles. see chapter (todo).
+dev = [
+    "numpy>=2.5.4",
+    "pytest>=9.1.1",
+    "torch>=2.15.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["python/tests"] # we configure the list of directories that python should search for
+                             # when no specific directories, files, or test ids are given in the command line
+                             # we set this to python/tests (maturin does by default),
+                             # presumably because Cargo uses top-level tests/ for integration
+                             # see: https://docs.pytest.org/en/stable/reference/reference.html#confval-testpaths
+
+[build-system]
+requires = ["maturin>=1.14,<2.0"] # maturin is our build backend that compiles native rust source into cpython extension modules via pyo3
+build-backend = "maturin"         # see: https://docs.python.org/3/tutorial/modules.html
+                                  # see: https://pyo3.rs/v0.30.1/ and http://maturin.rs/
+                                  # see Cargo.toml for the native's configuration manifest
+
+[tool.maturin]                    # maturin supports multiple python/rust project layouts depending on the use-case
+python-source = "python"          # we configure python-source because we are not simply wrapping a 100% rust source with python
+module-name = "borscht._borscht"  # we configure module-name, importing rust source as a submodule
+exclude = [                       # see: https://www.maturin.rs/project_layout.html#mixed-rustpython-project
+    "**/__pycache__",             # see: https://www.maturin.rs/project_layout.html#import-rust-as-a-submodule-of-your-project
     "**/*.pyc",
     "**/*.pyo"
 ]
+
+[tool.uv] # we configure uv's cache-keys manually, so that for development and testing with editable install of borscht,
+cache-keys = [{ file = "pyproject.toml" }, { file = "Cargo.toml" }, { file = "rust/**/*.rs" }]
+# uv will rebuild cpython extension modules automatically since [build-system] is configured with maturin
+# this avoids manually re-compling the native extension module with `maturin develop` anytime the rust source is modified
+# see: https://docs.astral.sh/uv/concepts/cache/#dynamic-metadata
