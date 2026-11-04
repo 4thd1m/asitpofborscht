@@ -1,29 +1,31 @@
-from . import _borscht
-from ._borscht import *
+# After reading pyproject.toml and Cargo.toml, we now understand how borscht's mixed Python and Rust source works.
+# — borscht uses CPython's C API combined with Rust's FFI feature targeting the C ABI.
+#   But, rather than manually write Rust code with externs, we use the pyo3 crate so that we can simply decorate data and function with macros.
+#   When we drive rustc with maturin rather than cargo via `maturin develop`, a shared object file will be produced,
+#   called _borscht.cpython-315-<TARGET>.so which we can import as a Python submodule with the following two lines:
+from . import _borscht  # recall that the name was configured in pyproject.toml with [tool.maturin].module-name
+from ._borscht import * # this underscore follows the naming convention of natively accelerated Python modules, to discourage use by end-users
+
+# One question you may be asking is how does one decide to write framework code in Python vs in Rust?
+# When we say "framework code", we are referring to all code that runs on the CPU unrelated to the code that runs on the GPU
+# To answer that question, head on over to tensor.py, the primary module of borscht
+# — After we define the borscht.Tensor, we can
+#     1. deepen it's semantics "downwards" by accelerating the evaluation of it's operations referred to as "forwards"
+#                                          and adding automatic differentiation referred to as "backwards"
+#     2. abstract it's semantics "upwards" by adding neural network primitives, optimizers,
+#                                          linear algebra routines, and a jit compiler on top of Tensor
 
 from . import nn
-from . import optim        # ch4.2/
-from . import linalg       # ch2.3/lab4      🎯 Nov
-from . import compile      # ch6/lab 10
-from .tensor import Tensor # ch2.1/lab 3     🎯 Nov
-from . import func         # ch4.1/lab 7
-from . import engine       # ch4.1/lab 7
-from . import kernels      # ch2.2,2.4/lab 4 🎯 Nov
+from . import optim
+from . import linalg
+from . import compile
+from .tensor import Tensor, dtype, layout, device, Generator # <--- You can see how other module builds on or below the Tensor
+from . import ops                                            #      the Tensor plays a somewhat similar role that
+from . import func                                           #      the IP protocol does in the networking stack or the ISA does in the hwardware-software interface
+from . import engine                                         #      That is to say, the Tensor is *the* major interface
+from . import kernels
 
 
 __doc__ = _borscht.__doc__
 if hasattr(_borscht, "__all__"):
     __all__ = _borscht.__all__
-
-# // ---------------------------------------------------------------------------
-# // op surface required by 3.1_fnn.ipynb and 3.5_gpt2.ipynb
-# //
-# // creation:    tensor, zeros, ones, arange, tril, randn, randint
-# // movement:    view, transpose, unsqueeze, contiguous, split, cat, repeat, t
-# // unary:       neg, exp, log, log10, sqrt, tanh, abs
-# // binary:      add, sub, mul, div, pow, cmp   (all broadcasting)
-# // reduce:      sum, max, mean, var            (over dim, keepdim)
-# // matmul:      batched @
-# // indexing:    index_select, gather, scatter_add, masked_fill
-# // autograd:    backward, grad, no_grad, retain_grad
-# // ---------------------------------------------------------------------------
