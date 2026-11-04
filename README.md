@@ -1,5 +1,8 @@
 # asitpofborscht <img src="https://sitp.ai/assets/borscht.png" width="32">
 
+This repository hosts the https://sitp.ai textbook and the `borscht` teaching deep learning framework.<br>
+To start reading the literary programmed source of `borscht`, head on over to [`borscht/pyproject.toml`](https://github.com/4thd1m/asitpofborscht/blob/master/borscht/pyproject.toml#L33).
+
 ## News
 
 ## Installation
