@@ -1,3 +1,143 @@
+#                          +==========================+
+#                          |      THE DATA CYCLE*     |  * original: https://phrack.org/issues/71/calling-all-hackers_md
+#                          +==========================+  * adaptaion: https://x.com/fleetwood___/status/2037117778503626937
+
+
+#                                                FRONTIER LABS
+#                    _______________      ,.-^=^=^=^=^=^=^=^=^=^;,
+#                  ,;===============>>   E^ OpenAI   Anthropic   '^3.
+#                .;^                    E^     Google      xAI     '^3
+#               //  labeled data       .E   Meta                    3^
+#              /|^                     ^E DeepMind    Mistral       :^
+#              ||                       ^;:           Amazon       ;3'
+#    ,.^-^-^-^-^-^-^-^-^-^-^;,            ^.=.=_=_=_=_=_=_=_=_=_=_=^
+#   E^ Scale AI    Mercor   '^:.              \\\\\\\\\\\\\\\\\\\\
+#  E^                Surge    '^3              \\\\\\\\\\\\\\\\\\\\
+# E'  Appen                    ^3. DATA         \\\ distillation  \\
+# ^;   Remotasks    Prolific   3.' ANNOTATORS    \\\\\\\\\\\\\\\\\\\\
+#  E;:           Labelbox     ,3^                 \\\\\\\\\\\\\\\\\\\\
+#   ^;._.._._._._._._._._._._,^                    \\\\\\\\\\\\\\\\\\\\
+#                                                                /\
+#     ^ ^ ^ ^ ^ ^ ^ ^                      DeepSeek   /\  /\  Qwen
+#     | | | | | | | |                          Kimi  /::\/::\  /::::\   /\
+#     | data extraction |                           / MiniMax /^^^^^^\ /^^\
+#     | | | | | | | |          ____________       /      \  /      Yi     \
+#                              (AGI 2027 :O)     /____ Baichuan __ GLM ____\
+#   \o/ \oXo/\oXoXo/  o        '==========='       CHINESE OPEN-SOURCE LABS
+#    |   | |  | | |  /|\          Oo._ /\_/\                  ,///
+# __/_\_/_X_\/_X_X_\_/_\__   /_________(@'w'@)_____________.,://'
+#         SOCIETY            \''  Cursor-Windsurf ''           MOE
+#                                   THE HUMBLE                 runoff
+#                                  POST TRAINER
+
+# Welcome to the teaching deep learning framework borscht, a hackable subset of pytorch.
+# We continue the hacker's spirit that lives in teaching systems such as
+# MIT's teaching operating system xv6[0], Cornell's educational compiler IR bril[1], and Berkeley's educational core sodor[2]
+
+# borscht's source is heavily commented following Knuth's philosophy of literate programming[3].
+# "Let us change our traditional attitude to the construction of programs:
+#  Instead of imagining that our main task is to instruct a computer what to do,
+#  let us concentrate rather on explaining to human beings what we want a computer to do."
+
+# There is a specific order we recommend the reader to walkthrough the codebase.
+# In fact, this is the order of how borscht's companion textbook The Structure and Interpretation of Tensor Programs[4] presents borscht
+# — Here, in the pyproject.toml, we briefly explain how borscht's mixed source of Python, Rust, and CUDA all cohere together
+#   so that the user's can happily chop tensors, and carry weights with a single line of import borscht
+#   After reading this file, the second file you should read is Cargo.toml
+
+# You are highly encouraged to modify, extend, and hack on borscht.
+# Once you feel comfortable, we highly encourage you to graduate onto industry-level deep learning systems such as torch and vllm.
+# See you at work.
+
+# 4thd1m
+# Waterloo, ON
+# November 2026
+#
+# [0]: https://mit-pdos.github.io/xv6-riscv-book/
+# [1]: https://capra.cs.cornell.edu/bril/
+# [2]: https://github.com/ucb-bar/riscv-sodor
+# [3]: http://www.literateprogramming.com/#
+# [4]: https://sitp.ai/
+
+
+
+# + ============ +
+# | Python and C |
+# + ============ +
+
+# borscht has a mixed source of Python, Rust, and CUDA, coloquially quipped as "the three language problem"[0].
+# Python for productivity, Rust for performance on the CPU, and CUDA for performance on GPU.
+# Let us first explain how Python and Rust interop with one another.
+
+# All programming languages are domain-specific languages in some sense, and Python was no exception to the rule.
+# Python started out as a "scripting" language primarily meant for "glue" code.
+# One of the primary use cases you want for a scripting language (often implemented by an interpreter) is to be able to
+# 1. extend the interpreter with accelerated code for performance critical areas
+# 2. embed the interpreter into native code
+
+# The first use case of extending the interpreter is effectively all deep learning frameworks (a Python veneer over natively-accelerated code),
+# but was even true for the CPython implementation long before any deep learning frameworks entered the scene.
+# For instance, a lot of CPython's stdlib implementation is in pure Python (for the usual self-hosted reasons),
+# but the mission critical modules such as json, pickle, and decimal are implemented in C/C++.
+# This is because, depending on the workload, native code is generally* 10x, 20x, 50x times faster than it's virtual counterpart.
+# For sticklers, pay attention to the use of the qualifier in the preceding sentence.
+# Of course, for the purposes of numpy, torch, jax and friends, this first use case is the primary one.
+
+# The second use case of embedding the interpeter appears when a performance-critical system such as a
+# game engine wants to enable user-authored plugins without the user having to write native code
+# Or perhaps imagine rocket software written in C++ wants astronauts to be able to write scripts more productively in Python.
+
+# Both the extension and embeding of the CPython interpreter has been possible since the early '90s thanks to what is known as the C API.
+# Note that is only possible with the *CPython* interpreter. This is *not* a feature of *the* Python language itself
+# There is a user guide: https://docs.python.org/3/extending/index.html#extending-index
+#      and a reference manual: https://docs.python.org/3/c-api/index.html#c-api-index
+# Moreover, both use cases of extension and embedding is *different* from simply *calling* C *from* Python.
+# You can do the latter using Python's ctypes or cffi modules in the stdlib,
+# which would better preserve the portability of code across Python implementations[1].
+
+# CPython extension module 🎯 wed nov 4
+# https://docs.python.org/3/extending/first-extension-module.html#first-extension-module
+
+# + =============== +
+# | Python and Rust |
+# + =============== +
+
+# For CPU accelerated code, borscht uses the Rust programming language rather than C/C++,
+# while still maintaining the Python veneer for user productivity.
+# This is possible *because* the Rust language has a feature that supports Foreign Function Interface (FFI) with the keyword extern
+# — In short, FFI is a way for a programming language A to define functions and enable programming language B to call them
+#   by specifying a specific Application Binary Interface (ABI) which affects the format of the compiled assembly code.
+#   In particular, we would specifcy the "C" ABI chosen by the dominant compiler *for* the current target
+
+# [unsafe(no_mangle)]
+# pub extern "C" fn call_from_c() {
+#     println!("Just called a Rust function from C!");
+# }
+# book: https://rust-book.cs.brown.edu/ch20-01-unsafe-rust.html#calling-rust-functions-from-other-languages
+# rustonomicon: https://doc.rust-lang.org/nomicon/ffi.html#ffi-and-unwinding
+# reference: https://doc.rust-lang.org/reference/items/external-blocks.html#abi
+# 
+
+# For any performance critical borscht code, we can write Rust code with externs,
+# but ... (pyo3 and maturin) 🎯 wed nov 4
+
+
+
+
+# $ tree* -L 1
+# .
+# ├── Cargo.lock
+# ├── Cargo.toml
+# ├── pyproject.toml <--- We are currently here
+# ├── python
+# ├── rust
+# ├── target
+# ├── toolchain.toml
+# └── uv.lock
+
+# [0]: See the Mojo programming language (by Chris Lattner of clang, llvm and swift), attempting to replace all three languages with one.
+# [1]: Although CPython's is getting a JIT compiler (Sea of Nodes! Thanks Ken Jin), for Python implementations like PyPy for instance
+
 [project]
 name = "borscht"      # it's delicious!
 requires-python = ">=3.15"
