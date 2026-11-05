@@ -1,16 +1,95 @@
-import math
-
 # After reading pyproject.toml and Cargo.toml, you understand how borscht's mixed source of Python and Rust interop with one another.
-# After reading __init__.py, you have a 50,000 ft view of how borscht's internals.
-# We will will now delve deeper into the primary module that everything else hangs from, the Tensor
-
+# After reading __init__.py, you have a 50,000 ft view of borscht's internals.
+# We will now delve deeper into the primary module that everything else hangs from: the Tensor!
 #   First, the naming of Tensor instead of NDArray is unfortunate, in the same way the naming of Vector instead of Array in Rust is.
-#   Rust's std inherited the naming from C++'s STL. While Stepanov of C++ STL admitted his mistake, he actually propagted the naming from Scheme.
-#   The root is rotten, dating all the back to Guy Steele and Gerald Sussman when they created Scheme /s
+#   Rust's std inherited the naming from C++'s STL, and while the author of C++'s STL (Stepanov) admitted his mistake, he actually propagated the naming from Scheme.
+#   The root is rotten /s, dating all the back to Guy Steele and Gerald Sussman when they created Scheme and even before that with Lisp's vetor.
 #
-#   Similarly, the naming of Tensor from tensorflow and later pytorch is also historical,
+#   Similarly, the naming of Tensor with in LuaTorch, Tensorflow, PyTorch is historical
 #   dating back to Yann Lecun and Leon Bottou's neural network simulator for AmigaOS.
 #   See: https://x.com/norpadon/status/2045515535643758596
+#
+#   Just understanding this namespace collision already dispels a lot of misconception around deep learning systems.
+#   In the same way that auto-regressive large language models are "just" next-token prediction,
+#                                     deep learning frameworks are "just" n-rank arrays.
+
+# So, given that the primary abstraction of deep learning frameworks is an array (albeit n-rank),
+# there is a lot of transfer from our traditional training in designing data structures for software 1.0
+# Every data structure needs a way of creating, reading, updating, and deleting elements — it's CRUD all the way down!
+
+# Although we will eventually build high-level deep learning abstractions
+# such as borscht.nn and borscht.optim (as seen from the 50,000 ft view in __init__.py),
+# we start our deep learning system adventure with borscht by getting a matrix multiplication to run on the GPU.
+#   This is roughly following what is known as the incremental or Ghuloum approach to compiler construction (http://scheme2006.cs.uchicago.edu/11-ghuloum.pdf)
+#   where you implement a vertical slice of the entire compiler pipeline for a single language feature i.e arithmetic
+#   While we will literally be applying such form in Week 10 with a Tensor compiler following PyTorch 2,
+#                                                   we start with a Tensor interpreter following PyTorch 1.
+
+#   However, the one thing to realize, as you now understand from Chapter 1 is that the comparison of software 2.0's
+#   matrix multiplication to software 1.0's arithmetic could *not* be more different, for matrix multiplication is
+#   *the* core operation of all deep learning. There is nothing more universal than a linear operation.
+#   — "Mathematics is the art of reducing any problem to linear algebra", William Stein (of SageMath!)
+
+# With that said, we will implement all the abstractions necessary for the following forward pass to run
+# Down the rabbit hole we go!
+
+# >>> import borscht
+# >>> A = torch.full((2,3), 3.141592)
+# >>> B = torch.full((3,2), 3.141592)
+# >>> torch.mm(A,B)
+# tensor([[29.6088, 29.6088],
+#         [29.6088, 29.6088]])
+
+#              "Oh dear! Oh dear! I shall be too late!"
+#              "I do not want to miss tea time with borscht and pie"
+
+#  \\|//  ,,, \|/                                        \|/  \\|//
+# ^^^^^^^^^^^^.                                        .^^^^^^^^^^^^
+#           ':|             :  :  :                    |  .    :
+#       .     |             '  :  '              o     |  ':
+#         '. :| _ _ __         '                / \    | . :
+#      :   :':||=|H|  |\   (\   /)           .-------. |' :
+#         .   ||_|_|__|_\   \\ //            | ^   ^ | |.
+#        . :: |==========   (o o)            | \___/ | |'.     .
+#      .      |            (  v  )    .--.   '-------' |
+#            ,|            /|:::|\___( 12 )            |  .
+#         .  :|           ( |:::|     `--'             |   .  .
+#         .   |            (_) (_)                     |'  :
+#            :|         '  .                           |'
+#            ,|       c[_]                       _     |
+#       ,  :  |    o                            [_]    |:
+#            :|   / \            ______         | |    |  :. .
+#        .    | .-----.         [______]       /   \   |.  , :
+#           : | |~ X ~|         |ORANGE|      |DRINK|  | :
+#        ,   .| | ~ ^~|         |MARMA-|      | ME  |  | :
+#        :   .| '-----'         | LADE |      '-----'  |.
+#       .     |                 '------'               |
+#      ' '  ' |                                        |
+#        '    |   .----.                      _______  |  . :
+#             |   |Q   |                     |   |   | | ,.   '
+#             |   | <3 |      (O)===,_,      |  o|o  | |: ,:'
+#           . |   |   Q|                     |___|___| | ' :
+#             |   '----'                               |,.
+#             |                                        |   '  '
+#             |                   .                    |. ' .
+#      ::    ::                                        :      .
+#             .                   .                    .
+#            ''                                        '      .
+#                                 .
+
+
+#      "Down, down, down. Would the fall never come to an end?"
+
+
+
+
+
+
+
+
+import builtins
+import math
+
 class Tensor: # The more accurate name for the Tensor data structure we all use is an NDArray like numpy, and jax.
     def __init__(self, shape: tuple[int, ...], dtype):
         # A tensor is nothing more than a multidimensional (that is, multi rank) array that approximates some element in R^{d0,...,dn}
@@ -31,7 +110,7 @@ class Tensor: # The more accurate name for the Tensor data structure we all use 
         # One could argue that even if a single machine ran out of memory and storage, you could offload onto distributed machines.
         # — The primary reason why this is not a desirable design given that we have to *allocate* an array per additional rank.
         #   In systems programming, allocation is something that should be avoided if possible,
-        #   the same way that a non-polynomial algorithm should be avoided.
+        #   the same way that in "non"-systems programming, a non-polynomial algorithm should be avoided.
         #   This is because moving data from memory to processor is extremely expensive, as we'll understand more later.
         # Can we be more clever?
 
@@ -63,8 +142,8 @@ class Tensor: # The more accurate name for the Tensor data structure we all use 
             #   This gives us 3+2=5.
             #   **This works more generally for any nxm matrix, where instead of 3 we use n and instead of 5 we use m.**
 
-            # How does this work for indexing a rank-3 array with shape (p,n,m) with index (i,j,k)?
-            # Although more unwieldly, consider a concrete logical shape of (4,2,3)
+        # Although more unwieldly, how does this work for indexing a rank-3 array with shape (p,n,m) with index (i,j,k)?
+        # Consider a concrete logical shape of (4,2,3)
 
         #                         +-----+-----+-----+
         #                        /     /     /     /|
@@ -98,8 +177,9 @@ class Tensor: # The more accurate name for the Tensor data structure we all use 
         # And how do we recover the logical semantics of indexing with (i,j,k)?
         # Say, returning d23 when a user indexes with [(3,1,2)]?
 
+        #  We continue the same pattern from the previous case, except we *skip* twice-over with the first two indices.
+
             # First index
-            #   We continue the same pattern from the previous case, except we *skip* twice-over.
             #   The first index is 3, which means we want to skip over the first 3 matrices.
             #   We can do this by multiplying the logical index 3 by the shape of the matrix, which is 3*(2*3)=18
             #   This lets us jump from the index 0 to the index 0+18=18
@@ -137,12 +217,18 @@ class Tensor: # The more accurate name for the Tensor data structure we all use 
         # correspondingly multiplying the index (i,j,k) with another tuple known as the *stride* (n*m,m,1).
         # A stride is the technical jargon for the numbers you subequently multiply your indices to skip and jump over the relevant elements.
 
-        # The shape field is a tuple which stores stride ((s0 *...*s_{n-1}*1), ... , (s_{n-1}*1), 1)
-        self.stride: tuple[int, ...] = tuple(math.prod(self.shape[d+1:]) for d in range(len(self.shape)))
-        self.storage = None # The storage field is..
-        # 🎨 DESIGN CHOICE ALIASING/BINDING: MUTABLE vs IMMUTABLE), in borscht/torch views share storage (MUTATION). TODO: no Storage concept, direct Tensor to Tensor aliasing????
+        # The stride field is a tuple which stores stride ((s0 *...*s_{n-1}*1), ... , (s_{n-1}*1), 1)
+        # We can optimize the following expression multiplying from right to left with a running product, but we'll keep it as is for now.
+        self.stride: tuple[int, ...] = tuple(math.prod(self.shape[d+1:]) for d in builtins.range(len(self.shape)))
+        # TODO/TEST:  zero-size dims
+        
+        self.storage = None # explain storage concept
+
+        # one thread of exposition for general allocation on *various* targets (cpu, nvidia, amd)
+        # one thread of exposition for avoiding allocation for ops that just change logical picture
 
 
+        # explain (device,dtype,layout) concepts below
         self.device = None
         self.dtype: dtype | None = None
 
@@ -157,6 +243,49 @@ class Tensor: # The more accurate name for the Tensor data structure we all use 
     def backwards(self):
         # self.grad = Tensor()
         raise NotImplementedError("")
+
+# creation ops
+
+def tensor(data, *, dtype: dtype|None=None, device: device|None=None, requires_grad=False, pin_memory=False) -> "Tensor":
+    raise NotImplementedError("")
+
+# annotate .... explaining empty...
+# borscht follows the same API as torch, which in turn follows the same API as numpy
+def empty(size, out=None, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
+    raise NotImplementedError("")
+
+def empty_like(input, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
+    raise NotImplementedError("")
+
+def zeros(size, out=None, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
+    raise NotImplementedError("")
+
+def zeros_like(input, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
+    raise NotImplementedError("")
+
+def ones(size, out=None, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
+    raise NotImplementedError("")
+
+def ones_like(input, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
+    raise NotImplementedError("")
+
+def full(size, fill_value, out=None, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
+    raise NotImplementedError("")
+
+def full_like(input, fill_value, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
+    raise NotImplementedError("")
+
+def arange(start, end=None, step=1, out=None, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
+    raise NotImplementedError("")
+
+def range(start, end=None, step=1, out=None, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
+    raise NotImplementedError("")
+
+def linspace(start, end, steps, out=None, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
+    raise NotImplementedError("")
+
+def eye(n, m=None, out=None, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
+    raise NotImplementedError("")
 
 class dtype:
     def __init__(self):
