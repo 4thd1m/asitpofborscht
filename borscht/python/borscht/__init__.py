@@ -12,18 +12,17 @@ from ._borscht import * # this underscore follows the naming convention of nativ
 # — After we define the borscht.Tensor, we can
 #     1. deepen it's semantics "downwards" by accelerating the evaluation of it's operations referred to as "forwards"
 #                                          and adding automatic differentiation referred to as "backwards"
-#     2. abstract it's semantics "upwards" by adding neural network primitives, optimizers,
-#                                          linear algebra routines, and a jit compiler on top of Tensor
+#     2. abstract it's semantics "upwards" by adding neural network primitives, optimizers, and linear algebra routines
 
 from . import nn
 from . import optim
 from . import linalg
-from . import compile
 from .tensor import Tensor, dtype, layout, device, Generator # <--- You can see how other module builds on or below the Tensor
 from . import ops                                            #      the Tensor plays a somewhat similar role that
 from . import func                                           #      the IP protocol does in the networking stack or the ISA does in the hwardware-software interface
 from . import engine                                         #      That is to say, the Tensor is *the* major interface
 from . import kernels
+from . import compile
 
 
 __doc__ = _borscht.__doc__
