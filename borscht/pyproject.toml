@@ -38,6 +38,10 @@
 # "Let us change our traditional attitude to the construction of programs:
 #  Instead of imagining that our main task is to instruct a computer what to do,
 #  let us concentrate rather on explaining to human beings what we want a computer to do."
+# Given how comment-heavy borscht's source is, we recommend you to choose your editor's theme accordingly,
+# so that you don't strain your eyes to read the comments.
+# For VSCode, we like the light theme that is default "Light(Visual Studio)"
+#                  and the dark theme "CommentsAreImportant" see: https://marketplace.visualstudio.com/items?itemName=pluveto.comments-are-important
 
 # There is a specific order we recommend the reader to walkthrough the codebase.
 # In fact, this is the order of how borscht's companion textbook The Structure and Interpretation of Tensor Programs[4] presents borscht
