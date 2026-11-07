@@ -24,9 +24,9 @@
 
 # """
 # >>> import borscht
-# >>> A = torch.full((2,3), 3.141592)
-# >>> B = torch.full((3,2), 3.141592)
-# >>> torch.mm(A,B)
+# >>> A = borscht.full((2,3), 3.141592)
+# >>> B = borscht.full((3,2), 3.141592)
+# >>> borscht.mm(A,B)
 # tensor([[29.6088, 29.6088],
 #         [29.6088, 29.6088]])
 # """
@@ -201,22 +201,24 @@ __test__ = {"distributivity": """
 #         [29.6088, 29.6088]])
 # """                                                 # 4. = agi.
 
-# Our task is now to let the user construct (1) and multiply (3) two matrices A and B with shapes (2,3) and and (3,2) respectively
-# We will construct such Tensors in the remainder of tensor.py,
-#    and  multiply the two Tensors in ops.py
+# Our task for the remainder of tensor.py is now to let the user construct (1), read (2), and multiply (3)
+# two matrices A and B with shapes (2,3) and and (3,2) respectively
 
 # Note: We will interchangeably describe a Tensor's with "a matrix of shape (2,3)" and "a 2x3 matrix".
 # Both have the same meaning of *shape*.
 
-import builtins
 import math
+
+# + ==================================================================================================================+
+#                                              Constructing Tensors
+# + ==================================================================================================================+
 
 # Although Python does indeed have @staticmethod and @classmethod decorator's,
 # borscht's Tensor constructors/factory methods are free functions,
 # following torch and numpy, which in turn, were inspired by MatLab and APL
 # Many design decisions of systems with history are implicitly inherited rather than explicitly designed.
 
-def full(size, fill_value, out=None, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
+def full(size, fill_value): #out=None, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
     """Create a Tensor of shape `size` filled with `fill_value`.
 
     Args:
@@ -244,7 +246,7 @@ def full(size, fill_value, out=None, dtype: dtype|None=None, layout: layout|None
         (2, 3)
     """
 
-    return Tensor(size, fill_value) # for now, .full(size, fill_value) is simply a wrapper around Tensor.__init__()
+    return Tensor(size, fill_value) #, dtype) # for now, .full(size, fill_value) is simply a wrapper around Tensor.__init__()
 
 class Tensor: # The more accurate name for the Tensor data structure we all use is an NDArray like numpy, and jax.
     def __init__(self, shape: tuple[int, ...], fill_value):
@@ -385,24 +387,87 @@ class Tensor: # The more accurate name for the Tensor data structure we all use 
 
         # The stride field is a tuple which stores stride ((s0 *...*s_{n-1}*1), ... , (s_{n-1}*1), 1) TODO/TEST:  zero-size dims
         # We can optimize the following expression multiplying from right to left with a running product, but we'll keep it as is for now.
-        self.stride: tuple[int, ...] = tuple(math.prod(self.shape[d+1:]) for d in builtins.range(len(self.shape)))
+        self.stride: tuple[int, ...] = tuple(math.prod(self.shape[d+1:]) for d in range(len(self.shape)))
         self.storage: list = [fill_value] * math.prod(self.shape) # The storage field is a flat list, only one allocation!
-        self.dtype: dtype | None = None
 
-        # TODO: device, offset, layout??
-        self.device = None
+        # That's all a Tensor is!
+        # A Tensor is a logical shape virtualized by a stride to physical storage
+        # As Karpathy says, the rest is "just" efficiency
+        # We now recommend you to collapse/fold the __init__ method, and all of it's commentary.
+
+    def __repr__(self) -> str:
+        """
+        Examples:
+            >>> full((), 3.141592)
+            tensor(3.1416)
+            >>> full((2, 2, 3), 3.141592)
+            tensor([[[3.1416, 3.1416, 3.1416],
+                     [3.1416, 3.1416, 3.1416]],
+            <BLANKLINE>
+                    [[3.1416, 3.1416, 3.1416],
+                     [3.1416, 3.1416, 3.1416]]])
+        """
+        # + ===========================================================================================================+
+        #                                              Printing Tensors
+        # + ===========================================================================================================+
+        # Starting with our running example, evaluating the construction of a 2x3 matrix A looks like
+        # >>> A = full((2, 3), 3.141592)
+        # >>> A
+        # tensor([[3.1416, 3.1416, 3.1416],
+        #         [3.1416, 3.1416, 3.1416]])
+        # <borscht.tensor.Tensor object at 0x10b264ad0>
 
 
-    # 🎨 DESIGN CHOICE (DEEP vs SHALLOW embedding)
-    # in borscht/pt1/hips-autograd, AD is implemented via operator overloading and tape
-    # in jax/pt2, AD is implemented via source transformation
-    # see: Uwe's `dco` vs `dcr`
+        # print(A) calls str(A), which falls back to repr(A) since we don't define __str__ separately (and neither does torch).
+        # Printing is our first *read* of a Tensor, and it's the stride formula from above put to work:
+        # the logical index (i0,...,in) lives at the physical index i0*s0 + ... + in*sn in self.storage.
+        # So rather than allocating nested lists, we recurse one dimension at a time, carrying the running offset.
 
-    # scaffold ch.4.1 automatic difefrentiation
-    # extend Lab 7: Custom Autograd Backwards for VLA
-    def backwards(self):
-        # self.grad = Tensor()
-        raise NotImplementedError("")
+        # That's all our running example needs, but it's not all torch does. Compare print(full((2,3), 7)) with torch's.
+        # The rest — whole-number floats as "2.", scientific notation, ints and bools, aligned columns, line wrapping,
+        # and "..." for big tensors — is in _tensor_str.py, the same way torch keeps its printer in torch/_tensor_str.py.
+
+        return "tensor(" + self._str(0, 0, indent=len("tensor(")) + ")"
+
+    def _str(self, d: int, offset: int, indent: int) -> str:
+        if d == len(self.shape): # every index is used up, so offset is now a physical index into storage
+            return f"{self.storage[offset]:.4f}"
+
+        elements = [self._str(d + 1, offset + i * self.stride[d], indent + 1) for i in range(self.shape[d])]
+        if d == len(self.shape) - 1: # the innermost dimension is a row of numbers
+            return "[" + ", ".join(elements) + "]"
+
+        # Every other dimension is a column of sub-tensors, one per line, indented to sit under our opening bracket.
+        # torch also adds a newline per extra rank, so the matrices of a rank-3 tensor are separated by a blank line.
+        return "[" + ("," + "\n" * (len(self.shape) - d - 1) + " " * (indent + 1)).join(elements) + "]"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # creation ops
@@ -436,8 +501,8 @@ def full_like(input, fill_value, dtype: dtype|None=None, layout: layout|None=Non
 def arange(start, end=None, step=1, out=None, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
     raise NotImplementedError("")
 
-def range(start, end=None, step=1, out=None, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
-    raise NotImplementedError("")
+# def range(start, end=None, step=1, out=None, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
+#     raise NotImplementedError("")
 
 def linspace(start, end, steps, out=None, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
     raise NotImplementedError("")
@@ -476,6 +541,19 @@ class Generator:
     def set_state(self, new_state) -> "Generator":
         raise NotImplementedError("")
 
+# 🎨 DESIGN CHOICE (DEEP vs SHALLOW embedding)
+# in borscht/pt1/hips-autograd, AD is implemented via operator overloading and tape
+# in jax/pt2, AD is implemented via source transformation
+# see: Uwe's `dco` vs `dcr`
+
+# scaffold ch.4.1 automatic difefrentiation
+# extend Lab 7: Custom Autograd Backwards for VLA
+# def backwards(self):
+    # self.grad = Tensor()
+    # raise NotImplementedError("")
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
+
+
