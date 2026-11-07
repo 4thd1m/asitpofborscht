@@ -442,6 +442,66 @@ class Tensor: # The more accurate name for the Tensor data structure we all use 
         return "[" + ("," + "\n" * (len(self.shape) - d - 1) + " " * (indent + 1)).join(elements) + "]"
 
 
+# + ===========================================================================================================+
+#                                              Evaluating Tensors
+# + ===========================================================================================================+
+def mm(input: Tensor, mat2: Tensor) -> Tensor: #, out=None):
+    """Multiply the (n,k) matrix `input` with the (k,m) matrix `mat2` into a new (n,m) matrix.
+
+    Examples:
+        >>> A = full((2, 3), 3.141592)
+        >>> B = full((3, 2), 3.141592)
+        >>> mm(A, B)
+        tensor([[29.6088, 29.6088],
+                [29.6088, 29.6088]])
+        >>> mm(A, A)
+        Traceback (most recent call last):
+        ...
+        RuntimeError: mat1 and mat2 shapes cannot be multiplied (2x3 and 2x3)
+    """
+    # Our running example multiplies the 2x3 matrix A with the 3x2 matrix B into the 2x2 matrix C.
+    # Sitting B above C and A to the left of C, the shapes line up: C takes its n rows from A and its m columns from B,
+    # while the k columns of A have to match the k rows of B.
+
+    #                                                      m columns
+    #                                               <--------------------->
+    #                                                         +---------+
+    #                                           ^   [  3.1416 |  3.1416 | ]
+    #                                   k rows  |   [  3.1416 |  3.1416 | ]    B: (k,m) = (3,2)
+    #                                           v   [  3.1416 |  3.1416 | ]
+    #                                                         +----+----+
+    #                    k columns                                 |
+    #          <---------------------------->                      |
+    #            +------------------------+                   +----v----+
+    #        ^ [ | 3.1416  3.1416  3.1416 | ] ----> [ 29.6088 | 29.6088 | ]
+    # n rows |   +------------------------+                   +---------+
+    #        v [   3.1416  3.1416  3.1416   ]       [ 29.6088   29.6088   ]
+    #
+    #                 A: (n,k) = (2,3)                 C: (n,m) = (2,2)
+
+    #   c12 = a11*b12 + a12*b22 + a13*b32
+    #       = 3.141592*3.141592 + 3.141592*3.141592 + 3.141592*3.141592
+    #       = 29.6088
+
+    (nrows, k), (k2, mcols) = input.shape, mat2.shape
+    if len(input.shape) != 2 or len(mat2.shape) != 2: raise RuntimeError("self must be a matrix" if len(input.shape) != 2 else "mat2 must be a matrix")
+    if k != k2: raise RuntimeError(f"mat1 and mat2 shapes cannot be multiplied ({nrows}x{k} and {k2}x{mcols})")
+
+    output = full((nrows, mcols), 0.0)
+    A_NK, B_KM, C_NM = input, mat2, output
+    A_buf, B_buf, C_buf = A_NK.storage, B_KM.storage, C_NM.storage
+
+    (ijmp, pjmpa), (pjmpb, jjmp), (istridec, jstridec) = input.stride, mat2.stride, output.stride
+    for i in range(nrows):
+        for j in range(mcols):
+            dot_product = 0.0
+            for p in range(k):
+                dot_product += A_buf[i*ijmp + p*pjmpa] * B_buf[p*pjmpb + j*jjmp]
+            C_buf[i*istridec + j*jstridec] = dot_product
+
+    return output
+
+
 
 
 
