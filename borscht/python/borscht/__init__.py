@@ -25,6 +25,11 @@ from . import kernels
 from . import compile
 
 
+# note: this rebinds the attribute borscht.tensor from the submodule to the tensor() constructor, like torch.tensor
+from .tensor import tensor, empty, empty_like, zeros, zeros_like, ones, ones_like, full, full_like, arange, linspace, eye
+from .tensor import mm
+
+
 __doc__ = _borscht.__doc__
 if hasattr(_borscht, "__all__"):
     __all__ = _borscht.__all__
