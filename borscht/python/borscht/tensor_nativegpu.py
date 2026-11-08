@@ -2,11 +2,6 @@ import math
 
 # alternative: webgpu
 
-# Storage
-# Allocator
-# Device
-# Kernel
-
 def full(size, fill_value):
     raise NotImplementedError("borscht.tensor_nativegpu.full")
 

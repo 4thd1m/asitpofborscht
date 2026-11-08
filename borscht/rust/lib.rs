@@ -1,7 +1,9 @@
 use pyo3::prelude::*;
-mod tensor;
-mod engine;
-mod kernels;
+mod kernelscpu;
+mod kernelsgpu;
+
+// mod tensor;
+// mod engine;
 
 /// A Python module implemented in Rust.
 #[pymodule]
