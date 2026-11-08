@@ -1,6 +1,6 @@
 # After reading pyproject.toml and Cargo.toml, you understand how borscht's mixed source of Python and Rust interop with one another.
 # After reading __init__.py, you have a 50,000 ft view of borscht's internals.
-# We will now delve deeper into the primary module that everything else hangs from: the Tensor!
+# Let us delve deeper into the primary module that everything else hangs from: the Tensor!
 
 # So, given that the primary abstraction of deep learning frameworks is an array (albeit n-rank),
 # there is a lot of transfer from our traditional training in designing data structures for software 1.0
@@ -218,7 +218,7 @@ import math
 # following torch and numpy, which in turn, were inspired by MatLab and APL
 # Many design decisions of systems with history are implicitly inherited rather than explicitly designed.
 
-def full(size, fill_value): #out=None, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
+def full(size, fill_value):
     """Create a Tensor of shape `size` filled with `fill_value`.
 
     Args:
@@ -458,7 +458,7 @@ class Tensor: # The more accurate name for the Tensor data structure we all use 
 #  1. construct A and B
 #  2. read A and B (and thus C)
 # we can now implement a routine to evaluate an expression of matrix multiplication
-def mm(A: Tensor, B: Tensor) -> Tensor: #, out=None):
+def mm(A: Tensor, B: Tensor) -> Tensor:
     # That is,
     """Multiply the (n,k) matrix `A` with the (k,m) matrix `B` into a new (n,m) matrix.
 
@@ -582,7 +582,7 @@ if __name__ == "__main__":
 # To summarize,
 # -after reading pyproject.toml and Cargo.toml, you understand how borscht's mixed source of Python and Rust interop with one another.
 # -after reading __init__.py, you have a 50,000 ft view of borscht's internals.
-# -after reading tensor_managed.py, you understand the core essence behind the Tensor abstraction
+# -after reading tensor_managed.py, you understand the core essence behind the Tensor concept
 
 # it is now time to accelerate our Tensor with the Rust programming language!
 # head on over to tensor_nativecpu.py
