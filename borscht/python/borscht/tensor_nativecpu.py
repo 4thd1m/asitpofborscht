@@ -1,6 +1,86 @@
+# After reading pyproject.toml and Cargo.toml, you understand how borscht's mixed source of Python and Rust interop with one another.
+# After reading __init__.py, you have a 50,000 ft view of borscht's internals.
+# After reading tensor_nativecpu.py, you now understand the core essence of the Tensor concept
+# Let us accelerate the implementation of the Tensor's matrix multiplication routine with the Rust programming language!
+
+def _main():
+    import doctest
+    doctest.testmod()
+
+    A = full((2,3), 3.141592) # some pie ...
+    B = full((3,2), 3.141592)
+    C = mm(A,B) # .. and some borscht!
+    print(C)
+
+    n = 256
+    A, B = full((n, n), 1.0), full((n, n), 1.0)
+
+    import time    
+    t0 = time.perf_counter()
+    mm(A, B)
+    t = time.perf_counter() - t0
+    print(f"{n}x{n} mm: {t*1e3:.1f} ms, {2*n**3 / t / 1e9:.4f} GFLOP/s")
+
 import math
 
-def full(size, fill_value): #out=None, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
+def mm(A: Tensor, B: Tensor) -> Tensor:
+    """Multiply the (n,k) matrix `A` with the (k,m) matrix `B` into a new (n,m) matrix.
+
+    Examples:
+        >>> A = full((2, 3), 3.141592)
+        >>> B = full((3, 2), 3.141592)
+        >>> mm(A, B)
+        tensor([[29.6088, 29.6088],
+                [29.6088, 29.6088]])
+        >>> mm(A, A)
+        Traceback (most recent call last):
+        ...
+        RuntimeError: A and B shapes cannot be multiplied (2x3 and 2x3)
+    """
+    return mm_managed(A, B)
+
+def mm_native(A: Tensor, B: Tensor) -> Tensor:
+    raise NotImplementedError()
+
+def mm_managed(A: Tensor, B: Tensor) -> Tensor:
+    # That is,
+    """Multiply the (n,k) matrix `A` with the (k,m) matrix `B` into a new (n,m) matrix.
+
+    Examples:
+        >>> A = full((2, 3), 3.141592)
+        >>> B = full((3, 2), 3.141592)
+        >>> mm(A, B)
+        tensor([[29.6088, 29.6088],
+                [29.6088, 29.6088]])
+        >>> mm(A, A)
+        Traceback (most recent call last):
+        ...
+        RuntimeError: A and B shapes cannot be multiplied (2x3 and 2x3)
+    """
+    # preconditions for well-defined matrix multiplication
+    (nrows, p), (p2, mcols) = A.shape, B.shape
+    if len(A.shape) != 2 or len(B.shape) != 2: raise RuntimeError("self must be a matrix" if len(A.shape) != 2 else "B must be a matrix")
+    if p != p2: raise RuntimeError(f"A and B shapes cannot be multiplied ({nrows}x{p} and {p2}x{mcols})")
+
+    # allocating output and aliasing strides and storage
+    C = full((nrows, mcols), 0.0)
+    A_NP, B_PM, C_NM = A, B, C
+    (ijmp, kjmp), (k2jmp, jjmp), (istridec, jstridec) = A.stride, B.stride, C.stride
+    A_buf, B_buf, C_buf = A_NP.storage, B_PM.storage, C_NM.storage
+
+    for i in range(nrows): # for each of A's n rows..
+        for j in range(mcols): # ..loop through of B's m cols..
+            dot_product = 0.0
+            for k in range(p):   # ..take their k-dimensional dot product A[(i,k)] + B[(k,j)]..
+                dot_product += A_buf[i*ijmp + k*kjmp] * B_buf[k*k2jmp + j*jjmp]
+            C_buf[i*istridec + j*jstridec] = dot_product
+            # repeat for the rest of B's columns
+        # repeat for the rest of A's rows
+
+    return C
+
+
+def full(size, fill_value):
     """Create a Tensor of shape `size` filled with `fill_value`.
 
     Args:
@@ -63,63 +143,8 @@ class Tensor: # The more accurate name for the Tensor data structure we all use 
         # torch also adds a newline per extra rank, so the matrices of a rank-3 tensor are separated by a blank line.
         return "[" + ("," + "\n" * (len(self.shape) - d - 1) + " " * (indent + 1)).join(elements) + "]"
 
-def mm(input: Tensor, mat2: Tensor) -> Tensor: #, out=None):
-    """Multiply the (n,k) matrix `input` with the (k,m) matrix `mat2` into a new (n,m) matrix.
 
-    Examples:
-        >>> A = full((2, 3), 3.141592)
-        >>> B = full((3, 2), 3.141592)
-        >>> mm(A, B)
-        tensor([[29.6088, 29.6088],
-                [29.6088, 29.6088]])
-        >>> mm(A, A)
-        Traceback (most recent call last):
-        ...
-        RuntimeError: mat1 and mat2 shapes cannot be multiplied (2x3 and 2x3)
-    """
-    # mm_naive(input, mat2)
-    # _gemm()
-    raise NotImplementedError("")
-
-def mm_native(input: Tensor, mat2: Tensor) -> Tensor:
-    raise NotImplementedError()
-
-def mm_python(input: Tensor, mat2: Tensor) -> Tensor: #, out=None):
-    """Multiply the (n,k) matrix `input` with the (k,m) matrix `mat2` into a new (n,m) matrix.
-
-    Examples:
-        >>> A = full((2, 3), 3.141592)
-        >>> B = full((3, 2), 3.141592)
-        >>> mm(A, B)
-        tensor([[29.6088, 29.6088],
-                [29.6088, 29.6088]])
-        >>> mm(A, A)
-        Traceback (most recent call last):
-        ...
-        RuntimeError: mat1 and mat2 shapes cannot be multiplied (2x3 and 2x3)
-    """
-    (nrows, k), (k2, mcols) = input.shape, mat2.shape
-    if len(input.shape) != 2 or len(mat2.shape) != 2: raise RuntimeError("self must be a matrix" if len(input.shape) != 2 else "mat2 must be a matrix")
-    if k != k2: raise RuntimeError(f"mat1 and mat2 shapes cannot be multiplied ({nrows}x{k} and {k2}x{mcols})")
-
-    output = full((nrows, mcols), 0.0)
-    A_NK, B_KM, C_NM = input, mat2, output
-    A_buf, B_buf, C_buf = A_NK.storage, B_KM.storage, C_NM.storage
-
-    (ijmp, pjmpa), (pjmpb, jjmp), (istridec, jstridec) = input.stride, mat2.stride, output.stride
-    for i in range(nrows):
-        for j in range(mcols):
-            dot_product = 0.0
-            for p in range(k):
-                dot_product += A_buf[i*ijmp + p*pjmpa] * B_buf[p*pjmpb + j*jjmp]
-            C_buf[i*istridec + j*jstridec] = dot_product
-
-    return output
-
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
+if __name__ == "__main__": _main()
 
 # 🎨 DESIGN CHOICE (DEEP vs SHALLOW embedding)
 # in borscht/pt1/hips-autograd, AD is implemented via operator overloading and tape

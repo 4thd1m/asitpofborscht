@@ -8,7 +8,7 @@ from ._borscht import * # this underscore follows the naming convention of nativ
 
 # One question you may be asking is how does one decide to write framework code in Python vs in Rust?
 # When we say "framework code", we are referring to all code that runs on the CPU unrelated to the code that runs on the GPU
-# To answer that question, head on over to tensor.py, the primary module of borscht
+# To answer that question, head on over to tensor_managed.py, the primary module of borscht
 # — After we define the borscht.Tensor, we can
 #     1. deepen it's semantics "downwards" by accelerating the evaluation of it's operations referred to as "forwards"
 #                                          and adding automatic differentiation referred to as "backwards"
@@ -18,15 +18,33 @@ from . import nn
 from . import optim
 from . import linalg
 
-import os
-_TENSOR = os.environ.get("BORSCHT_TENSOR") or "BTL"
-if   _TENSOR == "BTL":   from .tensor_managed   import Tensor, full, mm   # <--- You can see how other module builds on or below the Tensor
-elif _TENSOR == "ISL":   from .tensor_nativecpu import Tensor, full, mm   #      the Tensor plays a somewhat similar role that
-# elif _TENSOR == "ISL+": from .tensor_nativegpu import Tensor, full, mm  #      the IP protocol does in the networking stack or the ISA does in the hwardware-software interface
-# elif _TENSOR == "ASL": from .tensor import Tensor, full, mm
-else: raise ValueError(f"BORSCHT_TENSOR must be one of 'BTL', 'BTL', 'ISL', 'ISL+', 'ASL' but got {_TENSOR!r}")
 
-from . import compile                                                       #      That is to say, the Tensor is *the* major interface
+
+
+
+# You can see how other module builds on or below the Tensor the Tensor plays a somewhat similar role that
+# the IP protocol does in the networking stack or the ISA does in the hwardware-software interface
+# That is to say, the Tensor is *the* major interface
+
+# SITP and borscht is inspired by SICP's dual, HtDP[0], which has various
+# teachign language levels[1] with Dr. Racket's (originally PLT Scheme) #lang feature
+# Such languages are
+import os
+_SHELANG = os.environ.get("SHELANG") or "BSL"
+if   _SHELANG == "BSL":   from .tensor_managed   import Tensor, full, mm  # BSL: beginning student language implements the Tensor concept with matrix multiplication
+elif _SHELANG == "ISL":   from .tensor_nativecpu import Tensor, full, mm  # ISL: intermediate student language accelerates the Tensor with the Rust programming language
+elif _SHELANG == "ISL+":  from .tensor_nativegpu import Tensor, full, mm  # ISL+: intermediate student language plus accelerates the Tensor with the CUDA Rust programming language
+elif _SHELANG == "ASL":   from .tensor import Tensor, full, mm            # ASL: advanced student language abstracts device acceleration with Dispatcher, Storage, and Allocator concepts
+else: raise ValueError(f"SHELANG must be one of 'BSL', 'ISL', 'ISL+', 'ASL' but got {_SHELANG!r}")
+
+# [0]: https://cs.brown.edu/people/sk/Publications/Papers/Published/fffk-htdp-vs-sicp-journal/paper.pdf
+# [1]: https://docs.racket-lang.org/drracket/htdp-langs.html
+
+
+
+
+
+from . import compile                                                       
 from . import ops
 from . import kernels
 
