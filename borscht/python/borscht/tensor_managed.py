@@ -22,14 +22,14 @@
 # With that said, we will implement all the abstractions necessary for the following forward pass to run
 # Down the rabbit hole we go!
 
-# """
-# >>> import borscht
-# >>> A = borscht.full((2,3), 3.141592)
-# >>> B = borscht.full((3,2), 3.141592)
-# >>> borscht.mm(A,B)
-# tensor([[29.6088, 29.6088],
-#         [29.6088, 29.6088]])
-# """
+"""
+>>> import borscht
+>>> A = borscht.full((2,3), 3.141592)
+>>> B = borscht.full((3,2), 3.141592)
+>>> borscht.mm(A,B)
+tensor([[29.6088, 29.6088],
+        [29.6088, 29.6088]])
+"""
 
 #                                      "Oh dear! Oh dear! I shall be too late!"
 
@@ -183,23 +183,23 @@ __test__ = {"distributivity": """
 #                 ________\___________/________           '.   `-....-'     `-....-'     `-....-'   .'
 #                '-----------------------------'            '--------------------------------------'
 
-# """
-# >>> import borscht
-# >>> A = borscht.full((2,3), 3.141592)               # 1. creating tensors + ...
-# >>> B = borscht.full((3,2), 3.141592)
+"""
+>>> import borscht
+>>> A = borscht.full((2,3), 3.141592)               # 1. creating tensors + ...
+>>> B = borscht.full((3,2), 3.141592)
 
-# >>> print(A)                                        # 2. reading tensors + ...
-# tensor([[3.1416, 3.1416, 3.1416],
-#         [3.1416, 3.1416, 3.1416]])
-# >>> print(B)
-# tensor([[3.1416, 3.1416],
-#         [3.1416, 3.1416],
-#         [3.1416, 3.1416]])
+>>> A                                               # 2. reading tensors + ...
+tensor([[3.1416, 3.1416, 3.1416],
+        [3.1416, 3.1416, 3.1416]])
+>>> B
+tensor([[3.1416, 3.1416],
+        [3.1416, 3.1416],
+        [3.1416, 3.1416]])
 
-# >>> borscht.mm(A,B)                                 # 3. updating tensors + ...
-# tensor([[29.6088, 29.6088],
-#         [29.6088, 29.6088]])
-# """                                                 # 4. = agi.
+>>> borscht.mm(A,B)                                 # 3. updating tensors + ...
+tensor([[29.6088, 29.6088],
+        [29.6088, 29.6088]])
+"""
 
 # Our task for the remainder of tensor.py is now to let the user construct (1), read (2), and multiply (3)
 # two matrices A and B with shapes (2,3) and and (3,2) respectively
@@ -210,7 +210,7 @@ __test__ = {"distributivity": """
 import math
 
 # + ==================================================================================================================+
-#                                              Constructing Tensors
+#                                              1. Constructing Tensors ...
 # + ==================================================================================================================+
 
 # Although Python does indeed have @staticmethod and @classmethod decorator's,
@@ -393,8 +393,27 @@ class Tensor: # The more accurate name for the Tensor data structure we all use 
         # That's all a Tensor is!
         # A Tensor is a logical shape virtualized by a stride to physical storage
         # As Karpathy says, the rest is "just" efficiency
-        # We now recommend you to collapse/fold the __init__ method, and all of it's commentary.
+        # We now recommend you to collapse/fold the __init__ method, along with all of it's commentary.
 
+    # + ===========================================================================================================+
+    #                                              2. Printing Tensors ...
+    # + ===========================================================================================================+
+    # Continuing with our running example, in order to test our matrix multiplication of A and B, we need to be able to read tensors.
+    # Before we can even print C, we are not even able to print A nor B.
+    # Trying to print A in an interpreter we have
+    """
+    >>> A = full((2, 3), 3.141592)
+    >>> A
+    tensor([[3.1416, 3.1416, 3.1416],
+            [3.1416, 3.1416, 3.1416]])
+    <borscht.tensor.Tensor object at 0x10b264ad0>
+    """
+    # where print() converts arguments to __str__() see: https://docs.python.org/3/builtins/functions.html#print
+    # and in turn, __str__() falls back to __repr__() see: https://docs.python.org/3/builtins/stdtypes.html#str
+    # and in turn, inherits from object.__repr__'s
+    # which in turn, prints the memory address of the allocated object
+
+    # Instead, what we'd like is to print the actual elements of the Tensor
     def __repr__(self) -> str:
         """
         Examples:
@@ -407,16 +426,6 @@ class Tensor: # The more accurate name for the Tensor data structure we all use 
                     [[3.1416, 3.1416, 3.1416],
                      [3.1416, 3.1416, 3.1416]]])
         """
-        # + ===========================================================================================================+
-        #                                              Printing Tensors
-        # + ===========================================================================================================+
-        # Starting with our running example, evaluating the construction of a 2x3 matrix A looks like
-        # >>> A = full((2, 3), 3.141592)
-        # >>> A
-        # tensor([[3.1416, 3.1416, 3.1416],
-        #         [3.1416, 3.1416, 3.1416]])
-        # <borscht.tensor.Tensor object at 0x10b264ad0>
-
 
         # print(A) calls str(A), which falls back to repr(A) since we don't define __str__ separately (and neither does torch).
         # Printing is our first *read* of a Tensor, and it's the stride formula from above put to work:
@@ -443,10 +452,15 @@ class Tensor: # The more accurate name for the Tensor data structure we all use 
 
 
 # + ===========================================================================================================+
-#                                              Evaluating Tensors
+#                                              3. Evaluating Tensors ...
 # + ===========================================================================================================+
-def mm(input: Tensor, mat2: Tensor) -> Tensor: #, out=None):
-    """Multiply the (n,k) matrix `input` with the (k,m) matrix `mat2` into a new (n,m) matrix.
+# Continuing with our running example of multiplying C=AB, now that we're able to
+#  1. construct A and B
+#  2. read A and B (and thus C)
+# we can now implement a routine to evaluate an expression of matrix multiplication
+def mm(A: Tensor, B: Tensor) -> Tensor: #, out=None):
+    # That is,
+    """Multiply the (n,k) matrix `A` with the (k,m) matrix `B` into a new (n,m) matrix.
 
     Examples:
         >>> A = full((2, 3), 3.141592)
@@ -457,163 +471,118 @@ def mm(input: Tensor, mat2: Tensor) -> Tensor: #, out=None):
         >>> mm(A, A)
         Traceback (most recent call last):
         ...
-        RuntimeError: mat1 and mat2 shapes cannot be multiplied (2x3 and 2x3)
+        RuntimeError: A and B shapes cannot be multiplied (2x3 and 2x3)
     """
-    # Our running example multiplies the 2x3 matrix A with the 3x2 matrix B into the 2x2 matrix C.
-    # Sitting B above C and A to the left of C, the shapes line up: C takes its n rows from A and its m columns from B,
-    # while the k columns of A have to match the k rows of B.
-
-    #                                                      m columns
-    #                                               <--------------------->
-    #                                                         +---------+
-    #                                           ^   [  3.1416 |  3.1416 | ]
-    #                                   k rows  |   [  3.1416 |  3.1416 | ]    B: (k,m) = (3,2)
-    #                                           v   [  3.1416 |  3.1416 | ]
-    #                                                         +----+----+
-    #                    k columns                                 |
-    #          <---------------------------->                      |
-    #            +------------------------+                   +----v----+
-    #        ^ [ | 3.1416  3.1416  3.1416 | ] ----> [ 29.6088 | 29.6088 | ]
-    # n rows |   +------------------------+                   +---------+
-    #        v [   3.1416  3.1416  3.1416   ]       [ 29.6088   29.6088   ]
+    # The routine for matrix multiplication is a literal translation of the definition, and is also what we do by hand.
     #
-    #                 A: (n,k) = (2,3)                 C: (n,m) = (2,2)
+    #                      <------- p ------->                   <---- m ---->                   <---- m ---->
+    #                    ^ +-----+-----+-----+                 ^ +-----+-----+                 ^ +-----+-----+
+    #                  n | | a11 | a12 | a13 |               p | | b11 | b12 |               n | | c11 | c12 |
+    #         A  =       | | a21 | a22 | a23 |      B  =       | | b21 | b22 |      C  =       | | c21 | c22 |
+    #                    v +-----+-----+-----+                 | | b31 | b32 |                 v +-----+-----+
+    #                                                          v +-----+-----+
+    #
+    #                       A: (n,p) = (2,3)                   B: (p,m) = (3,2)                C: (n,m) = (2,2)
 
-    #   c12 = a11*b12 + a12*b22 + a13*b32
-    #       = 3.141592*3.141592 + 3.141592*3.141592 + 3.141592*3.141592
-    #       = 29.6088
+    # Recall that although the end result of the matmul C=AB is an nxm matrix C,
+    # there are in fact *two* different perspectives of *how* we evaluate such matmul:
 
-    (nrows, k), (k2, mcols) = input.shape, mat2.shape
-    if len(input.shape) != 2 or len(mat2.shape) != 2: raise RuntimeError("self must be a matrix" if len(input.shape) != 2 else "mat2 must be a matrix")
-    if k != k2: raise RuntimeError(f"mat1 and mat2 shapes cannot be multiplied ({nrows}x{k} and {k2}x{mcols})")
+    # 1. the column-oriented perspective:
+        # where the matrix multiplication is viewed *as* a linear combination..
+        # (each output of the linear combination are columns *vectors* of C)
 
-    output = full((nrows, mcols), 0.0)
-    A_NK, B_KM, C_NM = input, mat2, output
-    A_buf, B_buf, C_buf = A_NK.storage, B_KM.storage, C_NM.storage
+        #          .--------------------------- b11 ---------------------------.of A's p columns with each of B's columns which have a *shape* of (p)..
+        #          |                 .----------------- b21 -----------------. |
+        #          |                 |                 .------- b31 -------. | |
+        #          |                 |                 |                   | | |
+        #          |    +-----+      |    +-----+      |    +-----+       +-----+-----+       ^ +-----+
+        #          v    | a11 |      v    | a12 |      v    | a13 |       | b11 | b12 |     n | | c11 |
+        #             * | a21 |  +      * | a22 |  +      * | a23 |       | b21 | b22 |  =    | | c21 |
+        #               +-----+           +-----+           +-----+       | b31 | b32 |       v +-----+
 
-    (ijmp, pjmpa), (pjmpb, jjmp), (istridec, jstridec) = input.stride, mat2.stride, output.stride
-    for i in range(nrows):
-        for j in range(mcols):
+        #                                                                 +-----+-----+      ..and since A's columns have a a shape of (n), C's output columns also have a shape of (n)
+        #           ..moreover, since we take a linear combination *foreach* of B's *m* columns..
+        #          .------------------------------ b12 ------------------------------.
+        #          |                 .-------------------- b22 --------------------. |
+        #          |                 |                 .---------- b32 ----------. | |          ..C will have m output columns, resulting in a shape of (nxm)
+        #          |                 |                 |                         | | |          <---- m ---->
+        #          |    +-----+      |    +-----+      |    +-----+       +-----+-----+       ^ +-----+-----+
+        #          v    | a11 |      v    | a12 |      v    | a13 |       | b11 | b12 |     n | | c11 | c12 |
+        #             * | a21 |  +      * | a22 |  +      * | a23 |       | b21 | b22 |  =    | | c21 | c22 |
+        #               +-----+           +-----+           +-----+       | b31 | b32 |       v +-----+-----+
+        #                                                                 +-----+-----+
+
+
+        # This perspective is more semantically meaningful because we can view matrix multiplication as
+        # a *composition* of linear transformations encoded by B and subsequently A.
+        # For each column vector bi in the basis of B, take a linear combination of it's entries with each column vector in the basis of A.
+        # Then, C is simply the composition of linear transformations, and any subsequent matrix vector multiplication with C is the composed linear transform
+
+    # 2. the row-oriented perspective:
+        # where the matrix multiplication is viewed *as* an inner product (often the standard inner product i.e the dot product)..
+        # (each output of the inner product are *scalars* of C as opposed to column *vectors* of C)
+
+        #                                                      m columns
+        #                                               <--------------------->
+        #                                                         +---------+
+        #                                           ^   [  3.1416 |  3.1416 | ]
+        #                                   p rows  |   [  3.1416 |  3.1416 | ]    B: (p,m) = (3,2)
+        #                                           v   [  3.1416 |  3.1416 | ]
+        #                                                         +----+----+
+        #                    p columns                                 |
+        #          <---------------------------->                      |
+        #            +------------------------+                   +----v----+  each element cij is the dot product..
+        #        ^ [ | 3.1416  3.1416  3.1416 | ] ----> [ 29.6088 | 29.6088 | ] ..of A's row vector and B's col vector
+        # n rows |   +------------------------+                   +---------+
+        #        v [   3.1416  3.1416  3.1416   ]       [ 29.6088   29.6088   ]
+        #
+        #                 A: (n,p) = (2,3)                 C: (n,m) = (2,2)
+
+        # this view lends itself more naturally to a computational transliteration..
+        # because we evaluate the matrix multiplication per-scalar, rather than per-vector
+
+    # preconditions for well-defined matrix multiplication
+    (nrows, p), (p2, mcols) = A.shape, B.shape
+    if len(A.shape) != 2 or len(B.shape) != 2: raise RuntimeError("self must be a matrix" if len(A.shape) != 2 else "B must be a matrix")
+    if p != p2: raise RuntimeError(f"A and B shapes cannot be multiplied ({nrows}x{p} and {p2}x{mcols})")
+
+    # allocating output and aliasing
+    C = full((nrows, mcols), 0.0) # empty C
+    A_NP, B_PM, C_NM = A, B, C # alias input's A, B and output C with hungarian notation shape suffixes
+    (ijmp, kjmp), (k2jmp, jjmp), (istridec, jstridec) = A.stride, B.stride, C.stride
+    A_buf, B_buf, C_buf = A_NP.storage, B_PM.storage, C_NM.storage # alias their storage buffers
+
+    # and now for the transltieration..
+    for i in range(nrows): # for each of A's n rows..
+        for j in range(mcols): # ..loop through of B's m cols..
             dot_product = 0.0
-            for p in range(k):
-                dot_product += A_buf[i*ijmp + p*pjmpa] * B_buf[p*pjmpb + j*jjmp]
-            C_buf[i*istridec + j*jstridec] = dot_product
+            for k in range(p):   # ..take their k-dimensional dot product A[(i,k)] + B[(k,j)]..
+                dot_product += A_buf[i*ijmp + k*kjmp] * B_buf[k*k2jmp + j*jjmp] # ..since A and B are virtualized
+                            # ..we map logical indices (i,k) and (k,j) to physical ones with strides
+            # update C[(i,j)] (strided)..
+            C_buf[i*istridec + j*jstridec] = dot_product # ..by flushing dot_product
 
-    return output
+            # repeat for the rest of B's columns
+        # repeat for the rest of A's rows
 
+    return C
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# creation ops
-
-def tensor(data, *, dtype: dtype|None=None, device: device|None=None, requires_grad=False, pin_memory=False) -> "Tensor":
-    raise NotImplementedError("")
-
-# annotate .... explaining empty...
-# borscht follows the same API as torch, which in turn follows the same API as numpy
-def empty(size, out=None, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
-    raise NotImplementedError("")
-
-def empty_like(input, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
-    raise NotImplementedError("")
-
-def zeros(size, out=None, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
-    raise NotImplementedError("")
-
-def zeros_like(input, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
-    raise NotImplementedError("")
-
-def ones(size, out=None, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
-    raise NotImplementedError("")
-
-def ones_like(input, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
-    raise NotImplementedError("")
-
-def full_like(input, fill_value, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
-    raise NotImplementedError("")
-
-def arange(start, end=None, step=1, out=None, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
-    raise NotImplementedError("")
-
-# def range(start, end=None, step=1, out=None, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
-#     raise NotImplementedError("")
-
-def linspace(start, end, steps, out=None, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
-    raise NotImplementedError("")
-
-def eye(n, m=None, out=None, dtype: dtype|None=None, layout: layout|None=None, device: device|None=None, requires_grad=None):
-    raise NotImplementedError("")
-
-class dtype:
-    def __init__(self):
-        raise NotImplementedError("")
-
-class layout:
-    def __init__(self):
-        raise NotImplementedError("")
-
-class device:
-    def __init__(self):
-        raise NotImplementedError("")
-
-class Generator:
-    def __init__(self, device: device|None=None):
-        raise NotImplementedError("")
-
-    def manual_seed(self, seed: int) -> "Generator":
-        raise NotImplementedError("")
-
-    def seed(self) -> int:
-        raise NotImplementedError("")
-
-    def initial_seed(self) -> int:
-        raise NotImplementedError("")
-
-    def get_state(self):
-        raise NotImplementedError("")
-
-    def set_state(self, new_state) -> "Generator":
-        raise NotImplementedError("")
-
-# 🎨 DESIGN CHOICE (DEEP vs SHALLOW embedding)
-# in borscht/pt1/hips-autograd, AD is implemented via operator overloading and tape
-# in jax/pt2, AD is implemented via source transformation
-# see: Uwe's `dco` vs `dcr`
-
-# scaffold ch.4.1 automatic difefrentiation
-# extend Lab 7: Custom Autograd Backwards for VLA
-# def backwards(self):
-    # self.grad = Tensor()
-    # raise NotImplementedError("")
+# and now, returning to our running example..
 
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
 
+    import borscht
+    A = borscht.full((2,3), 3.141592) # some pie ...
+    B = borscht.full((3,2), 3.141592)
+    C = borscht.mm(A,B) # .. and some borscht!
+    print(C)
 
+# To summarize,
+# -after reading pyproject.toml and Cargo.toml, you understand how borscht's mixed source of Python and Rust interop with one another.
+# -after reading __init__.py, you have a 50,000 ft view of borscht's internals.
+# -after reading tensor_managed.py, you understand the core essence behind the Tensor abstraction
+
+# it is now time to accelerate our Tensor with the Rust programming language!
+# head on over to tensor_nativecpu.py

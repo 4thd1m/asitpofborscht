@@ -17,17 +17,21 @@ from ._borscht import * # this underscore follows the naming convention of nativ
 from . import nn
 from . import optim
 from . import linalg
-from .tensor import Tensor, dtype, layout, device, Generator # <--- You can see how other module builds on or below the Tensor
-from . import ops                                            #      the Tensor plays a somewhat similar role that
-from . import func                                           #      the IP protocol does in the networking stack or the ISA does in the hwardware-software interface
-from . import engine                                         #      That is to say, the Tensor is *the* major interface
+
+import os
+_TENSOR = os.environ.get("BORSCHT_TENSOR") or "BTL"
+if   _TENSOR == "BTL":   from .tensor_managed   import Tensor, full, mm   # <--- You can see how other module builds on or below the Tensor
+elif _TENSOR == "ISL":   from .tensor_nativecpu import Tensor, full, mm   #      the Tensor plays a somewhat similar role that
+# elif _TENSOR == "ISL+": from .tensor_nativegpu import Tensor, full, mm  #      the IP protocol does in the networking stack or the ISA does in the hwardware-software interface
+# elif _TENSOR == "ASL": from .tensor import Tensor, full, mm
+else: raise ValueError(f"BORSCHT_TENSOR must be one of 'BTL', 'BTL', 'ISL', 'ISL+', 'ASL' but got {_TENSOR!r}")
+
+from . import compile                                                       #      That is to say, the Tensor is *the* major interface
+from . import ops
 from . import kernels
-from . import compile
 
-
-# note: this rebinds the attribute borscht.tensor from the submodule to the tensor() constructor, like torch.tensor
-from .tensor import tensor, empty, empty_like, zeros, zeros_like, ones, ones_like, full, full_like, arange, linspace, eye
-from .tensor import mm
+from . import func
+from . import engine
 
 
 __doc__ = _borscht.__doc__
