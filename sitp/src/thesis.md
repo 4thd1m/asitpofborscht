@@ -209,6 +209,10 @@ Jeffrey Zhang<br>
 Waterloo, Ontario<br>
 August 2026<br>
 
+## Acknowledgements
+
+Cloud-V a community platform, an initiative of 10xEngineers for providing access to RVV1.0 compliant RISC-V development boards
+
 
 
 
