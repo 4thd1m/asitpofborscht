@@ -19,13 +19,13 @@ after = ["links"]
 trust = true
 macros = "katex_macros.txt"
 
-[preprocessor.aquascope]
+# [preprocessor.aquascope]
 
-[preprocessor.quiz]
+# [preprocessor.quiz]
 # Inline quizzes only after katex has run, or katex would render the `$…$` in a
 # quiz's JSON data attribute and corrupt it. Quiz math is instead rendered in
 # the browser (see the KaTeX auto-render block in theme/js/custom.js).
-after = ["katex"]
+# after = ["katex"]
 
 [output.html]
 additional-css = ["theme/css/custom.css", "theme/css/lean.css"]
@@ -63,9 +63,9 @@ command = "python3 preprocessors/mdbook-refine"
 # Identifiers/keywords link into the Lean reference via a pinned link table
 # (preprocessors/lean-reference-links.json, reference v4.31.0). Regenerate after
 # a toolchain bump: python3 preprocessors/gen-lean-reference-links.py <version>
-[preprocessor.lean]
-command = "python3 preprocessors/mdbook-lean"
-lean-dir = "lean"
-lib = "SitpLean"
-build = true
-reference-links = "preprocessors/lean-reference-links.json"
+# [preprocessor.lean]
+# command = "python3 preprocessors/mdbook-lean"
+# lean-dir = "lean"
+# lib = "SitpLean"
+# build = true
+# reference-links = "preprocessors/lean-reference-links.json"
