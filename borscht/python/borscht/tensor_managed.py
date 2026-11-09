@@ -1,6 +1,5 @@
-# After reading pyproject.toml and Cargo.toml, you understand how borscht's mixed source of Python and Rust interop with one another.
 # After reading __init__.py, you have a 50,000 ft view of borscht's internals.
-# Let us delve deeper into the primary module that everything else hangs from: the Tensor!
+# Let us delve deeper into the primary module and concept that everything else hangs from: the Tensor!
 
 # So, given that the primary abstraction of deep learning frameworks is an array (albeit n-rank),
 # there is a lot of transfer from our traditional training in designing data structures for software 1.0
@@ -30,6 +29,15 @@
 tensor([[29.6088, 29.6088],
         [29.6088, 29.6088]])
 """
+def _main():
+    import doctest
+    doctest.testmod()
+
+    import borscht
+    A = borscht.full((2,3), 3.141592) # some pie ...
+    B = borscht.full((3,2), 3.141592)
+    C = borscht.mm(A,B) # .. and some borscht!
+    print(C)
 
 #                                      "Oh dear! Oh dear! I shall be too late!"
 
@@ -569,15 +577,7 @@ def mm(A: Tensor, B: Tensor) -> Tensor:
 
 # and now, returning to our running example..
 
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
-
-    import borscht
-    A = borscht.full((2,3), 3.141592) # some pie ...
-    B = borscht.full((3,2), 3.141592)
-    C = borscht.mm(A,B) # .. and some borscht!
-    print(C)
+if __name__ == "__main__": _main()
 
 # To summarize,
 # -after reading pyproject.toml and Cargo.toml, you understand how borscht's mixed source of Python and Rust interop with one another.

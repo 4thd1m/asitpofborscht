@@ -1,67 +1,18 @@
-#                          +==========================+
-#                          |      THE DATA CYCLE*     |  * original: https://phrack.org/issues/71/calling-all-hackers_md
-#                          +==========================+  * adaptaion: https://x.com/fleetwood___/status/2037117778503626937
+# + =============== +
+# | Python Modules  |
+# + =============== +
 
+# $ tree -L 1
+# .
+# ├── Cargo.lock
+# ├── Cargo.toml
+# ├── pyproject.toml <--- We are currently here
+# ├── python
+# ├── rust
+# ├── target
+# ├── toolchain.toml
+# └── uv.lock
 
-#                                                FRONTIER LABS
-#                    _______________      ,.-^=^=^=^=^=^=^=^=^=^;,
-#                  ,;===============>>   E^ OpenAI   Anthropic   '^3.
-#                .;^                    E^     Google      xAI     '^3
-#               //  labeled data       .E   Meta                    3^
-#              /|^                     ^E DeepMind    Mistral       :^
-#              ||                       ^;:           Amazon       ;3'
-#    ,.^-^-^-^-^-^-^-^-^-^-^;,            ^.=.=_=_=_=_=_=_=_=_=_=_=^
-#   E^ Scale AI    Mercor   '^:.              \\\\\\\\\\\\\\\\\\\\
-#  E^                Surge    '^3              \\\\\\\\\\\\\\\\\\\\
-# E'  Appen                    ^3. DATA         \\\ distillation  \\
-# ^;   Remotasks    Prolific   3.' ANNOTATORS    \\\\\\\\\\\\\\\\\\\\
-#  E;:           Labelbox     ,3^                 \\\\\\\\\\\\\\\\\\\\
-#   ^;._.._._._._._._._._._._,^                    \\\\\\\\\\\\\\\\\\\\
-#                                                                /\
-#     ^ ^ ^ ^ ^ ^ ^ ^                      DeepSeek   /\  /\  Qwen
-#     | | | | | | | |                          Kimi  /::\/::\  /::::\   /\
-#     | data extraction |                           / MiniMax /^^^^^^\ /^^\
-#     | | | | | | | |          ____________       /      \  /      Yi     \
-#                              (AGI 2027 :O)     /____ Baichuan __ GLM ____\
-#   \o/ \oXo/\oXoXo/  o        '==========='       CHINESE OPEN-SOURCE LABS
-#    |   | |  | | |  /|\          Oo._ /\_/\                  ,///
-# __/_\_/_X_\/_X_X_\_/_\__   /_________(@'w'@)_____________.,://'
-#         SOCIETY            \''  Cursor-Windsurf ''           MOE
-#                                   THE HUMBLE                 runoff
-#                                  POST TRAINER
-
-# Welcome to the teaching deep learning framework borscht, a hackable subset of pytorch.
-# We continue the hacker's spirit that lives in teaching systems such as
-# MIT's teaching operating system xv6[0], Cornell's educational compiler IR bril[1], and Berkeley's educational core sodor[2]
-
-# borscht's source is heavily commented following Knuth's philosophy of literate programming[3].
-# "Let us change our traditional attitude to the construction of programs:
-#  Instead of imagining that our main task is to instruct a computer what to do,
-#  let us concentrate rather on explaining to human beings what we want a computer to do."
-# Given how comment-heavy borscht's source is, we recommend you to choose your editor's theme accordingly,
-# so that you don't strain your eyes to read the comments.
-# For VSCode, we like the light theme that is default "Light(Visual Studio)"
-#                  and the dark theme "CommentsAreImportant" see: https://marketplace.visualstudio.com/items?itemName=pluveto.comments-are-important
-
-# There is a specific order we recommend the reader to walkthrough the codebase.
-# In fact, this is the order of how borscht's companion textbook The Structure and Interpretation of Tensor Programs[4] presents borscht
-# — Here, in the pyproject.toml, we briefly explain how borscht's mixed source of Python, Rust, and CUDA all cohere together
-#   so that the user's can happily chop tensors, and carry weights with a single line of import borscht
-#   After reading this file, the second file you should read is Cargo.toml
-
-# You are highly encouraged to modify, extend, and hack on borscht.
-# Once you feel comfortable, we highly encourage you to graduate onto industry-level deep learning systems such as torch and vllm.
-# See you at work.
-
-# 4thd1m
-# Waterloo, ON
-# November 2026
-#
-# [0]: https://mit-pdos.github.io/xv6-riscv-book/
-# [1]: https://capra.cs.cornell.edu/bril/
-# [2]: https://github.com/ucb-bar/riscv-sodor
-# [3]: http://www.literateprogramming.com/#
-# [4]: https://sitp.ai/
 
 
 
