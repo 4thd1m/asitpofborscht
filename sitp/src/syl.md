@@ -17,7 +17,7 @@ If you are interested in learning about the course's philosophy, see the [course
 - [Week 2. I Perceive You 👀](#week-2-i-perceive-you-)
 - [Week 3. MetaCircularEvaLuAtor! ↩️](#week-3-metacircularevaluator-️)
 - [Week 4. GPUs Go Brrr 🏎️](#week-4-gpus-go-brrr-️)
-- Week 5. King - Man + Queen = 👩 (SOON)
+- Week 5. King - Queen + Man = 👩 (SOON)
 - Week 6. Plato's Cave 𐦂𖨆𐀪𖠋 (SOON)
 - Week 7. AutoNabla (≧∇≦) (SOON)
 - Week 8. Don't Think 🤔 (TBD)
