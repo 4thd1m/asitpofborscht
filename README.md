@@ -1,7 +1,14 @@
 # asitpofborscht <img src="https://sitp.ai/assets/borscht.png" width="32">
 
 This repository hosts the https://sitp.ai textbook and the `borscht` teaching deep learning framework.<br>
-To start reading the literary programmed source of `borscht`, head on over to [`borscht/pyproject.toml`](https://github.com/4thd1m/asitpofborscht/blob/master/borscht/pyproject.toml#L33).
+The following is the recommended order to read the [literary programmed](http://www.literateprogramming.com/) source of `./borscht`:
+- File 1. Hello borscht: [`python/borscht/__init__.py`](./borscht/python/borscht/__init__.py)
+- File 2. Hello Tensor: [`python/borscht/tensor_managed.py`](./borscht/python/borscht/tensor_managed.py)
+- File 3. Python + Rust: [`pyproject.toml`](./borscht/pyproject.toml), [`Cargo.toml`](./borscht/Cargo.toml), [`rust/lib.rs`](./borscht/rust/lib.rs)
+- File 4. Accelerate Tensor on CPU: [`python/borscht/tensor_nativecpu.py`](./borscht/python/borscht/tensor_nativecpu.py),  [`rust/kernelscpu.rs`](./borscht/rust/kernelscpu.rs)
+- File 5. Python + Rust + CUDA Rust: 
+- File 6. Accelerate Tensor on GPU: [`python/borscht/tensor_nativegpu.py`](), [`rust/kernelsgpu.rs`]()
+- File 7. Abstract Acceleration with `Dispatcher`, `Storage`, `Allocator`: [`borscht/python/borscht/tensor.py`](./borscht/python/borscht/tensor.py)
 
 ## News
 
