@@ -53,7 +53,7 @@ def main():
     else:
         url = "%s/xref.json" % base
         sys.stderr.write("fetching %s\n" % url)
-        with urllib.request.urlopen(url) as r:
+        with urllib.request.urlopen(url, timeout=30) as r:
             xref = json.load(r)
 
     table = {"base": base, "version": version}
