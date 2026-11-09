@@ -114,6 +114,7 @@
   # + ------------------------------------------- Package Registry ≜  ----------------------------------------
   # 
 
+  # In asitpofborscht/notebooks
   # uv run python
   # >>> import borscht
 

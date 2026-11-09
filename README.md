@@ -6,9 +6,9 @@ The following is the recommended order to read the [literary programmed](http://
 - File 2. Hello Tensor: [`python/borscht/tensor_managed.py`](./borscht/python/borscht/tensor_managed.py)
 - File 3. Python + Rust: [`pyproject.toml`](./borscht/pyproject.toml), [`Cargo.toml`](./borscht/Cargo.toml), [`rust/lib.rs`](./borscht/rust/lib.rs)
 - File 4. Accelerate Tensor on CPU: [`python/borscht/tensor_nativecpu.py`](./borscht/python/borscht/tensor_nativecpu.py),  [`rust/kernelscpu.rs`](./borscht/rust/kernelscpu.rs)
-- File 5. Python + Rust + CUDA Rust: 
+<!-- - File 5. Python + Rust + CUDA Rust: 
 - File 6. Accelerate Tensor on GPU: [`python/borscht/tensor_nativegpu.py`](), [`rust/kernelsgpu.rs`]()
-- File 7. Abstract Acceleration with `Dispatcher`, `Storage`, `Allocator`: [`borscht/python/borscht/tensor.py`](./borscht/python/borscht/tensor.py)
+- File 7. Abstract Acceleration with `Dispatcher`, `Storage`, `Allocator`: [`borscht/python/borscht/tensor.py`](./borscht/python/borscht/tensor.py) -->
 
 ## News
 

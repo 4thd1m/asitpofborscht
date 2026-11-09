@@ -1,5 +1,20 @@
-# After reading __init__.py, you have a 50,000 ft view of borscht's internals.
-# Let us delve deeper into the primary module and concept that everything else hangs from: the Tensor!
+# *********************************************************************************************************************
+#                                                borscht (Literary Source)
+# <-- File 1. __init__.py                      -- File 2. tensor_managed.py --           File 3. tensor_nativecpu.py -->
+# *********************************************************************************************************************
+
+# With the introduction aside, welcome to borscht proper — if this __init__.py is the *first* file you are reading, then you are in the right place!
+# With the first file of __init__.py, we will understand two ideas:
+#   1. How Python's module and packaging system works, since up ahead we will be implementing
+#      borscht with a mixed source of Python, Rust, CUDA Rust, and CuTeDSL (Python again!)
+#   2. How borscht's internals are organized from a 50,000ft view 
+
+# After reading __init__.py, you undertand how borscht uses Python's module and packaging system, and you have a 50,000 ft view of borscht's internals.
+# With the econd file of tensor_managed.py, we will implement:
+#   0. Why the concept called Tensor
+#   1. Constructing Tensors
+#   2. Reading Tensors 
+#   3. Updating Tensors
 
 # So, given that the primary abstraction of deep learning frameworks is an array (albeit n-rank),
 # there is a lot of transfer from our traditional training in designing data structures for software 1.0
@@ -82,7 +97,7 @@ def _main():
 
 
 # + ==================================================================================================================+
-#                                                 What's in a name?
+#                                                 0. What's in a name?
 # + ==================================================================================================================+
 
 #                                                          |>
@@ -421,7 +436,7 @@ class Tensor: # The more accurate name for the Tensor data structure we all use 
     # and in turn, inherits from object.__repr__'s
     # which in turn, prints the memory address of the allocated object
 
-    # Instead, what we'd like is to print the actual elements of the Tensor
+    # Instead, what we'd like is to print are the actual elements of the Tensor
     def __repr__(self) -> str:
         """
         Examples:
@@ -434,16 +449,6 @@ class Tensor: # The more accurate name for the Tensor data structure we all use 
                     [[3.1416, 3.1416, 3.1416],
                      [3.1416, 3.1416, 3.1416]]])
         """
-
-        # print(A) calls str(A), which falls back to repr(A) since we don't define __str__ separately (and neither does torch).
-        # Printing is our first *read* of a Tensor, and it's the stride formula from above put to work:
-        # the logical index (i0,...,in) lives at the physical index i0*s0 + ... + in*sn in self.storage.
-        # So rather than allocating nested lists, we recurse one dimension at a time, carrying the running offset.
-
-        # That's all our running example needs, but it's not all torch does. Compare print(full((2,3), 7)) with torch's.
-        # The rest — whole-number floats as "2.", scientific notation, ints and bools, aligned columns, line wrapping,
-        # and "..." for big tensors — is in _tensor_str.py, the same way torch keeps its printer in torch/_tensor_str.py.
-
         return "tensor(" + self._str(0, 0, indent=len("tensor(")) + ")"
 
     def _str(self, d: int, offset: int, indent: int) -> str:
@@ -458,6 +463,16 @@ class Tensor: # The more accurate name for the Tensor data structure we all use 
         # torch also adds a newline per extra rank, so the matrices of a rank-3 tensor are separated by a blank line.
         return "[" + ("," + "\n" * (len(self.shape) - d - 1) + " " * (indent + 1)).join(elements) + "]"
 
+
+
+# print(A) calls str(A), which falls back to repr(A) since we don't define __str__ separately (and neither does torch).
+# Printing is our first *read* of a Tensor, and it's the stride formula from above put to work:
+# the logical index (i0,...,in) lives at the physical index i0*s0 + ... + in*sn in self.storage.
+# So rather than allocating nested lists, we recurse one dimension at a time, carrying the running offset.
+
+# That's all our running example needs, but it's not all torch does. Compare print(full((2,3), 7)) with torch's.
+# The rest — whole-number floats as "2.", scientific notation, ints and bools, aligned columns, line wrapping,
+# and "..." for big tensors — is in _tensor_str.py, the same way torch keeps its printer in torch/_tensor_str.py.
 
 # + ===========================================================================================================+
 #                                              3. Evaluating Tensors ...
