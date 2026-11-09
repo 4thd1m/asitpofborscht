@@ -1,4 +1,4 @@
-![](./assets/syl.png)
+![](./assets/tsfm4.webp)
 
 # Singularity Systems Syllabus
 
