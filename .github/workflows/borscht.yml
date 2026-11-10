@@ -1,4 +1,4 @@
-# borscht: Rust checks + the Python test suite.
+# borscht: Rust checks + Python typecheck and test suite.
 name: borscht
 
 on:
@@ -35,10 +35,17 @@ jobs:
         with:
           enable-cache: true
       # --locked: fail if uv.lock is out of date with pyproject.toml.
-      # --no-dev --with pytest: skip the dev group's torch, whose linux wheel
+      # --no-dev --with ...: skip the dev group's torch, whose linux wheel
       #   pulls in several GB of nvidia-* deps that no test imports yet. Once the
-      #   tests use torch as an oracle, drop these two flags and point torch at
+      #   tests use torch as an oracle, drop these flags and point torch at
       #   the CPU index (https://download.pytorch.org/whl/cpu) in [tool.uv.sources].
+      # pyrefly needs pytest too: project-includes covers python/tests, which import it.
+      # pyrefly's version is read from uv.lock (via uv export), so CI runs the same
+      #   pyrefly as `uv run pyrefly check` locally. grep fails the step if it's missing.
+      - name: pyrefly
+        run: |
+          pyrefly=$(uv export --locked --only-group dev --no-hashes --no-annotate --no-header -q | grep '^pyrefly==')
+          uv run --locked --no-dev --with "$pyrefly" --with pytest pyrefly check
       - name: pytest
         run: uv run --locked --no-dev --with pytest pytest -v
   rust:

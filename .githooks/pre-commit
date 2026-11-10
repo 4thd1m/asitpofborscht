@@ -1,7 +1,11 @@
 #!/bin/sh
 if ! git diff --cached --quiet -- borscht/; then
-  echo "borscht: cargo fmt + clippy" >&2
-  (cd borscht && uv run pyrefly check && cargo fmt --check && cargo clippy --all-targets -- -D warnings)
+  (
+    cd borscht &&
+    echo "borscht: typechecking python..." >&2 && uv run pyrefly check &&
+    echo "borscht: formatchecking rust..." >&2 && cargo fmt --check &&
+    echo "borscht: linting rust..." >&2 && cargo clippy --all-targets -- -D warnings
+  )
 fi
 
 # Auto-retheme matplotlib figures in staged notebooks before commit:
