@@ -6,6 +6,8 @@ Al-Faisal, Faisal, and Ty Ghaswala. 2026. “MATH 235: Linear Algebra 2 for Hono
 
 Axler, Sheldon. 2026. Linear Algebra Done Right. <https://linear.axler.net/LADR4e.pdf>.
 
+Bryant, Randal E., and David R. O’Hallaron. 2015. Computer Systems. Addison-Wesley.
+
 Chan, Stanley H. 2021. *Introduction to Probability for Data Science*. Michigan Publishing. <https://probability4datascience.com/>.
 
 Cotterell, Ryan, Anej Svete, Clara Meister, Tianyu Liu, and Li Du. 2023. “Formal Aspects of Language Modeling.” 2311.04329V2. November 7. arXiv (2311.04329v2). <https://arxiv.org/abs/2311.04329v2>.
@@ -14,7 +16,17 @@ Felleisen, Matthias, Robert Bruce Findler, Matthew Flatt, and Shriram Krishnamur
 
 Fisler, Kathi, Shriram Krishnamurthi, Benjamin S. Lerner, and Joe Gibbs Politz. 2025. *A Data-Centric Introduction to Computing*. <https://dcic-world.org/>.
 
+Fog, Agner. n.d. “Software Optimization Resources. C++ and Assembly. Windows, Linux, BSD, Mac OS X.” Agner.Org. Accessed November 10, 2026. <https://agner.org/optimize/>
+
 Forrest, Barbara, and Brian Forrest. 2020. “Math 147 Honours Calculus 1 Advanced Course Notes.” Course notes, University of Waterloo. <https://www.math.uwaterloo.ca/~beforres/M147/CourseNotes/Forrest_M147CN_F20.pdf>.
+
+Geijn, Robert van de, Margaret Myers, and Devangi Parikh. n.d. “Programming for High Performance.” Utexas.Edu. Accessed November 10, 2026. <https://www.cs.utexas.edu/~flame/laff/pfhp/>.
+
+Gregg, Brendan. 2020. Systems Performance: Enterprise and the Cloud. Addison-Wesley. <https://www.brendangregg.com/systems-performance-2nd-edition-book.html>.
+
+Hennessy, John L., David A. Patterson, and Christos Kozyrakis. 2025. Computer Architecture: A Quantitative Approach. Morgan Kaufmann.
+
+Hwu, Wen-mei, David B. Kirk, and Izzat El Hajj. 2027. Programming Massively Parallel Processors: A Hands-On Approach. Morgan Kaufmann Publishers.
 
 Jurafsky, Daniel, and James H. Martin. 2026. *Speech and Language Processing*. 3rd ed. draft. <https://web.stanford.edu/~jurafsky/slp3/>.
 
@@ -22,9 +34,12 @@ New, Stephen. 2022. MATH 145 Algebra. Course notes, University of Waterloo https
 
 Newstead, Clive. 2026. *An Infinite Descent into Pure Mathematics*. Last modified June 25, 2026. <https://infinitedescent.org/>.
 
+Slotin, Sergey. n.d. “Algorithms for Modern Hardware - Algorithmica.” En.Algorithmica.Org. Accessed November 10, 2026. <https://en.algorithmica.org/hpc/>.
+
 Stepanov, Alexander A, and Daniel E Rose. 2014. From Mathematics to Generic Programming. Addison-Wesley Professional.
 
-Tao, Terence. 2022. Analysis I Fourth Edition. Springer Nature. <https://terrytao.wordpress.com/books/analysis-i/>
+Tao, Terence. 2022. Analysis I Fourth Edition. Springer Nature. <https://terrytao.wordpress.com/books/analysis-i/>.
+
 
 <!-- Ansel, Jason, Edward Yang, Horace He, Natalia Gimelshein, Animesh Jain, Michael Voznesensky, Bin Bao, et al. 2024. “PyTorch 2: Faster Machine Learning Through Dynamic Python Bytecode Transformation and Graph Compilation.” In *Proceedings of the 29th ACM International Conference on Architectural Support for Programming Languages and Operating Systems (ASPLOS ’24)*. ACM. <https://doi.org/10.1145/3620665.3640366>. -->
 
