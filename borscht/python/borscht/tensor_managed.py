@@ -3,15 +3,9 @@
 # <-- File 1. __init__.py                      -- File 2. tensor_managed.py --           File 3. tensor_nativecpu.py -->
 # *********************************************************************************************************************
 
-# With the introduction aside, welcome to borscht proper — if this __init__.py is the *first* file you are reading, then you are in the right place!
-# With the first file of __init__.py, we will understand two ideas:
-#   1. How Python's module and packaging system works, since up ahead we will be implementing
-#      borscht with a mixed source of Python, Rust, CUDA Rust, and CuTeDSL (Python again!)
-#   2. How borscht's internals are organized from a 50,000ft view 
-
 # After reading __init__.py, you undertand how borscht uses Python's module and packaging system, and you have a 50,000 ft view of borscht's internals.
 # With the econd file of tensor_managed.py, we will implement:
-#   0. Why the concept called Tensor
+#   0. Why the concept is called Tensor
 #   1. Constructing Tensors
 #   2. Reading Tensors 
 #   3. Updating Tensors
@@ -95,11 +89,15 @@ def _main():
 
 
 
-
-# + ==================================================================================================================+
-#                                                 0. What's in a name?
-# + ==================================================================================================================+
-
+# *********************************************************************************************************************
+#                                                borscht (Literary Source)
+# <-- File 1. __init__.py                     -- File 2. tensor_managed.py --            File 3. tensor_nativecpu.py -->
+# *********************************************************************************************************************
+#                                                0. Naming Tensors       <-- HERE
+#                                                1. Constructing Tensors
+#                                                2. Reading Tensors 
+#                                                3. Updating Tensors
+#
 #                                                          |>
 #                                                         /^\
 #                                                        /   \
@@ -232,9 +230,18 @@ tensor([[29.6088, 29.6088],
 
 import math
 
-# + ==================================================================================================================+
-#                                              1. Constructing Tensors ...
-# + ==================================================================================================================+
+
+
+
+
+# *********************************************************************************************************************
+#                                                borscht (Literary Source)
+# <-- File 1. __init__.py                     -- File 2. tensor_managed.py --            File 3. tensor_nativecpu.py -->
+# *********************************************************************************************************************
+#                                                0. Naming Tensors
+#                                                1. Constructing Tensors <-- HERE
+#                                                2. Reading Tensors 
+#                                                3. Updating Tensors
 
 # Although Python does indeed have @staticmethod and @classmethod decorator's,
 # borscht's Tensor constructors/factory methods are free functions,
@@ -412,15 +419,26 @@ class Tensor: # The more accurate name for the Tensor data structure we all use 
         # We can optimize the following expression multiplying from right to left with a running product, but we'll keep it as is for now.
         self.stride: tuple[int, ...] = tuple(math.prod(self.shape[d+1:]) for d in range(len(self.shape)))
         self.storage: list = [fill_value] * math.prod(self.shape) # The storage field is a flat list, only one allocation!
+        self.ndim: int = len(shape) # The ndim field is the rank of the Tensor i.e the number of dimensions
 
         # That's all a Tensor is!
         # A Tensor is a logical shape virtualized by a stride to physical storage
         # As Karpathy says, the rest is "just" efficiency
         # We now recommend you to collapse/fold the __init__ method, along with all of it's commentary.
 
-    # + ===========================================================================================================+
-    #                                              2. Printing Tensors ...
-    # + ===========================================================================================================+
+
+
+
+
+    # *********************************************************************************************************************
+    #                                                borscht (Literary Source)
+    # <-- File 1. __init__.py                     -- File 2. tensor_managed.py --            File 3. tensor_nativecpu.py -->
+    # *********************************************************************************************************************
+    #                                                0. Naming Tensors
+    #                                                1. Constructing Tensors
+    #                                                2. Reading Tensors      <-- HERE
+    #                                                3. Updating Tensors
+
     # Continuing with our running example, in order to test our matrix multiplication of A and B, we need to be able to read tensors.
     # Before we can even print C, we are not even able to print A nor B.
     # Trying to print A in an interpreter we have
@@ -436,47 +454,111 @@ class Tensor: # The more accurate name for the Tensor data structure we all use 
     # and in turn, inherits from object.__repr__'s
     # which in turn, prints the memory address of the allocated object
 
-    # Instead, what we'd like is to print are the actual elements of the Tensor
+    # Instead, what we'd like to print are the actual elements of the Tensor
     def __repr__(self) -> str:
         """
         Examples:
-            >>> full((), 3.141592)
-            tensor(3.1416)
-            >>> full((2, 2, 3), 3.141592)
-            tensor([[[3.1416, 3.1416, 3.1416],
-                     [3.1416, 3.1416, 3.1416]],
-            <BLANKLINE>
-                    [[3.1416, 3.1416, 3.1416],
-                     [3.1416, 3.1416, 3.1416]]])
+          For a scalar, we just want to print the number
+          >>> full((), 3.141592)
+          tensor(3.1416)
+
+          For a vector, we print the list of numbers surrounded by brackets
+          >>> full((3,), 3.141592)
+          tensor([3.1416, 3.1416, 3.1416])
+
+          For a matrix, we print the row vectors on each line
+          >>> full((2,3), 3.141592)
+          tensor([[3.1416, 3.1416, 3.1416],
+                  [3.1416, 3.1416, 3.1416]])
+
+          For a 3-rank array, we won't be printing a 3D ascii cube.
+          Rather, the square matrix is the primary unit, and we start entering new lines for every dimension thereafter.
+          For a 3-rank array, we insert one new line in between the matrices.
+          >>> full((2, 2, 3), 3.141592)
+          tensor([[[3.1416, 3.1416, 3.1416],
+                   [3.1416, 3.1416, 3.1416]],
+          <BLANKLINE>
+                  [[3.1416, 3.1416, 3.1416],
+                   [3.1416, 3.1416, 3.1416]]])
+
+          For a 4-rank array, we insert two new lines in between the 3-rank arrays.
+          >>> full((3, 2, 2, 3), 3.141592)
+          tensor([[[[3.1416, 3.1416, 3.1416],
+                    [3.1416, 3.1416, 3.1416]],
+          <BLANKLINE>
+                   [[3.1416, 3.1416, 3.1416],
+                    [3.1416, 3.1416, 3.1416]]],
+          <BLANKLINE>
+          <BLANKLINE>
+                  [[[3.1416, 3.1416, 3.1416],
+                    [3.1416, 3.1416, 3.1416]],
+          <BLANKLINE>
+                   [[3.1416, 3.1416, 3.1416],
+                    [3.1416, 3.1416, 3.1416]]],
+          <BLANKLINE>
+          <BLANKLINE>
+                  [[[3.1416, 3.1416, 3.1416],
+                    [3.1416, 3.1416, 3.1416]],
+          <BLANKLINE>
+                   [[3.1416, 3.1416, 3.1416],
+                    [3.1416, 3.1416, 3.1416]]]])
+
+          And so on, for any arbitrary n-rank array
         """
-        return "tensor(" + self._str(0, 0, indent=len("tensor(")) + ")"
+        return "tensor(" + self._str(0, 0, len("tensor(")) + ")"
 
-    def _str(self, d: int, offset: int, indent: int) -> str:
-        if d == len(self.shape): # every index is used up, so offset is now a physical index into storage
-            return f"{self.storage[offset]:.4f}"
+    def _str(self, r: int, i: int, s: int) -> str:
+        """
+        Args:
+            r: the rank of self.shape being generated, starting at 0
+            i: the physical index of self.storage
+            s: the number of spaces to indent, starting at len("tensor(")=7
 
-        elements = [self._str(d + 1, offset + i * self.stride[d], indent + 1) for i in range(self.shape[d])]
-        if d == len(self.shape) - 1: # the innermost dimension is a row of numbers
-            return "[" + ", ".join(elements) + "]"
+        Returns:
+            The string for self starting at rank r indented with s spaces
+        """
+                                                                    # scalar: len(self.shape=0)
+                                                                    # >>> A = full((), 3.141592)
+                                                                    # >>> A._str(self, r=0, i=0, s=len("tensor("))
+                                                                    # tensor(3.1416)
+        if r == self.ndim: return f"{self.storage[i]:.4f}" # base case (d == self.shape) means we've stepped through all logical dimensions
+                                                                              # recurse for every dimension d of the current rank self.shape[r] # vector: len(self.shape==1)
+        elements = [self._str(r+1, i+d*self.stride[r], s+1) for d in range(self.shape[r])]                                # >>> A = full((3,), 3.141592)
+                              # rank r and spaces s are always incremented by 1, marching across the shape and spaces respectively              # >>> A._str(self, r=0, i=0, s=7)
+                              # index i is incremented by striding. take a moment to convince yourself d*self.stride[r] is correct              # r!=self.ndim so elements = [
+                                                                                                                                                  # d=0 → _str(r=0+1 aka sh:(), st:(), i=0+0*1=0, s=7+1)
+                                                                                                                                                  #            r == self.ndim → self.storage[0],
+                                                                                                                                                  # d=1 → _str(r=0+1 r=0+1 aka sh:(), st:(), i=0+1*1=1, s=7+1)
+                                                                                                                                                  #            r == self.ndim → self.storage[1],
+                                                                                                                                                  # d=2 → _str(r=0+1 r=0+1 aka sh:(), st:(), i=0+2*1=2, s=7+1)  
+                                                                                                                                                  #            r == self.ndim → self.storage[2],
+                                                                                                                                                  # ] (the first rank has 3 dimensions)
+                                                                                                                                                  # seperator = ", "                           ^
+                                     # if we're generating a string for row vector, seperate numbers ', '                                         #                                            |
+        separator = ", " if r == self.ndim-1 else "," + ("\n"*(self.ndim-r-1)) + (" "*(s+1))   #                                                                |
+                                                                                      # otherwise for n-rank array n>=2 separate the subarrays with new lines and s+1 spaces                   |
+        return "[" + separator.join(elements) + "]"                          # matrix: len(self.shape==2)                                                                             |
+                                                                                      # >>> A = full((2,3), 3.141592)                                                                          |
+                                                                                      # A._str(self, r=0 aka sh:(2,3), st:(3,1), s=len("tensor("), i=0)                                        |
+                                                                                      # r!=self.ndim so elements = [                                                                           |
+                                                                                      # ├─ d=0 → _str(r=0+1 aka sh: (3,) st: (1,), i=0+(0*3)=0, s=8) ------------------------------------------|
+                                                                                      # └─ d=1 → _str(r=0+1 aka sh: (3,) st: (1,), i=1+(1*3)=3, s=8) -------------------------------------------
+                                                                                      # ] (the first rank has 2 dimensions)
+                                                                                      # seperator = "," with self.ndim-r-1 newlines with s+1 spaces
 
-        # Every other dimension is a column of sub-tensors, one per line, indented to sit under our opening bracket.
-        # torch also adds a newline per extra rank, so the matrices of a rank-3 tensor are separated by a blank line.
-        return "[" + ("," + "\n" * (len(self.shape) - d - 1) + " " * (indent + 1)).join(elements) + "]"
 
 
 
-# print(A) calls str(A), which falls back to repr(A) since we don't define __str__ separately (and neither does torch).
-# Printing is our first *read* of a Tensor, and it's the stride formula from above put to work:
-# the logical index (i0,...,in) lives at the physical index i0*s0 + ... + in*sn in self.storage.
-# So rather than allocating nested lists, we recurse one dimension at a time, carrying the running offset.
 
-# That's all our running example needs, but it's not all torch does. Compare print(full((2,3), 7)) with torch's.
-# The rest — whole-number floats as "2.", scientific notation, ints and bools, aligned columns, line wrapping,
-# and "..." for big tensors — is in _tensor_str.py, the same way torch keeps its printer in torch/_tensor_str.py.
+# *********************************************************************************************************************
+#                                                borscht (Literary Source)
+# <-- File 1. __init__.py                     -- File 2. tensor_managed.py --            File 3. tensor_nativecpu.py -->
+# *********************************************************************************************************************
+#                                                0. Naming Tensors
+#                                                1. Constructing Tensors
+#                                                2. Reading Tensors
+#                                                3. Updating Tensors     <-- HERE
 
-# + ===========================================================================================================+
-#                                              3. Evaluating Tensors ...
-# + ===========================================================================================================+
 # Continuing with our running example of multiplying C=AB, now that we're able to
 #  1. construct A and B
 #  2. read A and B (and thus C)

@@ -1,4 +1,4 @@
-from borscht.tensor import dtype, layout, device, Generator
+# from borscht.tensor import dtype, layout, device, Generator
 
 # ops legend
 # - creation ops
