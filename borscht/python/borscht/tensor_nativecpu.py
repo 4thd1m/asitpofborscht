@@ -1,9 +1,15 @@
-# After reading pyproject.toml and Cargo.toml, you understand how borscht's mixed source of Python and Rust interop with one another.
-# After reading __init__.py, you have a 50,000 ft view of borscht's internals.
-# After reading tensor_nativecpu.py, you now understand the core essence of the Tensor concept and the primary operation of matrix multiplication
-# Let us accelerate the implementation of the Tensor's matrix multiplication routine with the Rust programming language!
-
-
+# *********************************************************************************************************************
+#                                                borscht (Literary Source)
+# <-- File 2. tensor_managed.py              -- File 3. tensor_nativecpu.py --                 File 4. kernelscpu.rs -->
+#                                                       pyproject.toml
+#                                                       Cargo.toml
+#                                                       rust/lib.rs
+# *********************************************************************************************************************
+# After reading File 1. __init__.py, you have a 50,000 ft view of borscht's internals.
+# After reading File 2. tensor_managed.py, you now understand the core essence of the Tensor concept and the primary operation of matrix multiplication
+#            In File 3. let us analyze and benchmark tensor_managed.py's matrix multiplication routine mm
+#                       and subsequently set up a mixed Python and Rust source for the borscht Python package
+#                       so that we can accelerate our matrix multiply with a native implementation on a RISC-V machine in File 4. kernelscpu.rs
 
 from borscht.tensor_managed import full, mm as mm_managed # Let us import the full constructor and mm routine as mm_managed from tensor_managed.py to benchmark against our accelerated version
 from borscht.tensor_managed import Tensor                 # Let us import Tensor to define our accelerated mm routine
@@ -68,14 +74,3 @@ def mm_native(A: Tensor, B: Tensor) -> Tensor:
     return output
 
 if __name__ == "__main__": _main()
-
-# 🎨 DESIGN CHOICE (DEEP vs SHALLOW embedding)
-# in borscht/pt1/hips-autograd, AD is implemented via operator overloading and tape
-# in jax/pt2, AD is implemented via source transformation
-# see: Uwe's `dco` vs `dcr`
-
-# scaffold ch.4.1 automatic difefrentiation
-# extend Lab 7: Custom Autograd Backwards for VLA
-# def backwards(self):
-    # self.grad = Tensor()
-    # raise NotImplementedError("")

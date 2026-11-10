@@ -2,12 +2,12 @@ import math
 
 # alternative: webgpu
 
-def full(size, fill_value):
-    raise NotImplementedError("borscht.tensor_nativegpu.full")
+# def full(size, fill_value):
+#     raise NotImplementedError("borscht.tensor_nativegpu.full")
 
-class Tensor:
-    def __init__(self, shape: tuple[int, ...], fill_value):
-        raise NotImplementedError("borscht.tensor_nativegpu.Tensor")
+# class Tensor:
+#     def __init__(self, shape: tuple[int, ...], fill_value):
+#         raise NotImplementedError("borscht.tensor_nativegpu.Tensor")
 
-def mm(A: Tensor, B: Tensor) -> Tensor:
-    raise NotImplementedError("borscht.tensor_nativegpu.mm")
+# def mm(A: Tensor, B: Tensor) -> Tensor:
+#     raise NotImplementedError("borscht.tensor_nativegpu.mm")

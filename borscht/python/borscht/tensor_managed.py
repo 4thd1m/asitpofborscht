@@ -45,6 +45,8 @@ def _main():
     C = borscht.mm(A,B) # .. and some borscht!
     print(C)
 
+#
+
 #                                      "Oh dear! Oh dear! I shall be too late!"
 
 #                          \\|//  ,,, \|/                                        \|/  \\|//
@@ -227,25 +229,7 @@ tensor([[29.6088, 29.6088],
 
 import math
 
-
-
-
-
-# *********************************************************************************************************************
-#                                                borscht (Literary Source)
-# <-- File 1. __init__.py                     -- File 2. tensor_managed.py --            File 3. tensor_nativecpu.py -->
-# *********************************************************************************************************************
-#                                                0. Naming Tensors
-#                                                1. Constructing Tensors <-- HERE
-#                                                2. Reading Tensors 
-#                                                3. Updating Tensors
-
-# Although Python does indeed have @staticmethod and @classmethod decorator's,
-# borscht's Tensor constructors/factory methods are free functions,
-# following torch and numpy, which in turn, were inspired by MatLab and APL
-# Many design decisions of systems with history are implicitly inherited rather than explicitly designed.
-
-def full(size, fill_value):
+def full(size: tuple[int, ...], fill_value: float) -> Tensor:
     """Create a Tensor of shape `size` filled with `fill_value`.
 
     Args:
@@ -275,8 +259,21 @@ def full(size, fill_value):
 
     return Tensor(size, fill_value) #, dtype) # for now, .full(size, fill_value) is simply a wrapper around Tensor.__init__()
 
+# *********************************************************************************************************************
+#                                                borscht (Literary Source)
+# <-- File 1. __init__.py                     -- File 2. tensor_managed.py --            File 3. tensor_nativecpu.py -->
+# *********************************************************************************************************************
+#                                                0. Naming Tensors
+#                                                1. Constructing Tensors <-- HERE
+#                                                2. Reading Tensors 
+#                                                3. Updating Tensors
+
+# Although Python does indeed have @staticmethod and @classmethod decorator's,
+# borscht's Tensor constructors/factory methods are free functions,
+# following torch and numpy, which in turn, were inspired by MatLab and APL
+# Many design decisions of systems with history are implicitly inherited rather than explicitly designed.
 class Tensor: # The more accurate name for the Tensor data structure we all use is an NDArray like numpy, and jax.
-    def __init__(self, shape: tuple[int, ...], fill_value):
+    def __init__(self, shape: tuple[int, ...], fill_value: float):
         # A tensor is nothing more than a multidimensional (that is, multi rank) array that approximates some element in R^{d0,...,dn}
         self.shape: tuple[int, ...] = shape # The shape field is a tuple which stores the (d0,...,dn)
 
@@ -415,7 +412,7 @@ class Tensor: # The more accurate name for the Tensor data structure we all use 
         # The stride field is a tuple which stores stride ((s0 *...*s_{n-1}*1), ... , (s_{n-1}*1), 1) TODO/TEST:  zero-size dims
         # We can optimize the following expression multiplying from right to left with a running product, but we'll keep it as is for now.
         self.stride: tuple[int, ...] = tuple(math.prod(self.shape[d+1:]) for d in range(len(self.shape)))
-        self.storage: list = [fill_value] * math.prod(self.shape) # The storage field is a flat list, only one allocation!
+        self.storage: list[float] = [fill_value] * math.prod(self.shape) # The storage field is a flat list, only one allocation!
         self.ndim: int = len(shape) # The ndim field is the rank of the Tensor i.e the number of dimensions
 
         # That's all a Tensor is!

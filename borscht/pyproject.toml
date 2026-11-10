@@ -107,9 +107,16 @@ dynamic = ["version"] # we configure which keys were intentionally unspecified
 [dependency-groups]   # borscht uses numpy and torch as oracles. see chapter (todo).
 dev = [
     "numpy>=2.5.4",
+    "pyrefly>=1.4.1",
     "pytest>=9.1.1",
     "torch>=2.15.0",
 ]
+
+[tool.pyrefly]                              # pyrefly is our static type checker run by the editor and by `uv run pyrefly check`
+project-includes = ["python"]              # we configure the files to type check
+disable-project-excludes-heuristics = true # we configure pyrefly to stop excluding site-packages paths, since the editable install of borscht puts python/ itself on the interpreter's site-packages path (see the .pth file in .venv/lib/python3.15/site-packages)
+preset = "strict"                          # we configure the strict preset
+
 
 [tool.pytest.ini_options]
 testpaths = ["python/tests"] # we configure the list of directories that python should search for

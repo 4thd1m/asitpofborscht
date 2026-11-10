@@ -89,7 +89,7 @@ def test_full():
         ),
     ],
 )
-def test_repr(shape, expected):
+def test_repr(shape: tuple[int, ...], expected: float):
     assert repr(full(shape, 3.141592)) == expected
 
 
