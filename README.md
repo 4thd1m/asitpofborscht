@@ -7,17 +7,17 @@ source of the deep neural network architecture under [./notebooks](./notebooks) 
 Reading the source provides a condensed version of the SITP textbook, which spend a lot more time on intuition and motivation
 via visualizations, figures, and prose.
 
-**Recommended Reading Order for Deep Neural Networks**
+**Reading Order for Deep Neural Networks**
 - Model 1: Bigram
 - Model 2: Discriminative Perceptron
 - Model 3: Probabilistic Perceptron
 - Model 4: MLP
 
-**Recommended Reading Order for Deep Learning Framework**
+**Reading Order for Deep Learning Framework**
 - File 1. Hello borscht: [`python/borscht/__init__.py`](./borscht/python/borscht/__init__.py)
 - File 2. Hello Tensor: [`python/borscht/tensor_managed.py`](./borscht/python/borscht/tensor_managed.py)
-- File 3. Python + Rust: [`pyproject.toml`](./borscht/pyproject.toml), [`Cargo.toml`](./borscht/Cargo.toml), [`rust/lib.rs`](./borscht/rust/lib.rs)
-- File 4. Accelerate Tensor on CPU: [`python/borscht/tensor_nativecpu.py`](./borscht/python/borscht/tensor_nativecpu.py),  [`rust/kernelscpu.rs`](./borscht/rust/kernelscpu.rs)
+- File 3. Python + Rust: [`python/borscht/tensor_nativecpu.py`](./borscht/python/borscht/tensor_nativecpu.py), [`pyproject.toml`](./borscht/pyproject.toml), [`Cargo.toml`](./borscht/Cargo.toml), [`rust/lib.rs`](./borscht/rust/lib.rs)
+- File 4. Accelerate Tensor on CPU:  [`rust/kernelscpu.rs`](./borscht/rust/kernelscpu.rs)
 <!-- - File 5. Python + Rust + CUDA Rust: 
 - File 6. Accelerate Tensor on GPU: [`python/borscht/tensor_nativegpu.py`](), [`rust/kernelsgpu.rs`]()
 - File 7. Abstract Acceleration with `Dispatcher`, `Storage`, `Allocator`: [`borscht/python/borscht/tensor.py`](./borscht/python/borscht/tensor.py) -->
