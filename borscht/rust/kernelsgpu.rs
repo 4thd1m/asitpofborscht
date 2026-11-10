@@ -1,11 +1,11 @@
-fn _axpy(x: &[u8], y: &[u8]) -> () {
+fn _axpy(_x: &[u8], _y: &[u8]) -> () {
   todo!()
 }
 
-fn _gemv(x: &[u8], y: &[u8]) -> () {
+fn _gemv(_x: &[u8], _y: &[u8]) -> () {
   todo!()
 }
 
-fn _gemm(x: &[u8], y: &[u8]) -> () {
+fn _gemm(_x: &[u8], _y: &[u8]) -> () {
   todo!()
 }
