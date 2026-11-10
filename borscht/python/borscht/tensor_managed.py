@@ -30,23 +30,6 @@
 # With that said, we will implement all the abstractions necessary for the following forward pass to run
 # Down the rabbit hole we go!
 
-"""
->>> import borscht
->>> A = borscht.full((2,3), 3.141592)
->>> B = borscht.full((3,2), 3.141592)
->>> borscht.mm(A,B)
-tensor([[29.6088, 29.6088],
-        [29.6088, 29.6088]])
-"""
-def _main():
-    import borscht
-    A = borscht.full((2,3), 3.141592) # some pie ...
-    B = borscht.full((3,2), 3.141592)
-    C = borscht.mm(A,B) # .. and some borscht!
-    print(C)
-
-#
-
 #                                      "Oh dear! Oh dear! I shall be too late!"
 
 #                          \\|//  ,,, \|/                                        \|/  \\|//
@@ -84,6 +67,7 @@ def _main():
 #                                                         .
 
 #                               "Down, down, down. Would the fall never come to an end?"
+
 
 
 
@@ -203,6 +187,19 @@ def _main():
 #                 ________\___________/________           '.   `-....-'     `-....-'     `-....-'   .'
 #                '-----------------------------'            '--------------------------------------'
 
+# Our task for the remainder of tensor.py is now to let the user construct (1), read (2), and multiply (3)
+# two matrices A and B with shapes (2,3) and and (3,2) respectively
+# Note that we will interchangeably describe a Tensor's with "a matrix of shape (2,3)" and "a 2x3 matrix".
+# Both have the same meaning of *shape*.
+
+# For an interactive experience, cd into borscht's python source
+# $ cd borscht/python/borscht            # cd into borscht's python source
+# $ pwd
+# asitpofborscht/borscht/python/borscht  # verify the working directory (we will explain the internal file organization soon)
+
+# $ uv run pyrefly check                 # ensure types check
+# $ uv run pytest                        # ensure tests pass
+# uv run python                          # run the interpreter, and enter
 """
 >>> import borscht
 >>> A = borscht.full((2,3), 3.141592)               # 1. creating tensors + ...
@@ -221,11 +218,21 @@ tensor([[29.6088, 29.6088],
         [29.6088, 29.6088]])
 """
 
-# Our task for the remainder of tensor.py is now to let the user construct (1), read (2), and multiply (3)
-# two matrices A and B with shapes (2,3) and and (3,2) respectively
+# uv run tensor_managed.py              # run the persisted program above
+def _main():
+    import borscht
+    A = borscht.full((2,3), 3.141592) # some pie ...
+    B = borscht.full((3,2), 3.141592)
+    C = borscht.mm(A,B) # .. and some borscht!
+    print(C)
 
-# Note: We will interchangeably describe a Tensor's with "a matrix of shape (2,3)" and "a 2x3 matrix".
-# Both have the same meaning of *shape*.
+# ensure you have the pyrefly extension installed with your editor
+# so that you see the inlay type hints that A, B, and C all have type Tensor
+# for the vscode editor, configure these in your user settings
+#   "python.analysis.inlayHints.variableTypes": true,
+#   "python.analysis.inlayHints.functionReturnTypes": true,
+#   "python.analysis.inlayHints.callArgumentNames": "all",
+
 
 import math
 
