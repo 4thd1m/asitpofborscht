@@ -14,7 +14,6 @@ via visualizations, figures, and prose.
 - Model 4: MLP
 
 **Recommended Reading Order for Deep Learning Framework**
-The following is the recommended order to read the [literary programmed](http://www.literateprogramming.com/) source of `./borscht`,
 - File 1. Hello borscht: [`python/borscht/__init__.py`](./borscht/python/borscht/__init__.py)
 - File 2. Hello Tensor: [`python/borscht/tensor_managed.py`](./borscht/python/borscht/tensor_managed.py)
 - File 3. Python + Rust: [`pyproject.toml`](./borscht/pyproject.toml), [`Cargo.toml`](./borscht/Cargo.toml), [`rust/lib.rs`](./borscht/rust/lib.rs)

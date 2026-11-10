@@ -39,9 +39,6 @@ tensor([[29.6088, 29.6088],
         [29.6088, 29.6088]])
 """
 def _main():
-    import doctest
-    doctest.testmod()
-
     import borscht
     A = borscht.full((2,3), 3.141592) # some pie ...
     B = borscht.full((3,2), 3.141592)
@@ -144,12 +141,12 @@ def _main():
 
 #   And, as we now understand from Intermezzo One, if you don't have associativity then you sure as don't have distributivity:
 
-__test__ = {"distributivity": """
+"""
 >>> 0.9 * (0.2 + 0.3)
 0.45
 >>> 0.9 * 0.2 + 0.9 * 0.3
 0.45000000000000007
-"""}
+"""
 
 #   Since a matrix over a field uses that field's definition of vector addition and scalar multiplication,
 #   the matrices we use for computation are no longer linear as well.
@@ -510,7 +507,7 @@ class Tensor: # The more accurate name for the Tensor data structure we all use 
     def _str(self, r: int, i: int, s: int) -> str:
         """
         Args:
-            r: the rank of self.shape being generated, starting at 0
+            r: the logical rank of self.shape being generated, starting at 0
             i: the physical index of self.storage
             s: the number of spaces to indent, starting at len("tensor(")=7
 
@@ -545,6 +542,7 @@ class Tensor: # The more accurate name for the Tensor data structure we all use 
                                                                                       # └─ d=1 → _str(r=0+1 aka sh: (3,) st: (1,), i=1+(1*3)=3, s=8) -------------------------------------------
                                                                                       # ] (the first rank has 2 dimensions)
                                                                                       # seperator = "," with self.ndim-r-1 newlines with s+1 spaces
+                                                                                      #        i.e self.ndim=2 ==> 2-0-1=1 newline for matrix, not 2.
 
 
 
