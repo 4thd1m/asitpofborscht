@@ -12,19 +12,35 @@ on:
       - 'borscht/**'
       - '.github/workflows/borscht.yml'
   workflow_dispatch:
+  workflow_call: # release.yml calls this as the gate before publishing
 
 permissions:
   contents: read
-
-concurrency:
-  group: borscht-${{ github.ref }}
-  cancel-in-progress: true
 
 defaults:
   run:
     working-directory: borscht
 
 jobs:
+  pytest:
+    name: pytest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable # uv builds borscht's Rust extension through maturin, so it needs cargo.
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: borscht
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      # --locked: fail if uv.lock is out of date with pyproject.toml.
+      # --no-dev --with pytest: skip the dev group's torch, whose linux wheel
+      #   pulls in several GB of nvidia-* deps that no test imports yet. Once the
+      #   tests use torch as an oracle, drop these two flags and point torch at
+      #   the CPU index (https://download.pytorch.org/whl/cpu) in [tool.uv.sources].
+      - name: pytest
+        run: uv run --locked --no-dev --with pytest pytest -v
   rust:
     name: rust
     runs-on: ubuntu-latest
@@ -42,24 +58,3 @@ jobs:
         run: cargo clippy --all-targets -- -D warnings
       - name: test
         run: cargo test
-
-  pytest:
-    name: pytest
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      # uv builds borscht's Rust extension through maturin, so it needs cargo.
-      - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
-        with:
-          workspaces: borscht
-      - uses: astral-sh/setup-uv@v5
-        with:
-          enable-cache: true
-      # --locked: fail if uv.lock is out of date with pyproject.toml.
-      # --no-dev --with pytest: skip the dev group's torch, whose linux wheel
-      #   pulls in several GB of nvidia-* deps that no test imports yet. Once the
-      #   tests use torch as an oracle, drop these two flags and point torch at
-      #   the CPU index (https://download.pytorch.org/whl/cpu) in [tool.uv.sources].
-      - name: pytest
-        run: uv run --locked --no-dev --with pytest pytest -v
