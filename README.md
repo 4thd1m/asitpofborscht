@@ -3,7 +3,7 @@
 This repository hosts the https://sitp.ai textbook and the `borscht` teaching deep learning framework ([`nanogpt`](https://github.com/karpathy/nanogpt) complete!)<br>
 
 If you prefer to "just show me the code" mode, you can read the [literary programmed](http://www.literateprogramming.com/)
-source of the deep neural network architecture under [./notebooks](./notebooks) and the deep learning framework under [./borscht](./borscht/)
+source of the deep neural network architecture under [./models](./models) and the deep learning framework under [./borscht](./borscht/)
 Reading the source provides a condensed version of the SITP textbook, which spend a lot more time on intuition and motivation
 via visualizations, figures, and prose.
 
