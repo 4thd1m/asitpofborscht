@@ -1,0 +1,28 @@
+#!/bin/sh
+# borscht: run the python and rust test suites before pushing commits that touch borscht/.
+# pre-commit runs the fast checks (pyrefly, fmt, clippy) on every commit; tests are slower,
+# so they run once per push instead. CI runs everything again regardless.
+#
+# Enabled the same way as pre-commit, once per clone:
+#     git config core.hooksPath .githooks
+# Skip it for one push with: git push --no-verify
+
+is_zero() { case $1 in *[!0]*) return 1 ;; esac } # all-zero sha = ref doesn't exist on that side
+
+# git sends one line per pushed ref on stdin: <local ref> <local sha> <remote ref> <remote sha>
+touches_borscht=false
+while read -r _ local_sha _ remote_sha; do
+  is_zero "$local_sha" && continue # deleting a remote branch: nothing to test
+  if is_zero "$remote_sha"; then   # new remote branch: check commits not on any remote yet
+    changed=$(git rev-list -1 "$local_sha" --not --remotes -- borscht/ 2>/dev/null) || changed=unknown
+  else
+    changed=$(git rev-list -1 "$remote_sha..$local_sha" -- borscht/ 2>/dev/null) || changed=unknown
+  fi
+  [ -n "$changed" ] && touches_borscht=true # unknown (e.g. remote sha not fetched) errs toward testing
+done
+
+$touches_borscht || exit 0
+
+cd borscht &&
+  echo "borscht: testing python..." >&2 && uv run pytest &&
+  echo "borscht: testing rust..." >&2 && cargo test
