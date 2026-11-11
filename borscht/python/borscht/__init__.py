@@ -1,3 +1,9 @@
+# **********************************************************************************************************************
+#                                               borscht (Literary Source)
+# <-- File 0. README.md                       -- File 1. Hello borscht --                       File 2. Hello Tensor -->
+#                                                        __init__.py                                    tensor_managed.py
+# **********************************************************************************************************************
+
 #                          +==========================+
 #                          |      THE DATA CYCLE*     |  * original: https://phrack.org/issues/71/calling-all-hackers_md
 #                          +==========================+  * adaptaion: https://x.com/fleetwood___/status/2037117778503626937

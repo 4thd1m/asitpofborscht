@@ -19,11 +19,13 @@ Reading a literary program also involves running files (modules) as scripts.<br>
 Ensure you have Python and Rust toolchains on your machine by running [`borscht/setup.sh`](./borscht/setup.sh) in your shell.
 - File 1. Hello borscht: [`python/borscht/__init__.py`](./borscht/python/borscht/__init__.py)
 - File 2. Hello Tensor: [`python/borscht/tensor_managed.py`](./borscht/python/borscht/tensor_managed.py)
-- File 3. Python + Rust: [`python/borscht/tensor_nativecpu.py`](./borscht/python/borscht/tensor_nativecpu.py), [`pyproject.toml`](./borscht/pyproject.toml), [`Cargo.toml`](./borscht/Cargo.toml), [`rust/lib.rs`](./borscht/rust/lib.rs)
-- File 4. Accelerate Tensor on CPU:  [`rust/kernelscpu.rs`](./borscht/rust/kernelscpu.rs)
-<!-- - File 5. Python + Rust + CUDA Rust: 
-- File 6. Accelerate Tensor on GPU: [`python/borscht/tensor_nativegpu.py`](), [`rust/kernelsgpu.rs`]()
-- File 7. Abstract Acceleration with `Dispatcher`, `Storage`, `Allocator`: [`borscht/python/borscht/tensor.py`](./borscht/python/borscht/tensor.py) -->
+- File 3. Accelerate Tensor
+  - File 3A: From Python to Rust [`python/borscht/tensor_nativecpu.py`](./borscht/python/borscht/tensor_nativecpu.py), [`pyproject.toml`](./borscht/pyproject.toml), [`Cargo.toml`](./borscht/Cargo.toml), [`rust/lib.rs`](./borscht/rust/lib.rs)
+  - File 3B: From Rust to RISC-V:  [`rust/kernelscpu.rs`](./borscht/rust/kernelscpu.rs)
+- File 4. Accelerate++ Tensor
+  - File 4A: From Rust to CUDA Rust:
+  - File 4B: Accelerate Tensor on GPU: [`python/borscht/tensor_nativegpu.py`](), [`rust/kernelsgpu.rs`]()
+- File 5. Abstracting Acceleration with `Dispatcher`, `Storage`, `Allocator`: [`borscht/python/borscht/tensor.py`](./borscht/python/borscht/tensor.py)
 
 ## License
 

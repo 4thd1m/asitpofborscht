@@ -1,7 +1,14 @@
-# *********************************************************************************************************************
-#                                                borscht (Literary Source)
-# <-- File 1. __init__.py                      -- File 2. tensor_managed.py --           File 3. tensor_nativecpu.py -->
-# *********************************************************************************************************************
+# **********************************************************************************************************************
+#                                               borscht (Literary Source)                                               
+# <-- File 1. Hello borscht                   -- File 2. Hello Tensor --                   File 3. Accelerate Tensor -->
+#                                                                                               3A. From Python to Rust
+#             __init__.py                                tensor_managed.py                         - tensor_nativecpu.py
+#                                                                                                  - pyproject.toml
+#                                                                                                  - Cargo.toml
+#                                                                                                  - lib.rs
+#                                                                                               3B. From Rust to RISC-V
+#                                                                                                  - kernelscpu.rs
+# **********************************************************************************************************************
 
 # After reading __init__.py, you undertand how borscht uses Python's module and packaging system, and you have a 50,000 ft view of borscht's internals.
 # With the econd file of tensor_managed.py, we will implement:

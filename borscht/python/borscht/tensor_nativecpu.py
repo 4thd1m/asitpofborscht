@@ -1,20 +1,23 @@
-# *********************************************************************************************************************
-#                                                borscht (Literary Source)
-# <-- File 2. tensor_managed.py              -- File 3. tensor_nativecpu.py --                 File 4. kernelscpu.rs -->
-#                                                       pyproject.toml
-#                                                       Cargo.toml
-#                                                       rust/lib.rs
-# *********************************************************************************************************************
+# **********************************************************************************************************************
+#                                               borscht (Literary Source)
+# <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 4. Accelerate++ Tensor -->
+#     tensor_managed.py                               3A. From Python to Rust
+#                                                         - tensor_nativecpu.py <-- HERE
+#                                                         - pyproject.toml
+#                                                         - Cargo.toml
+#                                                         - lib.rs
+#                                                     3B. From Rust to RISC-V
+#                                                         - kernelscpu.rs
+# **********************************************************************************************************************
 # After reading File 1. __init__.py, you have a 50,000 ft view of borscht's internals.
 # After reading File 2. tensor_managed.py, you now understand the core essence of the Tensor concept and the primary operation of matrix multiplication
 #            In File 3. let us analyze and benchmark tensor_managed.py's matrix multiplication routine mm
 #                       and subsequently set up a mixed Python and Rust source for the borscht Python package
 #                       so that we can accelerate our matrix multiply with a native implementation on a RISC-V machine in File 4. kernelscpu.rs
 
-from borscht.tensor_managed import full, mm as mm_managed # Let us import the full constructor and mm routine as mm_managed from tensor_managed.py to benchmark against our accelerated version
 from borscht.tensor_managed import Tensor                 # Let us import Tensor to define our accelerated mm routine
-__all__ = ["Tensor", "full", "mm"]             # Let us re-export the full constructor and Tensor concept as-is from tensor_managed.py
-                                                          #   as well as the mm
+from borscht.tensor_managed import full, mm as mm_managed # Let us import the full constructor and managed matrix multiply routine
+__all__ = ["Tensor", "full", "mm"]             # Let us re-export the full constructor and Tensor concept as-is from tensor_managed.py as well as our natively accelerated mm
 
 
 def _main():

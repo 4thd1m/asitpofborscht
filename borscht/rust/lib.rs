@@ -1,3 +1,15 @@
+// **********************************************************************************************************************
+//                                               borscht (Literary Source)
+// <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 4. Accelerate++ Tensor -->
+//     tensor_managed.py                               3A. From Python to Rust
+//                                                         - tensor_nativecpu.py
+//                                                         - pyproject.toml
+//                                                         - Cargo.toml
+//                                                         - lib.rs              <-- HERE
+//                                                     3B. From Rust to RISC-V
+//                                                         - kernelscpu.rs
+// **********************************************************************************************************************
+
 use pyo3::prelude::*;
 mod kernelscpu;
 mod kernelsgpu;
