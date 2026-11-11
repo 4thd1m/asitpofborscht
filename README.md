@@ -14,6 +14,9 @@ via visualizations, figures, and prose.
 - Model 4: MLP
 
 **Reading Order for Deep Learning Framework**
+
+Reading a literary program also involves running files (modules) as scripts.<br>
+Ensure you have Python and Rust toolchains on your machine by running [`borscht/setup.sh`](./borscht/setup.sh) in your shell.
 - File 1. Hello borscht: [`python/borscht/__init__.py`](./borscht/python/borscht/__init__.py)
 - File 2. Hello Tensor: [`python/borscht/tensor_managed.py`](./borscht/python/borscht/tensor_managed.py)
 - File 3. Python + Rust: [`python/borscht/tensor_nativecpu.py`](./borscht/python/borscht/tensor_nativecpu.py), [`pyproject.toml`](./borscht/pyproject.toml), [`Cargo.toml`](./borscht/Cargo.toml), [`rust/lib.rs`](./borscht/rust/lib.rs)
