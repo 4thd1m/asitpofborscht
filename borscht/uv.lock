@@ -11,7 +11,7 @@ dev = [
     { name = "numpy" },
     { name = "pyrefly" },
     { name = "pytest" },
-    { name = "torch" },
+    { name = "torch", marker = "platform_machine != 'riscv64'" },
 ]
 
 [package.metadata]
@@ -21,7 +21,7 @@ dev = [
     { name = "numpy", specifier = ">=2.5.4" },
     { name = "pyrefly", specifier = ">=1.4.1" },
     { name = "pytest", specifier = ">=9.1.1" },
-    { name = "torch", specifier = ">=2.15.0" },
+    { name = "torch", marker = "platform_machine != 'riscv64'", specifier = ">=2.15.0" },
 ]
 
 [[package]]

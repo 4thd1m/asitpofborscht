@@ -109,7 +109,6 @@ dev = [
     "numpy>=2.5.4",
     "pyrefly>=1.4.1",
     "pytest>=9.1.1",
-    "ruff>=0.17.4",
     "torch>=2.15.0; platform_machine != 'riscv64'", # we configure an environment marker to skip torch on risc-v, since pytorch publishes no riscv64 wheels
                                                     # see: https://packaging.python.org/en/latest/specifications/dependency-specifiers/#environment-markers
 ]

@@ -2,9 +2,9 @@
 if ! git diff --cached --quiet -- borscht/; then
   (
     cd borscht &&
-    echo "borscht: typechecking python..." >&2 && uv run pyrefly check &&
-    echo "borscht: formatchecking rust..." >&2 && cargo fmt --check &&
-    echo "borscht: linting rust..." >&2 && cargo clippy --all-targets -- -D warnings
+    echo "borscht: typechecking python 🐍..." >&2 && uv run pyrefly check &&
+    echo "borscht: formatchecking rust 🦀..." >&2 && cargo fmt --check &&
+    echo "borscht: linting rust 🦀..." >&2 && cargo clippy --all-targets -- -D warnings
   )
 fi
 

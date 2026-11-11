@@ -24,5 +24,5 @@ done
 $touches_borscht || exit 0
 
 cd borscht &&
-  echo "borscht: testing python..." >&2 && uv run pytest &&
-  echo "borscht: testing rust..." >&2 && cargo test
+  echo "borscht: testing python 🐍..." >&2 && uv run pytest &&
+  echo "borscht: testing rust 🦀..." >&2 && cargo test
