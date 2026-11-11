@@ -1,4 +1,4 @@
-# asitpofborscht <img src="https://sitp.ai/assets/borscht.png" width="32">
+# asitpofborscht <img src="https://sitp.ai/assets/borscht.webp" width="32">
 
 This repository hosts the https://sitp.ai textbook and the `borscht` teaching deep learning framework ([`nanogpt`](https://github.com/karpathy/nanogpt) complete!)<br>
 

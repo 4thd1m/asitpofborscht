@@ -1,6 +1,6 @@
 # Dedication
 
-<img src="./assets/dad.jpg" width="500px" /><br>
+<img src="./assets/dad.webp" width="500px" /><br>
 
 In loving memory of my father, my [teacher](https://web.archive.org/web/20260206222945/https://ginsengpress.com/articles/yin-and-yang/), and my best friend [Dr. Thomas Zhang ND., R.TCMP, R.Ac](https://web.archive.org/web/20260316214521/https://ginsengpress.com/about-ginseng-press/).<br>
 The love I put into this textbook and course is but a fraction of the love he gave me.<br>

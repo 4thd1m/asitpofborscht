@@ -387,7 +387,7 @@ blockquote .lecnote {
    rather than as an `<img>`. That is what lets one file serve both themes: the
    mark takes the note's own color and muting, exactly like the `.fa-svg` lecture
    icon does, so ./assets/cpp.svg needs none of the `_dark` twin that every drawn
-   `.png` figure there carries. Dropping the brand blue is the point and not a
+   `.webp` figure there carries. Dropping the brand blue is the point and not a
    shortcut — a saturated hexagon would be the one loud thing in a margin built
    entirely out of muted gray. */
 .cppnote {
@@ -484,7 +484,7 @@ img.icon {
    therefore pasted as a raw `<svg>` at each video caption, wrapped in the same
    `.fa-svg` span mdBook's own chrome uses so its `width/height: 1em` and
    `fill: currentColor` (css/general.css) apply for free. currentColor is the
-   point: unlike the `.png` icons this needs no `_dark` twin to survive ayu.
+   point: unlike the `.webp` icons this needs no `_dark` twin to survive ayu.
    `.video-icon` only adds what the caption context needs — a touch more size
    than the surrounding text and a real gap, since a caption is plain prose and
    not the inline `code` span that `img.icon` leans on for its spacing. */
@@ -1763,132 +1763,132 @@ main :is(h1, h2, h3, h4, h5, h6) :is(.sidenote, .sidenote-number) {
   }
 }
 
-/* Theme-dependent owl illustration. The default <img src> points at owl.png
+/* Theme-dependent owl illustration. The default <img src> points at owl.webp
    (used by the light/rust themes); these override the rendered image per theme
    via `content`. Paths are relative to this CSS file, which mdBook emits at
    theme/css/custom-*.css, so assets/ is two levels up. */
 html.coal img.owl {
-  content: url("../../assets/owl2.png");
+  content: url("../../assets/owl2.webp");
 }
 
 html.navy img.owl,
 html.ayu img.owl {
-  content: url("../../assets/owl3.png");
+  content: url("../../assets/owl3.webp");
 }
 
 html.navy img.hipowl,
 html.ayu img.hipowl,
 html.coal img.hipowl {
-  content: url("../../assets/hipowl_dark.png");
+  content: url("../../assets/hipowl_dark.webp");
 }
 
 /* Theme-dependent probability-space diagram, mirroring the owl swap above. */
 html.coal img.probspace,
 html.navy img.probspace,
 html.ayu img.probspace {
-  content: url("../../assets/probspace_dark.png");
+  content: url("../../assets/probspace_dark.webp");
 }
 
 html.coal img.vector,
 html.navy img.vector,
 html.ayu img.vector {
-  content: url("../../assets/vector_dark.png");
+  content: url("../../assets/vector_dark.webp");
 }
 
 html.coal img.tensors,
 html.navy img.tensors,
 html.ayu img.tensors {
-  content: url("../../assets/tensors_dark.png");
+  content: url("../../assets/tensors_dark.webp");
 }
 
 html.coal img.randvar,
 html.navy img.randvar,
 html.ayu img.randvar {
-  content: url("../../assets/randvar_dark.png");
+  content: url("../../assets/randvar_dark.webp");
 }
 
 html.coal img.randproc,
 html.navy img.randproc,
 html.ayu img.randproc {
-  content: url("../../assets/randproc_dark.png");
+  content: url("../../assets/randproc_dark.webp");
 }
 
 html.coal img.chain,
 html.navy img.chain,
 html.ayu img.chain {
-  content: url("../../assets/chain_dark.png");
+  content: url("../../assets/chain_dark.webp");
 }
 
 html.coal img.conditional,
 html.navy img.conditional,
 html.ayu img.conditional {
-  content: url("../../assets/conditional_dark.png");
+  content: url("../../assets/conditional_dark.webp");
 }
 
 html.coal img.jointbars,
 html.navy img.jointbars,
 html.ayu img.jointbars {
-  content: url("../../assets/jointbars_dark.png");
+  content: url("../../assets/jointbars_dark.webp");
 }
 
 html.coal img.jointmatrix,
 html.navy img.jointmatrix,
 html.ayu img.jointmatrix {
-  content: url("../../assets/jointmatrix_dark.png");
+  content: url("../../assets/jointmatrix_dark.webp");
 }
 
 html.coal img.jointmatrixmarginal,
 html.navy img.jointmatrixmarginal,
 html.ayu img.jointmatrixmarginal {
-  content: url("../../assets/jointmatrixmarginal_dark.png");
+  content: url("../../assets/jointmatrixmarginal_dark.webp");
 }
 
 html.coal img.hand-flame,
 html.navy img.hand-flame,
 html.ayu img.hand-flame {
-  content: url("../../assets/hand-flame_dark.png");
+  content: url("../../assets/hand-flame_dark.webp");
 }
 
 html.coal img.berouilli_logreg,
 html.navy img.berouilli_logreg,
 html.ayu img.berouilli_logreg {
-  content: url("../../assets/berouilli_logreg_dark.png");
+  content: url("../../assets/bernoulli_logreg_dark.webp");
 }
 
 html.coal img.losscurve,
 html.navy img.losscurve,
 html.ayu img.losscurve {
-  content: url("../../assets/losscurve_dark.png");
+  content: url("../../assets/losscurve_dark.webp");
 }
 
 html.coal img.neuron,
 html.navy img.neuron,
 html.ayu img.neuron {
-  content: url("../../assets/neuron_dark.png");
+  content: url("../../assets/neuron_dark.webp");
 }
 
 html.coal img.multiclass_logisticregression,
 html.navy img.multiclass_logisticregression,
 html.ayu img.multiclass_logisticregression {
-  content: url("../../assets/multiclass_logisticregression_dark.png");
+  content: url("../../assets/multiclass_logisticregression_dark.webp");
 }
 
 html.coal img.multiclass_logisticregression_circuit,
 html.navy img.multiclass_logisticregression_circuit,
 html.ayu img.multiclass_logisticregression_circuit {
-  content: url("../../assets/multiclass_logisticregression_circuit_dark.png");
+  content: url("../../assets/multiclass_logisticregression_circuit_dark.webp");
 }
 
 html.coal img.ffn,
 html.navy img.ffn,
 html.ayu img.ffn {
-  content: url("../../assets/ffn_dark.png");
+  content: url("../../assets/ffn_dark.webp");
 }
 
 html.coal img.transformer,
 html.navy img.transformer,
 html.ayu img.transformer {
-  content: url("../../assets/transformer_dark.png");
+  content: url("../../assets/transformer_dark.webp");
 }
 
 html.coal img.cpugpu,
@@ -1900,72 +1900,72 @@ html.ayu img.cpugpu {
 html.coal img.ffn_circuit,
 html.navy img.ffn_circuit,
 html.ayu img.ffn_circuit {
-  content: url("../../assets/ffn_circuit_dark.png");
+  content: url("../../assets/ffn_circuit_dark.webp");
 }
 
 html.coal img.ffn_matmul,
 html.navy img.ffn_matmul,
 html.ayu img.ffn_matmul {
-  content: url("../../assets/ffn_matmul_dark.png");
+  content: url("../../assets/ffn_matmul_dark.webp");
 }
 
 html.coal img.neuron_linreg,
 html.navy img.neuron_linreg,
 html.ayu img.neuron_linreg {
-  content: url("../../assets/neuron_linreg_dark.png");
+  content: url("../../assets/neuron_linreg_dark.webp");
 }
 
 html.coal img.vocabindexmap,
 html.navy img.vocabindexmap,
 html.ayu img.vocabindexmap {
-  content: url("../../assets/vocabindexmap_dark.png");
+  content: url("../../assets/vocabindexmap_dark.webp");
 }
 
 html.coal img.onehot,
 html.navy img.onehot,
 html.ayu img.onehot {
-  content: url("../../assets/onehot_dark.png");
+  content: url("../../assets/onehot_dark.webp");
 }
 
 html.coal img.discriminant_decisionbad,
 html.navy img.discriminant_decisionbad,
 html.ayu img.discriminant_decisionbad {
-  content: url("../../assets/discriminant_decisionbad_dark.png");
+  content: url("../../assets/discriminant_decisionbad_dark.webp");
 }
 
 html.coal img.discriminant_decision,
 html.navy img.discriminant_decision,
 html.ayu img.discriminant_decision {
-  content: url("../../assets/discriminant_decision_dark.png");
+  content: url("../../assets/discriminant_decision_dark.webp");
 }
 
 html.coal img.discriminant_weight_bad,
 html.navy img.discriminant_weight_bad,
 html.ayu img.discriminant_weight_bad {
-  content: url("../../assets/discriminant_weight_bad_dark.png");
+  content: url("../../assets/discriminant_weight_bad_dark.webp");
 }
 
 html.coal img.discriminant_weight,
 html.navy img.discriminant_weight,
 html.ayu img.discriminant_weight {
-  content: url("../../assets/discriminant_weight_dark.png");
+  content: url("../../assets/discriminant_weight_dark.webp");
 }
 
 html.coal img.venn,
 html.navy img.venn,
 html.ayu img.venn {
-  content: url("../../assets/venn_dark.png");
+  content: url("../../assets/venn_dark.webp");
 }
 
 html.coal img.venn_disjoint,
 html.navy img.venn_disjoint,
 html.ayu img.venn_disjoint {
-  content: url("../../assets/venn_disjoint_dark.png");
+  content: url("../../assets/venn_disjoint_dark.webp");
 }
 
 /* Prose color-keys that name a part of a figure ("the orange output ..."), in
    the same Okabe-Ito hues the figures are drawn with. The dark values are the
-   palette verbatim, matching the strokes in the *_dark.png variants. On white,
+   palette verbatim, matching the strokes in the *_dark.webp variants. On white,
    though, only the blue is legible as text — the palette is tuned for fills,
    and orange/green/purple land at 2.3:1, 3.4:1 and 3.1:1 — so the light values
    are those three darkened (0.8x, 0.85x, 0.8x) to a uniform ~4.3:1. KaTeX

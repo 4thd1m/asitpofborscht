@@ -29,7 +29,7 @@ If you are interested in learning about the course's philosophy, see the [course
 **Week 1. Hello Tensor 👋**
 
 In week 1, you will be gently introduced to language modeling with the bigram model,
-using the stochastic and infinitely continuous software 2.0 programming language <img class="icon" src="./assets/borscht.png" alt="" style="aspect-ratio: 736 / 510;"> `borscht.Tensor`. You will need to watch one lecture, read two chapters, and write one lab.
+using the stochastic and infinitely continuous software 2.0 programming language <img class="icon" src="./assets/borscht.webp" alt="" style="aspect-ratio: 736 / 510;"> `borscht.Tensor`. You will need to watch one lecture, read two chapters, and write one lab.
 
 - Watch [▶️ Lecture 1: Hello Tensor]()
 - Read [📖 Chapter 1.1 From Certain to Uncertain Knowledge](./1.md#11-from-certain-to-uncertain-knowledge)
@@ -77,7 +77,7 @@ which formalizes the notion of dimensionality from linear algebra, as well as hi
 
 **Week 3. MetaCircularEvaLuAtor! ↩️**
 
-In week 3, you will be implementing your own <img class="icon" src="./assets/borscht.png" alt="" style="aspect-ratio: 736 / 510;"> `borscht.Tensor`
+In week 3, you will be implementing your own <img class="icon" src="./assets/borscht.webp" alt="" style="aspect-ratio: 736 / 510;"> `borscht.Tensor`
 which will run the bigram and perceptron model you trained in the first two weeks.
 This implementation of `borscht.Tensor` will be incrementally evolved to support GPU acceleration, and training deep neural networks.
 You will  need to watch one lecture, read three chapters, and write one lab.
@@ -98,7 +98,7 @@ Optional reading consists of reading historical papers on array programming lang
 
 **Week 4. GPUs Go Brrr 🏎️**
 
-In week 4, you will be accelerating the implementation of <img class="icon" src="./assets/borscht.png" alt="" style="aspect-ratio: 736 / 510;"> `borscht.Tensor`
+In week 4, you will be accelerating the implementation of <img class="icon" src="./assets/borscht.webp" alt="" style="aspect-ratio: 736 / 510;"> `borscht.Tensor`
 by implementing GPU kernels. You will need to watch one lecture, read one chapter, and write one lab.
 
 - Watch [▶️ Lecture 4: GPUs Go Brrr]()
@@ -126,7 +126,7 @@ by implementing GPU kernels. You will need to watch one lecture, read one chapte
 
 **Week 7. AutoNabla (≧∇≦)**
 
-*Implementing* <img class="icon" src="./assets/borscht.png" alt="" style="aspect-ratio: 736 / 510;"> `borscht.Tensor.backward()`
+*Implementing* <img class="icon" src="./assets/borscht.webp" alt="" style="aspect-ratio: 736 / 510;"> `borscht.Tensor.backward()`
 
 - Watch [▶️ Lecture 7]()
 - Read [📖 Chapter 4.1 Automatic Differentiation](./2.md#41-automatic-differentation)

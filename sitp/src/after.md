@@ -1,4 +1,4 @@
-![](./assets/sitp_banner.png)
+![](./assets/sitp_banner.webp)
 
 # Afterword
 

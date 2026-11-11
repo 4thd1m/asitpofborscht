@@ -1,6 +1,6 @@
 # Course Thesis
 
-![](./assets/pref.jpeg)
+![](./assets/pref.webp)
 <small>*Presenting an early outline of <span class="smallcaps">SITP</span> at [Toronto School of Foundation Modeling Season 1 (2025)](https://tsfm.ca/schedule)*</small>
 
 ## The Structure and Interpretation of The AI Curriculum
@@ -195,7 +195,7 @@ some explanations. not many references. at the limit, this is my attempt at crea
 - torch and vllm is the linux of AI, where is the xv6?
 - curriculum engineering, drscheme (racket): https://cs.brown.edu/people/sk/Publications/Papers/Published/fffkf-drscheme-journal/, pyret: https://pyret.org/pyret-code/
 - the book's breadth is ambitious but we should expect ourselves to learn more with AI now. AI is the rocketship for our minds.
-- alan kay, lisp's interpreter is like maxwells equations, everyone should also implement back propagation and a mingpt https://karpathy.github.io/2026/02/12/microgpt/, ./assets/lisp.png
+- alan kay, lisp's interpreter is like maxwells equations, everyone should also implement back propagation and a mingpt https://karpathy.github.io/2026/02/12/microgpt/, ./assets/lisp.webp
 - mark sarofim, golden age of systems,
 linear algebra, numpy, and torch stood the test of time
 - the only misnomer is that this is a book about torch, not jax
@@ -246,7 +246,7 @@ Software 2.0, following [(Krishnamurthi and Fisler 2020)](https://cs.brown.edu/p
   - Procedural skills
     - write a good design doc/test suite
     - code review
-- centered around the Teaching Array Programming Language <img class="icon" src="./assets/borscht.png" alt="" style="aspect-ratio: 736 / 510;
+- centered around the Teaching Array Programming Language <img class="icon" src="./assets/borscht.webp" alt="" style="aspect-ratio: 736 / 510;
 ">[`borscht.Tensor`]() with language levels following the form of [(Felleisen et al. 2004)](https://cs.brown.edu/people/sk/Publications/Papers/Published/fffk-htdp-vs-sicp-journal/paper.pdf) but with the substance of <span class="smallcaps">NETSOR</span> and <span class="smallcaps">NETSOR$\top$</span> from [(Yang 2019)](https://arxiv.org/pdf/1910.12478) and [(Yang 2020)](https://arxiv.org/abs/2006.14548) as well as PTX, CUDA, CuTeDSL, Cutile.
 
 Future Directions
