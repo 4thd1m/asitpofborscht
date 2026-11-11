@@ -21,7 +21,7 @@ fi
 # figures), so the commit costs whatever those cells cost to run.
 set -e
 
-py="sitp/notebooks/.venv/bin/python"
+py="models/.venv/bin/python"
 script="sitp/preprocessors/retheme-figures.py"
 
 nbs=$(git diff --cached --name-only --diff-filter=ACM -- '*.ipynb')

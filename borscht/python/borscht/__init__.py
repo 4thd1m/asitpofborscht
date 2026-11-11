@@ -75,7 +75,7 @@
 # With the first file of __init__.py, we will understand two ideas:
 #   1. How Python's module and packaging system works, since up ahead we will be implementing
 #      borscht with a mixed source of Python, Rust, CUDA Rust, and CuTeDSL (Python again!)
-#   2. How borscht's internals are organized from a 50,000ft view 
+#   2. How borscht's internals are organized from a 50,000ft view
 
 
 
@@ -114,11 +114,10 @@
   # + ------------------------------------------- Package Registry ≜  ----------------------------------------
   # 
 
-  # In asitpofborscht/notebooks
+  # uv run pyrefly check && uv run pytest
   # uv run python
   # >>> import borscht
-
-
+  # exit()
 
 
 
