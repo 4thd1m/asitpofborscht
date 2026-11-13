@@ -30,13 +30,13 @@ Hwu, Wen-mei, David B. Kirk, and Izzat El Hajj. 2027. Programming Massively Para
 
 Jurafsky, Daniel, and James H. Martin. 2026. *Speech and Language Processing*. 3rd ed. draft. <https://web.stanford.edu/~jurafsky/slp3/>.
 
-New, Stephen. 2022. MATH 145 Algebra. Course notes, University of Waterloo https://www.math.uwaterloo.ca/~snew/PMATH333/math145notes.pdf.
+New, Stephen. 2022. MATH 145 Algebra. Course notes, University of Waterloo <https://www.math.uwaterloo.ca/~snew/PMATH333/math145notes.pdf>.
 
 Newstead, Clive. 2026. *An Infinite Descent into Pure Mathematics*. Last modified June 25, 2026. <https://infinitedescent.org/>.
 
 Slotin, Sergey. n.d. “Algorithms for Modern Hardware - Algorithmica.” En.Algorithmica.Org. Accessed November 10, 2026. <https://en.algorithmica.org/hpc/>.
 
-Stepanov, Alexander A, and Daniel E Rose. 2014. From Mathematics to Generic Programming. Addison-Wesley Professional.
+Stepanov, Alexander A, and Daniel E Rose. 2014. From Mathematics to Generic Programming. Addison-Wesley Professional. <https://www.fm2gp.com/>.
 
 Tao, Terence. 2022. Analysis I Fourth Edition. Springer Nature. <https://terrytao.wordpress.com/books/analysis-i/>.
 
