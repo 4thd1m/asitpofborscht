@@ -11,7 +11,18 @@ via visualizations, figures, and prose.
 - Model 1: Bigram
 - Model 2: Discriminative Perceptron
 - Model 3: Probabilistic Perceptron
-- Model 4: MLP
+- Model 4: Multilayer Peceptron
+- Model 5: Convolutional Neural Network
+- Model 6: Recurrent Neural Network
+- Model 7: Long Short-Term Memory Network
+- Model 8: Encoder-Decoder Pre-trained Transformers (BERT)
+- Model 9: Decoder Only Pre-trained Transformers (mingpt)
+- Model 10: Decoder Only Pre-trained Transformers (nanogpt)
+- Model 11: Post-trained Transformer (nanochat)
+- Model 12: Post-trained Transformer (nanoreasoner)
+
+After Model 12, you might be interested in the first research blog series
+From SITP to SOTA [FS2S Part 1 (ARCH/OPT): From modded-nanogpt to dsv3 and k3]().
 
 **Reading Order for Deep Learning Framework**
 
@@ -26,6 +37,17 @@ Ensure you have Python and Rust toolchains on your machine by running [`borscht/
   - File 4A: From Rust to CUDA Rust:
   - File 4B: Accelerate Tensor on GPU: [`python/borscht/tensor_nativegpu.py`](), [`rust/kernelsgpu.rs`]()
 - File 5. Abstracting Acceleration with `Dispatcher`, `Storage`, `Allocator`: [`borscht/python/borscht/tensor.py`](./borscht/python/borscht/tensor.py)
+- File 6. Adding Forward Ops
+- File 7. Hello Autograd
+- File 8. Adding Backward Ops
+- File 9. From Volta to Ampere (sm80)
+- File 10. From Ampere (sm80) to Hopper (sm90)
+- File 11. Hello Tensor Compiler
+- File 12. Hello Inference Engine
+
+After Model 12, you might be interested in the second and third research blog series From SITP to SOTA
+- [FS2S Part 1 (SYS): From Hopper to Blackwell and Rubin]()
+- [FS2S Part 2 (DISTSYS): From FSDP to MP]()
 
 ## License
 
