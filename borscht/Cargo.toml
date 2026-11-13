@@ -1,13 +1,37 @@
+#                                                          ,,                                                                                                                                                        
+#                       db                               `7MM                          mm               MMP""MM""YMM                                                                                                 
+#                      ;MM:                                MM                          MM               P'   MM   `7                                                                                                 
+#  pd""b.             ,V^MM.    ,p6"bo   ,p6"bo   .gP"Ya   MM  .gP"Ya `7Mb,od8 ,6"Yb.mmMMmm .gP"Ya           MM  .gP"Ya `7MMpMMMb.  ,pP"Ybd  ,pW"Wq.`7Mb,od8                                                         
+# (O)  `8b           ,M  `MM   6M'  OO  6M'  OO  ,M'   Yb  MM ,M'   Yb  MM' "'8)   MM  MM  ,M'   Yb          MM ,M'   Yb  MM    MM  8I   `" 6W'   `Wb MM' "'                                                         
+#      ,89           AbmmmqMA  8M       8M       8M""""""  MM 8M""""""  MM     ,pm9MM  MM  8M""""""          MM 8M""""""  MM    MM  `YMMMa. 8M     M8 MM                                                             
+#    ""Yb. ,,       A'     VML YM.    , YM.    , YM.    ,  MM YM.    ,  MM    8M   MM  MM  YM.    ,          MM YM.    ,  MM    MM  L.   I8 YA.   ,A9 MM                                                             
+#       88 db     .AMA.   .AMMA.YMbmd'   YMbmd'   `Mbmmd'.JMML.`Mbmmd'.JMML.  `Moo9^Yo.`Mbmo`Mbmmd'        .JMML.`Mbmmd'.JMML  JMML.M9mmmP'  `Ybmd9'.JMML.                                                           
+# (O)  .M'                                                                                                                                                                                                           
+#  bmmmd'                                                                                                                                                                                                            
+#                                                                                                                                                                                                                   
+#                                                                                                                     ,,                                                                                             
+#                        db             `7MM"""YMM                                     `7MM"""Mq.              mm   `7MM                                 mm                `7MM"""Mq.                       mm       
+#                       ;MM:              MM    `7                                       MM   `MM.             MM     MM                                 MM                  MM   `MM.                      MM       
+#          pd""b.      ,V^MM.             MM   d `7Mb,od8 ,pW"Wq.`7MMpMMMb.pMMMb.        MM   ,M9 `7M'   `MF'mmMMmm   MMpMMMb.  ,pW"Wq.`7MMpMMMb.      mmMMmm ,pW"Wq.        MM   ,M9 `7MM  `7MM  ,pP"Ybd mmMMmm     
+#         (O)  `8b    ,M  `MM             MM""MM   MM' "'6W'   `Wb MM    MM    MM        MMmmdM9    VA   ,V    MM     MM    MM 6W'   `Wb MM    MM        MM  6W'   `Wb       MMmmdM9    MM    MM  8I   `"   MM       
+#              ,89    AbmmmqMA            MM   Y   MM    8M     M8 MM    MM    MM        MM          VA ,V     MM     MM    MM 8M     M8 MM    MM        MM  8M     M8       MM  YM.    MM    MM  `YMMMa.   MM       
+#            ""Yb.   A'     VML  ,,       MM       MM    YA.   ,A9 MM    MM    MM        MM           VVV      MM     MM    MM YA.   ,A9 MM    MM        MM  YA.   ,A9       MM   `Mb.  MM    MM  L.   I8   MM       
+#               88 .AMA.   .AMMA.db     .JMML.   .JMML.   `Ybmd9'.JMML  JMML  JMML.    .JMML.         ,V       `Mbmo.JMML  JMML.`Ybmd9'.JMML  JMML.      `Mbmo`Ybmd9'      .JMML. .JMM. `Mbod"YML.M9mmmP'   `Mbmo    
+#         (O)  .M'                                                                                   ,V                                                                                                              
+#          bmmmd'                                                                                 OOb"                                                                                                               
 # **********************************************************************************************************************
 #                                               borscht (Literary Source)
 # <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 4. Accelerate++ Tensor -->
 #     tensor_managed.py                               3A. From Python to Rust
 #                                                         - tensor_nativecpu.py
-#                                                         - pyproject.toml
-#                                                         - Cargo.toml          <-- HERE
-#                                                         - lib.rs
+#                                                           0. From Mathematics to Programming
+#                                                           1. From Lambda Calculus to Turing Machines
+#                                                           2. From Virtual Machines to Physical Machines
+#                                                         - pyproject.toml/Cargo.toml
 #                                                     3B. From Rust to RISC-V
-#                                                         - kernelscpu.rs
+#                                                         - lib.rs/kernelscpu.rs
+#                                                           0. From Big-O to Rooflines
+#                                                           1. von Neumann Architecture = Computation + Communication
 # **********************************************************************************************************************
 
 [package]

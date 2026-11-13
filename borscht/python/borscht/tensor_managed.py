@@ -1,8 +1,16 @@
+#                                        ,,    ,,                                                                    
+#                 `7MMF'  `7MMF'       `7MM  `7MM               MMP""MM""YMM                                         
+#                   MM      MM           MM    MM               P'   MM   `7                                         
+#  pd*"*b.          MM      MM  .gP"Ya   MM    MM  ,pW"Wq.           MM  .gP"Ya `7MMpMMMb.  ,pP"Ybd  ,pW"Wq.`7Mb,od8 
+# (O)   j8          MMmmmmmmMM ,M'   Yb  MM    MM 6W'   `Wb          MM ,M'   Yb  MM    MM  8I   `" 6W'   `Wb MM' "' 
+#     ,;j9          MM      MM 8M""""""  MM    MM 8M     M8          MM 8M""""""  MM    MM  `YMMMa. 8M     M8 MM     
+#  ,-='    ,,       MM      MM YM.    ,  MM    MM YA.   ,A9          MM YM.    ,  MM    MM  L.   I8 YA.   ,A9 MM     
+# Ammmmmmm db     .JMML.  .JMML.`Mbmmd'.JMML..JMML.`Ybmd9'         .JMML.`Mbmmd'.JMML  JMML.M9mmmP'  `Ybmd9'.JMML.
 # **********************************************************************************************************************
 #                                               borscht (Literary Source)                                               
 # <-- File 1. Hello borscht                   -- File 2. Hello Tensor --                   File 3. Accelerate Tensor -->
-#                                                                                               3A. From Python to Rust
-#             __init__.py                                tensor_managed.py                         - tensor_nativecpu.py
+#             __init__.py                                tensor_managed.py                3A. From Python to Rust
+#                                                                                                  - tensor_nativecpu.py
 #                                                                                                  - pyproject.toml
 #                                                                                                  - Cargo.toml
 #                                                                                                  - lib.rs
@@ -461,38 +469,38 @@ class Tensor: # The more accurate name for the Tensor data structure we all use 
         # A computational Tensor of shape (d1,...,d2) aspirationally represents the concept of the field R^{d1 x ... x dn}
         # We now recommend you to collapse/fold the __init__ method, along with all of it's commentary.                                                                                                                                                                                                                                            
                                                                                                                                                                                                                                             
-#                                                                              ,,                                                                                                                                                             
-#       db          MMP""MM""YMM                                               db                                                                                                                                                             
-#      ;MM:         P'   MM   `7                                                                                                                                                                                                              
-#     ,V^MM.             MM  .gP"Ya `7MMpMMMb.  ,pP"Ybd  ,pW"Wq.`7Mb,od8     `7MM  ,pP"Ybd                                                                                                                                                    
-#    ,M  `MM             MM ,M'   Yb  MM    MM  8I   `" 6W'   `Wb MM' "'       MM  8I   `"                                                                                                                                                    
-#    AbmmmqMA            MM 8M""""""  MM    MM  `YMMMa. 8M     M8 MM           MM  `YMMMa.                                                                                                                                                    
-#   A'     VML           MM YM.    ,  MM    MM  L.   I8 YA.   ,A9 MM           MM  L.   I8                                                                                                                                                    
-# .AMA.   .AMMA.       .JMML.`Mbmmd'.JMML  JMML.M9mmmP'  `Ybmd9'.JMML.       .JMML.M9mmmP'                                                                                                                                                    
+#                                                                                 ,,                                                                                                                                                             
+#          db          MMP""MM""YMM                                               db                                                                                                                                                             
+#         ;MM:         P'   MM   `7                                                                                                                                                                                                              
+#        ,V^MM.             MM  .gP"Ya `7MMpMMMb.  ,pP"Ybd  ,pW"Wq.`7Mb,od8     `7MM  ,pP"Ybd                                                                                                                                                    
+#       ,M  `MM             MM ,M'   Yb  MM    MM  8I   `" 6W'   `Wb MM' "'       MM  8I   `"                                                                                                                                                    
+#       AbmmmqMA            MM 8M""""""  MM    MM  `YMMMa. 8M     M8 MM           MM  `YMMMa.                                                                                                                                                    
+#      A'     VML           MM YM.    ,  MM    MM  L.   I8 YA.   ,A9 MM           MM  L.   I8                                                                                                                                                    
+#    .AMA.   .AMMA.       .JMML.`Mbmmd'.JMML  JMML.M9mmmP'  `Ybmd9'.JMML.       .JMML.M9mmmP'                                                                                                                                                    
                                                                                                                                                                                                                                             
                                                                                                                                                                                                                                             
                                                                                                                                                                                                                                             
-#   ,,                             ,,                       ,,                     ,,               ,,                                                     ,,                                         ,,    ,,                         ,,     
-#   db                           `7MM                       db                   `7MM             `7MM                                                     db             mm                        `7MM    db                       `7MM     
-#                                  MM                                              MM               MM                                                                    MM                          MM                               MM     
-# `7MM  ,pP"Ybd      ,6"Yb.        MM  ,pW"Wq.   .P"Ybmmm `7MM  ,p6"bo   ,6"Yb.    MM      ,pP"Ybd  MMpMMMb.   ,6"Yb. `7MMpdMAo.  .gP"Ya      `7M'   `MF'`7MM  `7Mb,od8 mmMMmm `7MM  `7MM   ,6"Yb.    MM  `7MM  M"""MMV .gP"Ya    ,M""bMM     
-#   MM  8I   `"     8)   MM        MM 6W'   `Wb :MI  I8     MM 6M'  OO  8)   MM    MM      8I   `"  MM    MM  8)   MM   MM   `Wb ,M'   Yb       VA   ,V    MM    MM' "'   MM     MM    MM  8)   MM    MM    MM  '  AMV ,M'   Yb ,AP    MM     
-#   MM  `YMMMa.      ,pm9MM        MM 8M     M8  WmmmP"     MM 8M        ,pm9MM    MM      `YMMMa.  MM    MM   ,pm9MM   MM    M8 8M""""""        VA ,V     MM    MM       MM     MM    MM   ,pm9MM    MM    MM    AMV  8M"""""" 8MI    MM     
-#   MM  L.   I8     8M   MM        MM YA.   ,A9 8M          MM YM.    , 8M   MM    MM      L.   I8  MM    MM  8M   MM   MM   ,AP YM.    ,         VVV      MM    MM       MM     MM    MM  8M   MM    MM    MM   AMV  ,YM.    , `Mb    MM     
-# .JMML.M9mmmP'     `Moo9^Yo.    .JMML.`Ybmd9'   YMMMMMb  .JMML.YMbmd'  `Moo9^Yo..JMML.    M9mmmP'.JMML  JMML.`Moo9^Yo. MMbmmd'   `Mbmmd'          W     .JMML..JMML.     `Mbmo  `Mbod"YML.`Moo9^Yo..JMML..JMML.AMMmmmM `Mbmmd'  `Wbmd"MML.   
-#                                               6'     dP                                                               MM                                                                                                                    
-#                                               Ybmmmd'                                                               .JMML.                                                                                                                  
+#      ,,                             ,,                       ,,                     ,,               ,,                                                     ,,                                         ,,    ,,                         ,,     
+#      db                           `7MM                       db                   `7MM             `7MM                                                     db             mm                        `7MM    db                       `7MM     
+#                                     MM                                              MM               MM                                                                    MM                          MM                               MM     
+#    `7MM  ,pP"Ybd      ,6"Yb.        MM  ,pW"Wq.   .P"Ybmmm `7MM  ,p6"bo   ,6"Yb.    MM      ,pP"Ybd  MMpMMMb.   ,6"Yb. `7MMpdMAo.  .gP"Ya      `7M'   `MF'`7MM  `7Mb,od8 mmMMmm `7MM  `7MM   ,6"Yb.    MM  `7MM  M"""MMV .gP"Ya    ,M""bMM     
+#      MM  8I   `"     8)   MM        MM 6W'   `Wb :MI  I8     MM 6M'  OO  8)   MM    MM      8I   `"  MM    MM  8)   MM   MM   `Wb ,M'   Yb       VA   ,V    MM    MM' "'   MM     MM    MM  8)   MM    MM    MM  '  AMV ,M'   Yb ,AP    MM     
+#      MM  `YMMMa.      ,pm9MM        MM 8M     M8  WmmmP"     MM 8M        ,pm9MM    MM      `YMMMa.  MM    MM   ,pm9MM   MM    M8 8M""""""        VA ,V     MM    MM       MM     MM    MM   ,pm9MM    MM    MM    AMV  8M"""""" 8MI    MM     
+#      MM  L.   I8     8M   MM        MM YA.   ,A9 8M          MM YM.    , 8M   MM    MM      L.   I8  MM    MM  8M   MM   MM   ,AP YM.    ,         VVV      MM    MM       MM     MM    MM  8M   MM    MM    MM   AMV  ,YM.    , `Mb    MM     
+#    .JMML.M9mmmP'     `Moo9^Yo.    .JMML.`Ybmd9'   YMMMMMb  .JMML.YMbmd'  `Moo9^Yo..JMML.    M9mmmP'.JMML  JMML.`Moo9^Yo. MMbmmd'   `Mbmmd'          W     .JMML..JMML.     `Mbmo  `Mbod"YML.`Moo9^Yo..JMML..JMML.AMMmmmM `Mbmmd'  `Wbmd"MML.   
+#                                                  6'     dP                                                               MM                                                                                                                    
+#                                                  Ybmmmd'                                                               .JMML.                                                                                                                  
                                                                                                                                                                                                                                             
-#  ,,                                                            ,,        ,,                                             ,,                           ,,                     ,,                                                              
-# *MM                                            mm              db      `7MM                mm                         `7MM                           db                   `7MM                mm                                            
-#  MM                                            MM                        MM                MM                           MM                                                  MM                MM                                            
-#  MM,dMMb.`7M'   `MF'     ,6"Yb.      ,pP"Ybd mmMMmm `7Mb,od8 `7MM   ,M""bMM  .gP"Ya      mmMMmm ,pW"Wq.      `7MMpdMAo. MMpMMMb.`7M'   `MF',pP"Ybd `7MM  ,p6"bo   ,6"Yb.    MM      ,pP"Ybd mmMMmm ,pW"Wq.`7Mb,od8 ,6"Yb.  .P"Ybmmm .gP"Ya  
-#  MM    `Mb VA   ,V      8)   MM      8I   `"   MM     MM' "'   MM ,AP    MM ,M'   Yb       MM  6W'   `Wb       MM   `Wb MM    MM  VA   ,V  8I   `"   MM 6M'  OO  8)   MM    MM      8I   `"   MM  6W'   `Wb MM' "'8)   MM :MI  I8  ,M'   Yb 
-#  MM     M8  VA ,V        ,pm9MM      `YMMMa.   MM     MM       MM 8MI    MM 8M""""""       MM  8M     M8       MM    M8 MM    MM   VA ,V   `YMMMa.   MM 8M        ,pm9MM    MM      `YMMMa.   MM  8M     M8 MM     ,pm9MM  WmmmP"  8M"""""" 
-#  MM.   ,M9   VVV        8M   MM      L.   I8   MM     MM       MM `Mb    MM YM.    ,       MM  YA.   ,A9       MM   ,AP MM    MM    VVV    L.   I8   MM YM.    , 8M   MM    MM      L.   I8   MM  YA.   ,A9 MM    8M   MM 8M       YM.    , 
-#  P^YbmdP'    ,V         `Moo9^Yo.    M9mmmP'   `Mbmo.JMML.   .JMML.`Wbmd"MML.`Mbmmd'       `Mbmo`Ybmd9'        MMbmmd'.JMML  JMML.  ,V     M9mmmP' .JMML.YMbmd'  `Moo9^Yo..JMML.    M9mmmP'   `Mbmo`Ybmd9'.JMML.  `Moo9^Yo.YMMMMMb  `Mbmmd' 
-#             ,V                                                                                                 MM                  ,V                                                                                     6'     dP         
-#          OOb"                                                                                                .JMML.             OOb"                                                                                      Ybmmmd'
+#     ,,                                                            ,,        ,,                                             ,,                           ,,                     ,,                                                              
+#    *MM                                            mm              db      `7MM                mm                         `7MM                           db                   `7MM                mm                                            
+#     MM                                            MM                        MM                MM                           MM                                                  MM                MM                                            
+#     MM,dMMb.`7M'   `MF'     ,6"Yb.      ,pP"Ybd mmMMmm `7Mb,od8 `7MM   ,M""bMM  .gP"Ya      mmMMmm ,pW"Wq.      `7MMpdMAo. MMpMMMb.`7M'   `MF',pP"Ybd `7MM  ,p6"bo   ,6"Yb.    MM      ,pP"Ybd mmMMmm ,pW"Wq.`7Mb,od8 ,6"Yb.  .P"Ybmmm .gP"Ya  
+#     MM    `Mb VA   ,V      8)   MM      8I   `"   MM     MM' "'   MM ,AP    MM ,M'   Yb       MM  6W'   `Wb       MM   `Wb MM    MM  VA   ,V  8I   `"   MM 6M'  OO  8)   MM    MM      8I   `"   MM  6W'   `Wb MM' "'8)   MM :MI  I8  ,M'   Yb 
+#     MM     M8  VA ,V        ,pm9MM      `YMMMa.   MM     MM       MM 8MI    MM 8M""""""       MM  8M     M8       MM    M8 MM    MM   VA ,V   `YMMMa.   MM 8M        ,pm9MM    MM      `YMMMa.   MM  8M     M8 MM     ,pm9MM  WmmmP"  8M"""""" 
+#     MM.   ,M9   VVV        8M   MM      L.   I8   MM     MM       MM `Mb    MM YM.    ,       MM  YA.   ,A9       MM   ,AP MM    MM    VVV    L.   I8   MM YM.    , 8M   MM    MM      L.   I8   MM  YA.   ,A9 MM    8M   MM 8M       YM.    , 
+#     P^YbmdP'    ,V         `Moo9^Yo.    M9mmmP'   `Mbmo.JMML.   .JMML.`Wbmd"MML.`Mbmmd'       `Mbmo`Ybmd9'        MMbmmd'.JMML  JMML.  ,V     M9mmmP' .JMML.YMbmd'  `Moo9^Yo..JMML.    M9mmmP'   `Mbmo`Ybmd9'.JMML.  `Moo9^Yo.YMMMMMb  `Mbmmd' 
+#                ,V                                                                                                 MM                  ,V                                                                                     6'     dP         
+#             OOb"                                                                                                .JMML.             OOb"                                                                                      Ybmmmd'
 
 
 
@@ -748,36 +756,36 @@ def mm(A: Tensor, B: Tensor) -> Tensor:
     # - the matrix multiplication algorithm... aspirationally representing...           the function L1: R^k -> R^n and L2: R^m -> R^k known as a composition of linear transformation
                                                                                                                                                                                               
                                                                                                                                                                                                                      
-#                                          ,,                                              ,,          ,,            ,,    ,,                          ,,                           ,,                                 
-# `7MMM.     ,MMF'         mm              db                 `7MMM.     ,MMF'           `7MM   mm     db          `7MM    db                   mm     db                           db                                 
-#   MMMb    dPMM           MM                                   MMMb    dPMM               MM   MM                   MM                         MM                                                                     
-#   M YM   ,M MM   ,6"Yb.mmMMmm `7Mb,od8 `7MM  `7M'   `MF'      M YM   ,M MM `7MM  `7MM    MM mmMMmm `7MM `7MMpdMAo. MM  `7MM  ,p6"bo   ,6"Yb.mmMMmm `7MM  ,pW"Wq.`7MMpMMMb.      `7MM  ,pP"Ybd                        
-#   M  Mb  M' MM  8)   MM  MM     MM' "'   MM    `VA ,V'        M  Mb  M' MM   MM    MM    MM   MM     MM   MM   `Wb MM    MM 6M'  OO  8)   MM  MM     MM 6W'   `Wb MM    MM        MM  8I   `"                        
-#   M  YM.P'  MM   ,pm9MM  MM     MM       MM      XMX          M  YM.P'  MM   MM    MM    MM   MM     MM   MM    M8 MM    MM 8M        ,pm9MM  MM     MM 8M     M8 MM    MM        MM  `YMMMa.                        
-#   M  `YM'   MM  8M   MM  MM     MM       MM    ,V' VA.        M  `YM'   MM   MM    MM    MM   MM     MM   MM   ,AP MM    MM YM.    , 8M   MM  MM     MM YA.   ,A9 MM    MM        MM  L.   I8                        
-# .JML. `'  .JMML.`Moo9^Yo.`Mbmo.JMML.   .JMML..AM.   .MA.    .JML. `'  .JMML. `Mbod"YML..JMML. `Mbmo.JMML. MMbmmd'.JMML..JMML.YMbmd'  `Moo9^Yo.`Mbmo.JMML.`Ybmd9'.JMML  JMML.    .JMML.M9mmmP'                        
-#                                                                                                           MM                                                                                                         
-#                                                                                                         .JMML.                                                                                                       
+#                                             ,,                                              ,,          ,,            ,,    ,,                          ,,                           ,,                                 
+#    `7MMM.     ,MMF'         mm              db                 `7MMM.     ,MMF'           `7MM   mm     db          `7MM    db                   mm     db                           db                                 
+#      MMMb    dPMM           MM                                   MMMb    dPMM               MM   MM                   MM                         MM                                                                     
+#      M YM   ,M MM   ,6"Yb.mmMMmm `7Mb,od8 `7MM  `7M'   `MF'      M YM   ,M MM `7MM  `7MM    MM mmMMmm `7MM `7MMpdMAo. MM  `7MM  ,p6"bo   ,6"Yb.mmMMmm `7MM  ,pW"Wq.`7MMpMMMb.      `7MM  ,pP"Ybd                        
+#      M  Mb  M' MM  8)   MM  MM     MM' "'   MM    `VA ,V'        M  Mb  M' MM   MM    MM    MM   MM     MM   MM   `Wb MM    MM 6M'  OO  8)   MM  MM     MM 6W'   `Wb MM    MM        MM  8I   `"                        
+#      M  YM.P'  MM   ,pm9MM  MM     MM       MM      XMX          M  YM.P'  MM   MM    MM    MM   MM     MM   MM    M8 MM    MM 8M        ,pm9MM  MM     MM 8M     M8 MM    MM        MM  `YMMMa.                        
+#      M  `YM'   MM  8M   MM  MM     MM       MM    ,V' VA.        M  `YM'   MM   MM    MM    MM   MM     MM   MM   ,AP MM    MM YM.    , 8M   MM  MM     MM YA.   ,A9 MM    MM        MM  L.   I8                        
+#    .JML. `'  .JMML.`Moo9^Yo.`Mbmo.JMML.   .JMML..AM.   .MA.    .JML. `'  .JMML. `Mbod"YML..JMML. `Mbmo.JMML. MMbmmd'.JMML..JMML.YMbmd'  `Moo9^Yo.`Mbmo.JMML.`Ybmd9'.JMML  JMML.    .JMML.M9mmmP'                        
+#                                                                                                              MM                                                                                                         
+#                                                                                                            .JMML.                                                                                                       
                                                                                                                                                                                                                      
-#          ,,                                  ,,                                       ,,                   ,,                                                       ,,                                           ,...
-#   mm   `7MM                    `7MM        `7MM                                mm   `7MM                 `7MM           mm                                        `7MM                      mm                 .d' ""
-#   MM     MM                      MM          MM                                MM     MM                   MM           MM                                          MM                      MM                 dM`   
-# mmMMmm   MMpMMMb.  .gP"Ya        MM  ,MP'    MM  .gP"Ya `7MMpMMMb.  .P"Ybmmm mmMMmm   MMpMMMb.        ,M""bMM  ,pW"Wq.mmMMmm     `7MMpdMAo.`7Mb,od8 ,pW"Wq.    ,M""bMM `7MM  `7MM  ,p6"bo mmMMmm      ,pW"Wq. mMMmm  
-#   MM     MM    MM ,M'   Yb       MM ;Y       MM ,M'   Yb  MM    MM :MI  I8     MM     MM    MM      ,AP    MM 6W'   `Wb MM         MM   `Wb  MM' "'6W'   `Wb ,AP    MM   MM    MM 6M'  OO   MM       6W'   `Wb MM    
-#   MM     MM    MM 8M""""""       MM;Mm mmmmm MM 8M""""""  MM    MM  WmmmP"     MM     MM    MM      8MI    MM 8M     M8 MM         MM    M8  MM    8M     M8 8MI    MM   MM    MM 8M        MM       8M     M8 MM    
-#   MM     MM    MM YM.    ,       MM `Mb.     MM YM.    ,  MM    MM 8M          MM     MM    MM      `Mb    MM YA.   ,A9 MM         MM   ,AP  MM    YA.   ,A9 `Mb    MM   MM    MM YM.    ,  MM       YA.   ,A9 MM    
-#   `Mbmo.JMML  JMML.`Mbmmd'     .JMML. YA.  .JMML.`Mbmmd'.JMML  JMML.YMMMMMb    `Mbmo.JMML  JMML.     `Wbmd"MML.`Ybmd9'  `Mbmo      MMbmmd' .JMML.   `Ybmd9'   `Wbmd"MML. `Mbod"YML.YMbmd'   `Mbmo     `Ybmd9'.JMML.  
-#                                                                    6'     dP                                                       MM                                                                                
-#                                                                    Ybmmmd'                                                       .JMML.                                                                              
+#             ,,                                  ,,                                       ,,                   ,,                                                       ,,                                           ,...
+#      mm   `7MM                    `7MM        `7MM                                mm   `7MM                 `7MM           mm                                        `7MM                      mm                 .d' ""
+#      MM     MM                      MM          MM                                MM     MM                   MM           MM                                          MM                      MM                 dM`   
+#    mmMMmm   MMpMMMb.  .gP"Ya        MM  ,MP'    MM  .gP"Ya `7MMpMMMb.  .P"Ybmmm mmMMmm   MMpMMMb.        ,M""bMM  ,pW"Wq.mmMMmm     `7MMpdMAo.`7Mb,od8 ,pW"Wq.    ,M""bMM `7MM  `7MM  ,p6"bo mmMMmm      ,pW"Wq. mMMmm  
+#      MM     MM    MM ,M'   Yb       MM ;Y       MM ,M'   Yb  MM    MM :MI  I8     MM     MM    MM      ,AP    MM 6W'   `Wb MM         MM   `Wb  MM' "'6W'   `Wb ,AP    MM   MM    MM 6M'  OO   MM       6W'   `Wb MM    
+#      MM     MM    MM 8M""""""       MM;Mm mmmmm MM 8M""""""  MM    MM  WmmmP"     MM     MM    MM      8MI    MM 8M     M8 MM         MM    M8  MM    8M     M8 8MI    MM   MM    MM 8M        MM       8M     M8 MM    
+#      MM     MM    MM YM.    ,       MM `Mb.     MM YM.    ,  MM    MM 8M          MM     MM    MM      `Mb    MM YA.   ,A9 MM         MM   ,AP  MM    YA.   ,A9 `Mb    MM   MM    MM YM.    ,  MM       YA.   ,A9 MM    
+#      `Mbmo.JMML  JMML.`Mbmmd'     .JMML. YA.  .JMML.`Mbmmd'.JMML  JMML.YMMMMMb    `Mbmo.JMML  JMML.     `Wbmd"MML.`Ybmd9'  `Mbmo      MMbmmd' .JMML.   `Ybmd9'   `Wbmd"MML. `Mbod"YML.YMbmd'   `Mbmo     `Ybmd9'.JMML.  
+#                                                                       6'     dP                                                       MM                                                                                
+#                                                                       Ybmmmd'                                                       .JMML.                                                                              
                                                                                                                                                                                                                      
-#              gp                                                                                     ,,                 gp                               ,,                                                           
-#       db     \/                                                                                   `7MM      `7MM"""Yp, \/                             `7MM                                                           
-#      ;MM:    `'                                                                                     MM        MM    Yb `'                               MM                                                           
-#     ,V^MM.     ,pP"Ybd     `7Mb,od8 ,pW"Wq.`7M'    ,A    `MF',pP"Ybd      ,6"Yb.  `7MMpMMMb.   ,M""bMM        MM    dP   ,pP"Ybd      ,p6"bo   ,pW"Wq.  MM `7MM  `7MM  `7MMpMMMb.pMMMb.  `7MMpMMMb.  ,pP"Ybd         
-#    ,M  `MM     8I   `"       MM' "'6W'   `Wb VA   ,VAA   ,V  8I   `"     8)   MM    MM    MM ,AP    MM        MM"""bg.   8I   `"     6M'  OO  6W'   `Wb MM   MM    MM    MM    MM    MM    MM    MM  8I   `"         
-#    AbmmmqMA    `YMMMa.       MM    8M     M8  VA ,V  VA ,V   `YMMMa.      ,pm9MM    MM    MM 8MI    MM        MM    `Y   `YMMMa.     8M       8M     M8 MM   MM    MM    MM    MM    MM    MM    MM  `YMMMa.         
-#   A'     VML   L.   I8       MM    YA.   ,A9   VVV    VVV    L.   I8     8M   MM    MM    MM `Mb    MM        MM    ,9   L.   I8     YM.    , YA.   ,A9 MM   MM    MM    MM    MM    MM    MM    MM  L.   I8         
-# .AMA.   .AMMA. M9mmmP'     .JMML.   `Ybmd9'     W      W     M9mmmP'     `Moo9^Yo..JMML  JMML.`Wbmd"MML.    .JMMmmmd9    M9mmmP'      YMbmd'   `Ybmd9'.JMML. `Mbod"YML..JMML  JMML  JMML..JMML  JMML.M9mmmP'         
+#                 gp                                                                                     ,,                 gp                               ,,                                                           
+#          db     \/                                                                                   `7MM      `7MM"""Yp, \/                             `7MM                                                           
+#         ;MM:    `'                                                                                     MM        MM    Yb `'                               MM                                                           
+#        ,V^MM.     ,pP"Ybd     `7Mb,od8 ,pW"Wq.`7M'    ,A    `MF',pP"Ybd      ,6"Yb.  `7MMpMMMb.   ,M""bMM        MM    dP   ,pP"Ybd      ,p6"bo   ,pW"Wq.  MM `7MM  `7MM  `7MMpMMMb.pMMMb.  `7MMpMMMb.  ,pP"Ybd         
+#       ,M  `MM     8I   `"       MM' "'6W'   `Wb VA   ,VAA   ,V  8I   `"     8)   MM    MM    MM ,AP    MM        MM"""bg.   8I   `"     6M'  OO  6W'   `Wb MM   MM    MM    MM    MM    MM    MM    MM  8I   `"         
+#       AbmmmqMA    `YMMMa.       MM    8M     M8  VA ,V  VA ,V   `YMMMa.      ,pm9MM    MM    MM 8MI    MM        MM    `Y   `YMMMa.     8M       8M     M8 MM   MM    MM    MM    MM    MM    MM    MM  `YMMMa.         
+#      A'     VML   L.   I8       MM    YA.   ,A9   VVV    VVV    L.   I8     8M   MM    MM    MM `Mb    MM        MM    ,9   L.   I8     YM.    , YA.   ,A9 MM   MM    MM    MM    MM    MM    MM    MM  L.   I8         
+#    .AMA.   .AMMA. M9mmmP'     .JMML.   `Ybmd9'     W      W     M9mmmP'     `Moo9^Yo..JMML  JMML.`Wbmd"MML.    .JMMmmmd9    M9mmmP'      YMbmd'   `Ybmd9'.JMML. `Mbod"YML..JMML  JMML  JMML..JMML  JMML.M9mmmP'         
                                                                                                                                                                                               
 
 # and now, returning to our running example..
@@ -796,7 +804,6 @@ def mm(A: Tensor, B: Tensor) -> Tensor:
 if __name__ == "__main__": _main()
 
 # To summarize,
-# -after reading pyproject.toml and Cargo.toml, you understand how borscht's mixed source of Python and Rust interop with one another.
 # -after reading __init__.py, you have a 50,000 ft view of borscht's internals.
 # -after reading tensor_managed.py, you understand the core essence behind the Tensor concept
 
