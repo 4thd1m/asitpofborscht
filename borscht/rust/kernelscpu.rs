@@ -27,10 +27,12 @@
 //                                                           1. From Lambda Calculus to Turing Machines
 //                                                           2. From Virtual Machines to Physical Machines
 //                                                         - pyproject.toml/Cargo.toml
+//                                                           3. From Python to C
+//                                                           4. From Python Rust
 //                                                     3B. From Rust to RISC-V
 //                                                         - lib.rs/kernelscpu.rs
-//                                                           0. From Big-O to Rooflines
-//                                                           1. von Neumann Architecture = Computation + Communication
+//                                                           5. From Big-O to Rooflines
+//                                                           6. von Neumann Architecture = Computation + Communication
 // **********************************************************************************************************************
 
 // After reading File 2. tensor_managed.py, you now understand the core essence of the Tensor concept and it's primary algorithm of matrix multiplication

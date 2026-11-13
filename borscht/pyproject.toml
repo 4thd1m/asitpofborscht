@@ -28,10 +28,12 @@
 #                                                           1. From Lambda Calculus to Turing Machines
 #                                                           2. From Virtual Machines to Physical Machines
 #                                                         - pyproject.toml/Cargo.toml
+#.                                                          3. From Python to C
+#.                                                          4. From Python Rust
 #                                                     3B. From Rust to RISC-V
 #                                                         - lib.rs/kernelscpu.rs
-#                                                           0. From Big-O to Rooflines
-#                                                           1. von Neumann Architecture = Computation + Communication
+#                                                           5. From Big-O to Rooflines
+#                                                           6. von Neumann Architecture = Computation + Communication
 # **********************************************************************************************************************
 
 
@@ -54,7 +56,7 @@
 
 
 # + ============ +
-# | Python and C |
+# | From Python to C |
 # + ============ +
 
 # borscht has a mixed source of Python, Rust, and CUDA, coloquially quipped as "the three language problem"[0].
@@ -91,7 +93,7 @@
 # https://docs.python.org/3/extending/first-extension-module.html#first-extension-module
 
 # + =============== +
-# | Python and Rust |
+# | From to Python Rust |
 # + =============== +
 
 # For CPU accelerated code, borscht uses the Rust programming language rather than C/C++,
