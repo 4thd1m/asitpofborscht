@@ -124,9 +124,15 @@ tensor([[29.6088, 29.6088],
 # In the case of the Tensor data structure and it's matrix multiplication algorithm, mathematicians prioritize the *definition* and properties.
 # They are not so much interested in their *evaluation* (except for perhaps, numerical analysts. Numerical analysts are more like our first cousins, while mathematicians second cousins),
 # **This is where programmers differ from our mathematical cousins, because we care about the evaluation of these objects.**
-# That is, in addition to caring about *correctness*,
-#                   we also care about *performance*.                                                                                                                                                                                         
-#                                                                                                                                                                         ,,                                                                    
+# That is, in addition to caring about *correctness*  i.e did I get the right answer?
+#                   we also care about *performance*. i.e did I get the right answer cheaply*?
+
+#                   * we use cheaply here because performance is about the *cost* of inputs, to receive an output
+#                     where the cost can be running time, memory space, energy, bandwidth.
+#                     that is, speed is just one way to measure cost.
+#                     — in this way, a programmer in the valley is similar to the investor on wall street.
+#                       at what price is the output *worth* it?
+#                                                                                                                                                                          ,,                                                                    
 #    `7MM"""Mq.                                                                                                                                                             *MM                             mm                                     
 #      MM   `MM.                                                                                                                                                             MM                             MM                                     
 #      MM   ,M9 `7Mb,od8 ,pW"Wq.   .P"Ybmmm `7Mb,od8 ,6"Yb.  `7MMpMMMb.pMMMb.  `7MMpMMMb.pMMMb.  .gP"Ya `7Mb,od8 ,pP"Ybd      ,p6"bo   ,6"Yb.  `7Mb,od8 .gP"Ya       ,6"Yb.  MM,dMMb.   ,pW"Wq.`7MM  `7MM mmMMmm                                   
@@ -165,6 +171,17 @@ tensor([[29.6088, 29.6088],
 #                                                         - lib.rs/kernelscpu.rs
 # **********************************************************************************************************************
 
+# Since we programmers care about performance, and in this case, speed, we need a way of modeling the cost of a program with respect to time.
+# In the natural sciences, in order to model a physical process, experimental data must be collected and the underlying analytical formula (if there is one) must be inferred.
+# — In fact, that is, what machine learning and deep learning do. They mechanize induction.
+# In contrast, with the artifical sciences like computation, we have *access* to the source code of our computational processes.
+# We can model the cost of our program (in this case the cost we care about is *time*)
+# by assigning a cost to each operation, and adding up all the costs.
+# It's that simple!
+
+# we need to use a *cost model*.
+# The first cost model we use 
+
 def _main():
     import doctest
     doctest.testmod()
@@ -174,14 +191,14 @@ def _main():
     C = mm_managed(A,B) # ..evaluating the matrix multiplication algorithm
     print(C)
 
-    n = 256
-    A, B = full((n, n), 1.0), full((n, n), 1.0)
-    import time
-
     # Is this fast?
     # According to Big-O, the time complexity is n -> n^3.
     # The transition from mathematics to programming is the transition from lambda calculus' substitution model
     # of computation to turing machines von neumann model of computation
+
+    n = 256
+    A, B = full((n, n), 1.0), full((n, n), 1.0)
+    import time
 
     # Continuing down the route of classical algorithm analysis,
     # we would be led to an algorithm known as Strassen's Algorithm, with time complexity n -> n^2.7.,. lg()
