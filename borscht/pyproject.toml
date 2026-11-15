@@ -8,32 +8,12 @@
 #       88 db     .AMA.   .AMMA.YMbmd'   YMbmd'   `Mbmmd'.JMML.`Mbmmd'.JMML.  `Moo9^Yo.`Mbmo`Mbmmd'        .JMML.`Mbmmd'.JMML  JMML.M9mmmP'  `Ybmd9'.JMML.                                                           
 # (O)  .M'                                                                                                                                                                                                           
 #  bmmmd'                                                                                                                                                                                                            
-#                                                                                                                                                                                                                   
-#                                                                                                                     ,,                                                                                             
-#                        db             `7MM"""YMM                                     `7MM"""Mq.              mm   `7MM                                 mm                `7MM"""Mq.                       mm       
-#                       ;MM:              MM    `7                                       MM   `MM.             MM     MM                                 MM                  MM   `MM.                      MM       
-#          pd""b.      ,V^MM.             MM   d `7Mb,od8 ,pW"Wq.`7MMpMMMb.pMMMb.        MM   ,M9 `7M'   `MF'mmMMmm   MMpMMMb.  ,pW"Wq.`7MMpMMMb.      mmMMmm ,pW"Wq.        MM   ,M9 `7MM  `7MM  ,pP"Ybd mmMMmm     
-#         (O)  `8b    ,M  `MM             MM""MM   MM' "'6W'   `Wb MM    MM    MM        MMmmdM9    VA   ,V    MM     MM    MM 6W'   `Wb MM    MM        MM  6W'   `Wb       MMmmdM9    MM    MM  8I   `"   MM       
-#              ,89    AbmmmqMA            MM   Y   MM    8M     M8 MM    MM    MM        MM          VA ,V     MM     MM    MM 8M     M8 MM    MM        MM  8M     M8       MM  YM.    MM    MM  `YMMMa.   MM       
-#            ""Yb.   A'     VML  ,,       MM       MM    YA.   ,A9 MM    MM    MM        MM           VVV      MM     MM    MM YA.   ,A9 MM    MM        MM  YA.   ,A9       MM   `Mb.  MM    MM  L.   I8   MM       
-#               88 .AMA.   .AMMA.db     .JMML.   .JMML.   `Ybmd9'.JMML  JMML  JMML.    .JMML.         ,V       `Mbmo.JMML  JMML.`Ybmd9'.JMML  JMML.      `Mbmo`Ybmd9'      .JMML. .JMM. `Mbod"YML.M9mmmP'   `Mbmo    
-#         (O)  .M'                                                                                   ,V                                                                                                              
-#          bmmmd'                                                                                 OOb"                                                                                                               
 # **********************************************************************************************************************
 #                                               borscht (Literary Source)
 # <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 4. Accelerate++ Tensor -->
-#     tensor_managed.py                               3A. From Python to Rust
-#                                                         - tensor_nativecpu.py
-#                                                           0. From Mathematics to Programming
-#                                                           1. From Lambda Calculus to Turing Machines
-#                                                           2. From Virtual Machines to Physical Machines
-#                                                         - pyproject.toml/Cargo.toml
-#.                                                          3. From Python to C
-#.                                                          4. From Python Rust
-#                                                     3B. From Rust to RISC-V
-#                                                         - lib.rs/kernelscpu.rs
-#                                                           5. From Big-O to Rooflines
-#                                                           6. von Neumann Architecture = Computation + Communication
+#             tensor_managed.py                          tensor_nativecpu.py
+#                                                        pyproject.toml/Cargo.toml
+#                                                        lib.rs/kernelscpu.rs
 # **********************************************************************************************************************
 
 
