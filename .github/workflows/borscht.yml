@@ -51,14 +51,25 @@ jobs:
   rust:
     name: rust
     runs-on: ubuntu-latest
+    env:
+      PYO3_PYTHON: python3.15
     steps:
       - uses: actions/checkout@v4
+      # cargo test links a real binary against libpython, so pin the interpreter
+      # pyo3 builds against instead of using whatever the runner image ships.
+      - uses: actions/setup-python@v5
+        id: py
+        with:
+          python-version: '3.15'
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy
+      # Key the cache on the Python version: rust-cache doesn't track it, so a
+      # runner-image Python change would otherwise restore stale pyo3 artifacts.
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: borscht
+          prefix-key: v0-rust-py${{ steps.py.outputs.python-version }}
       - name: fmt
         run: cargo fmt --check
       - name: clippy
