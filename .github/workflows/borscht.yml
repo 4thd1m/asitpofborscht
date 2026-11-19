@@ -1,4 +1,9 @@
-# borscht: Rust checks + Python typecheck and test suite.
+# borscht: typecheck, lint, and compile on GitHub's runners; run the tests on a GPU.
+#
+# Both jobs set up through borscht/setup.sh, the same script developers run, so CI
+# and a dev machine can't drift apart. Running the tests needs an Ampere-or-newer
+# NVIDIA GPU with driver 580+ (cuda-oxide's floor), which GitHub-hosted runners
+# don't offer, so the gpu job runs on a self-hosted runner labeled `gpu`.
 name: borscht
 
 on:
@@ -17,28 +22,37 @@ on:
 permissions:
   contents: read
 
+env:
+  # Outside maturin, pyo3 links borscht against libpython, which the runner images'
+  # system pythons don't ship. Point it at setup.sh's .venv instead: the same
+  # uv-managed python 3.15 maturin builds the extension for, libpython included.
+  PYO3_PYTHON: ${{ github.workspace }}/borscht/.venv/bin/python
+
 defaults:
   run:
     working-directory: borscht
 
 jobs:
-  pytest:
-    name: pytest
+  # Everything that needs no GPU. With no driver here, setup.sh installs CUDA 13.0,
+  # which is enough for cargo oxide to compile the kernels to PTX.
+  check:
+    name: check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable # uv builds borscht's Rust extension through maturin, so it needs cargo.
-      - uses: Swatinem/rust-cache@v2
-        with:
-          workspaces: borscht
       - uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
-      # --locked: fail if uv.lock is out of date with pyproject.toml.
-      # --no-dev --with ...: skip the dev group's torch, whose linux wheel
-      #   pulls in several GB of nvidia-* deps that no test imports yet. Once the
-      #   tests use torch as an oracle, drop these flags and point torch at
-      #   the CPU index (https://download.pytorch.org/whl/cpu) in [tool.uv.sources].
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: borscht
+          # cargo oxide's codegen backend, which takes minutes to build. cargo-oxide
+          # itself lives in ~/.cargo/bin, which rust-cache already saves.
+          cache-directories: ~/.cargo/cuda-oxide
+      # --no-dev: skip the dev group's torch, whose linux wheel pulls several GB
+      # of nvidia-* deps; only the gpu job's tests use it.
+      - name: setup
+        run: ./setup.sh --no-dev
       # pyrefly needs pytest too: project-includes covers python/tests, which import it.
       # pyrefly's version is read from uv.lock (via uv export), so CI runs the same
       #   pyrefly as `uv run pyrefly check` locally. grep fails the step if it's missing.
@@ -46,33 +60,34 @@ jobs:
         run: |
           pyrefly=$(uv export --locked --only-group dev --no-hashes --no-annotate --no-header -q | grep '^pyrefly==')
           uv run --locked --no-dev --with "$pyrefly" --with pytest pyrefly check
-      - name: pytest
-        run: uv run --locked --no-dev --with pytest pytest -v
-  rust:
-    name: rust
-    runs-on: ubuntu-latest
-    env:
-      PYO3_PYTHON: python3.15
-    steps:
-      - uses: actions/checkout@v4
-      # cargo test links a real binary against libpython, so pin the interpreter
-      # pyo3 builds against instead of using whatever the runner image ships.
-      - uses: actions/setup-python@v5
-        id: py
-        with:
-          python-version: '3.15'
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          components: rustfmt, clippy
-      # Key the cache on the Python version: rust-cache doesn't track it, so a
-      # runner-image Python change would otherwise restore stale pyo3 artifacts.
-      - uses: Swatinem/rust-cache@v2
-        with:
-          workspaces: borscht
-          prefix-key: v0-rust-py${{ steps.py.outputs.python-version }}
       - name: fmt
         run: cargo fmt --check
       - name: clippy
         run: cargo clippy --all-targets -- -D warnings
-      - name: test
-        run: cargo test
+      - name: build
+        run: cargo oxide build
+
+  # The test suites, which launch CUDA kernels. The runner is a long-lived machine
+  # that keeps its toolchains, caches, and system CUDA between jobs, so setup.sh
+  # is a few-second no-op here unless a pin changed.
+  #
+  # Fork PRs skip this job, since their code would run on that machine. The `if`
+  # alone doesn't protect it: a fork PR runs its own copy of this file and could
+  # delete the line. The real guard is the repo setting Settings → Actions →
+  # General → "Require approval for all external contributors", so no fork PR
+  # workflow runs until a maintainer has read it and approved.
+  gpu:
+    name: gpu
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: [self-hosted, gpu]
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: setup
+        run: ./setup.sh
+      - name: doctor
+        run: cargo oxide doctor
+      - name: pytest
+        run: uv run --locked pytest -v
+      - name: cargo oxide test
+        run: cargo oxide test

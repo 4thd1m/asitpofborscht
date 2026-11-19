@@ -6,8 +6,11 @@
 #                                   # uv rebuilds the extension when rust/ changes
 #                                   # and cut a PR
 #
-# This mirrors the CI build in .github/workflows/borscht.yml, so keep the two in
-# sync when you change either. Every step is safe to rerun: each installer is
+#     ./borscht/setup.sh --no-dev   # skip the dev group (torch and its several GB
+#                                   # of nvidia-* wheels), as CI's GPU-less jobs do
+#
+# CI (.github/workflows/borscht.yml) runs this script to set up every job, so a
+# change here changes CI too. Every step is safe to rerun: each installer is
 # skipped when its tool is already present, and uv sync is a no-op when .venv
 # already matches uv.lock.
 #
@@ -29,12 +32,22 @@
 #   - CUDA Toolkit 13.x  cuda.h and curand.h for cuda-bindings, nvcc and nvJitLink
 #                        for PTX. From NVIDIA's apt repo, at the CUDA version the
 #                        installed driver reports, since PTX from a newer toolkit
-#                        fails to load on an older driver (CUDA error 222).
+#                        fails to load on an older driver (CUDA error 222). With
+#                        no driver at all, 13.0, which compiles kernels but can't
+#                        run them.
 #   - libclang           bindgen, for the host-side cuda-bindings crate
 # The NVIDIA driver itself (580+, for CUDA 13) is not installed here.
 # LLVM's llc with the NVPTX backend comes from the llvm-tools component above,
 # so a system llvm-21 is optional (cargo oxide prefers llc-23/22/21 when found).
 set -euo pipefail
+
+UV_SYNC_ARGS=(--locked)
+for arg in "$@"; do
+  case "$arg" in
+    --no-dev) UV_SYNC_ARGS+=(--no-dev) ;;
+    *) echo "setup: unknown argument $arg; usage: setup.sh [--no-dev]" >&2; exit 2 ;;
+  esac
+done
 
 BORSCHT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(git -C "$BORSCHT" rev-parse --show-toplevel)"
@@ -81,10 +94,12 @@ find_cuda
 if [ -z "$CUDA_ROOT" ]; then
   # The driver's CUDA version is the newest toolkit whose PTX it can load.
   if ! command -v nvidia-smi >/dev/null 2>&1; then
-    echo "setup: no NVIDIA driver (nvidia-smi) found; install driver 580+ and rerun" >&2
-    exit 1
+    CUDA_VER=13.0
+    echo "setup: no NVIDIA driver (nvidia-smi) found, so CUDA $CUDA_VER it is:" >&2
+    echo "setup: enough to compile the kernels, but running them needs a GPU and driver 580+" >&2
+  else
+    CUDA_VER="$(nvidia-smi | grep -o 'CUDA Version: [0-9.]*' | awk '{print $3}')"
   fi
-  CUDA_VER="$(nvidia-smi | grep -o 'CUDA Version: [0-9.]*' | awk '{print $3}')"
   if [ "${CUDA_VER%%.*}" -lt 13 ]; then
     echo "setup: the NVIDIA driver supports up to CUDA $CUDA_VER; cuda-oxide needs 13.0+," >&2
     echo "setup: so upgrade the driver to 580+ and rerun" >&2
@@ -176,15 +191,21 @@ if ! command -v uv >/dev/null 2>&1; then
   PATH_CHANGED=true
 fi
 
-# Creates borscht/.venv with python 3.15 and the dev group, then builds and
-# installs borscht itself as an editable install. --locked fails rather than
-# re-resolving when uv.lock is out of date with pyproject.toml, same as CI.
-# Unlike CI, this installs the dev group's torch, whose linux x86_64 wheel pulls
-# several GB of nvidia-* CUDA dependencies.
-(cd "$BORSCHT" && uv sync --locked)
+# Creates borscht/.venv with python 3.15 and the dev group (unless --no-dev), then
+# builds and installs borscht itself as an editable install. --locked fails rather
+# than re-resolving when uv.lock is out of date with pyproject.toml. The dev
+# group's torch pulls several GB of nvidia-* CUDA wheels on linux x86_64.
+(cd "$BORSCHT" && uv sync "${UV_SYNC_ARGS[@]}")
 
 # pre-commit typechecks, formatchecks, and lints borscht; pre-push runs its tests.
 git -C "$ROOT" config core.hooksPath .githooks
+
+# Under GitHub Actions, hand cargo and uv to the job's later steps, which start
+# new shells that don't see the PATH exported above.
+if $PATH_CHANGED && [ -n "${GITHUB_PATH:-}" ]; then
+  echo "$CARGO_BIN" >>"$GITHUB_PATH"
+  echo "$UV_BIN" >>"$GITHUB_PATH"
+fi
 
 echo
 echo "setup: done. Next:"
