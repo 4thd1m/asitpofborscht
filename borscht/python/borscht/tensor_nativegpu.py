@@ -10,7 +10,7 @@
 #       MM                                                                                                                
 # **********************************************************************************************************************
 #                                               borscht (Literary Source)
-# <-- File 3. Accelerate Tensor               -- File 4. Accelerate++ Tensor --                     File 4. Abstract Accelerate -->
+# <-- File 3. Accelerate Tensor               -- File 4. Accelerate++ Tensor --          File 5. Abstract Accelerate -->
 #             tensor_nativecpu.py                        tensor_nativegpu.py
 #             pyproject.toml/Cargo.toml                  Cargo.toml
 #             lib.rs/kernelscpu.rs                       main.rs/kernelsgpu.rs
@@ -30,28 +30,36 @@ def _main():
     A, B = full((n, n), 1.0), full((n, n), 1.0)
     import time    
 
-    # matmul implemented by a managed language running on a virtual machine (File 2)
+    # File 2: matmul implemented by a managed language running on a virtual machine
     t0 = time.perf_counter()
     mm_managed(A, B)
     t = time.perf_counter() - t0
     print(f"{n}x{n} mm_managed: {t*1e3:.1f} ms, {2*n**3 / t / 1e9:.4f} GFLOP/s")
 
-    # matmul implemented by a native language running on a physical latency-oriented machine (File 3)
+    # File 3: matmul implemented by a native language running on a physical latency-oriented machine
     t0 = time.perf_counter()
     mm_native(A, B)
     t = time.perf_counter() - t0
     print(f"{n}x{n} mm_native: {t*1e3:.1f} ms, {2*n**3 / t / 1e9:.4f} GFLOP/s")
 
-    # matmul implemented  by a native language running on a physical throughput-oriented machine (File 4)
+    # File 4: matmul implemented by a native language running on a physical throughput-oriented machine
+    mm_nativegpu(A, B) # warm up, since the first call also creates the CUDA context and JIT compiles the kernel's PTX
+    t0 = time.perf_counter()
+    mm_nativegpu(A, B)
+    t = time.perf_counter() - t0
+    print(f"{n}x{n} mm_nativegpu: {t*1e3:.1f} ms, {2*n**3 / t / 1e9:.4f} GFLOP/s")
 
-import math
+    # timed on device with CUDA events, leaving out the Python list conversions and host<->device copies mm_nativegpu also pays for
+    for n in (256, 4096):
+        t = _sgemm_bench(n, n, n, reps=10)
+        print(f"{n}x{n} sgemm_naive kernel: {t*1e3:.3f} ms, {2*n**3 / t / 1e9:.1f} GFLOP/s")
 
 def mm(A: Tensor, B: Tensor) -> Tensor:
-    return mm_native(A,B)
+    return mm_nativegpu(A,B)
 
-from borscht._borscht import _gemm   # at the top of the file
-def mm_native(A: Tensor, B: Tensor) -> Tensor:
-    """Multiply the (n,k) matrix `A` with the (k,m) matrix `B` into a new (n,m) matrix.
+from borscht._borscht import _sgemm, _sgemm_bench
+def mm_nativegpu(A: Tensor, B: Tensor) -> Tensor:
+    """Multiply the (n,k) matrix `A` with the (k,m) matrix `B` into a new (n,m) matrix on the GPU.
 
     Examples:
         >>> A = full((2, 3), 3.141592)
@@ -69,7 +77,7 @@ def mm_native(A: Tensor, B: Tensor) -> Tensor:
     if len(A.shape) != 2 or len(B.shape) != 2: raise RuntimeError("self must be a matrix" if len(A.shape) != 2 else "B must be a matrix")
     if p != p2: raise RuntimeError(f"A and B shapes cannot be multiplied ({nrows}x{p} and {p2}x{mcols})")
     output = full((nrows, mcols), 0.0)
-    output.storage = _gemm(A.storage, B.storage, nrows, p, mcols)
+    output.storage = _sgemm(A.storage, B.storage, nrows, p, mcols)
     return output
 
 if __name__ == "__main__": _main()
