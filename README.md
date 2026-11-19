@@ -7,7 +7,8 @@ source of the deep neural network architecture under [./models](./models) and th
 Reading the source provides a condensed version of the SITP textbook, which spend a lot more time on intuition and motivation
 via visualizations, figures, and prose.
 
-**Reading Order for Deep Neural Networks**
+![](./sitp/src/assets/models_banner.png)
+## Deep Neural Networks
 - Model 1: Bigram
 - Model 2: Discriminative Perceptron
 - Model 3: Probabilistic Perceptron
@@ -24,7 +25,8 @@ via visualizations, figures, and prose.
 After Model 12, you might be interested in the first research blog series
 From SITP to SOTA [FS2S Part 1 (ARCH/OPT): From modded-nanogpt to dsv3 and k3]().
 
-**Reading Order for Deep Learning Framework**
+![](./sitp/src/assets/gpu_banner.png)
+## Deep Learning Framework
 
 Reading a literary program also involves running files (modules) as scripts.<br>
 Ensure you have Python and Rust toolchains on your machine by running [`borscht/setup.sh`](./borscht/setup.sh) in your shell.
