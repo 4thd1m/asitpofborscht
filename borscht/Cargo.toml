@@ -1,21 +1,3 @@
-#                                                          ,,                                                                                                                                                        
-#                       db                               `7MM                          mm               MMP""MM""YMM                                                                                                 
-#                      ;MM:                                MM                          MM               P'   MM   `7                                                                                                 
-#  pd""b.             ,V^MM.    ,p6"bo   ,p6"bo   .gP"Ya   MM  .gP"Ya `7Mb,od8 ,6"Yb.mmMMmm .gP"Ya           MM  .gP"Ya `7MMpMMMb.  ,pP"Ybd  ,pW"Wq.`7Mb,od8                                                         
-# (O)  `8b           ,M  `MM   6M'  OO  6M'  OO  ,M'   Yb  MM ,M'   Yb  MM' "'8)   MM  MM  ,M'   Yb          MM ,M'   Yb  MM    MM  8I   `" 6W'   `Wb MM' "'                                                         
-#      ,89           AbmmmqMA  8M       8M       8M""""""  MM 8M""""""  MM     ,pm9MM  MM  8M""""""          MM 8M""""""  MM    MM  `YMMMa. 8M     M8 MM                                                             
-#    ""Yb. ,,       A'     VML YM.    , YM.    , YM.    ,  MM YM.    ,  MM    8M   MM  MM  YM.    ,          MM YM.    ,  MM    MM  L.   I8 YA.   ,A9 MM                                                             
-#       88 db     .AMA.   .AMMA.YMbmd'   YMbmd'   `Mbmmd'.JMML.`Mbmmd'.JMML.  `Moo9^Yo.`Mbmo`Mbmmd'        .JMML.`Mbmmd'.JMML  JMML.M9mmmP'  `Ybmd9'.JMML.                                                           
-# (O)  .M'
-#  bmmmd'                                                                                                                                                                                                            
-# **********************************************************************************************************************
-#                                               borscht (Literary Source)
-# <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 4. Accelerate++ Tensor -->
-#             tensor_managed.py                          tensor_nativecpu.py
-#                                                        pyproject.toml/Cargo.toml
-#                                                        lib.rs/kernelscpu.rs
-# **********************************************************************************************************************
-
 [package]
 name = "borscht"
 version = "0.1.0"
@@ -35,23 +17,6 @@ cuda-host = { git = "https://github.com/NVIDIA/cuda-rust.git" }
 # cuda-host, which depends on it; a crates.io copy is a second cuda-core.
 cuda-core = { git = "https://github.com/NVIDIA/cuda-rust.git" }
 
-#                                                            ,,                                                           
-#                         db                               `7MM                          mm                               
-#                        ;MM:                                MM                          MM                               
-#      ,AM              ,V^MM.    ,p6"bo   ,p6"bo   .gP"Ya   MM  .gP"Ya `7Mb,od8 ,6"Yb.mmMMmm .gP"Ya      M         M     
-#     AVMM             ,M  `MM   6M'  OO  6M'  OO  ,M'   Yb  MM ,M'   Yb  MM' "'8)   MM  MM  ,M'   Yb     M         M     
-#   ,W' MM             AbmmmqMA  8M       8M       8M""""""  MM 8M""""""  MM     ,pm9MM  MM  8M"""""" mmmmMmmmm mmmmMmmmm 
-# ,W'   MM   ,,       A'     VML YM.    , YM.    , YM.    ,  MM YM.    ,  MM    8M   MM  MM  YM.    ,     M         M     
-# AmmmmmMMmm db     .AMA.   .AMMA.YMbmd'   YMbmd'   `Mbmmd'.JMML.`Mbmmd'.JMML.  `Moo9^Yo.`Mbmo`Mbmmd'     M         M     
-#       MM                                                                                                                
-#       MM                                                                                                                
-# **********************************************************************************************************************
-#                                               borscht (Literary Source)
-# <-- File 3. Accelerate Tensor               -- File 4. Accelerate++ Tensor --                     File 4. Abstract Accelerate -->
-#             tensor_nativecpu.py                        tensor_nativegpu.py
-#             pyproject.toml/Cargo.toml                  
-#             lib.rs/kernelscpu.rs
-# **********************************************************************************************************************
 
 # + ====================== +
 # | From Rust to CUDA Rust |
@@ -82,7 +47,3 @@ cuda-core = { git = "https://github.com/NVIDIA/cuda-rust.git" }
 # |-- setup.sh
 # |-- target
 # `-- uv.lock
-
-[[bin]]
-name = "borscht"
-path = "rust/main.rs"

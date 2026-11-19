@@ -35,9 +35,9 @@
 
 
 
-# + ============ +
+# + ================ +
 # | From Python to C |
-# + ============ +
+# + ================ +
 
 # borscht has a mixed source of Python, Rust, and CUDA, coloquially quipped as "the three language problem"[0].
 # Python for productivity, Rust for performance on the CPU, and CUDA for performance on GPU.
@@ -72,9 +72,9 @@
 # CPython extension module 🎯 wed nov 4
 # https://docs.python.org/3/extending/first-extension-module.html#first-extension-module
 
-# + =============== +
-# | From to Python Rust |
-# + =============== +
+# + =================== +
+# | From Python to Rust |
+# + =================== +
 
 # For CPU accelerated code, borscht uses the Rust programming language rather than C/C++,
 # while still maintaining the Python veneer for user productivity.
@@ -165,3 +165,11 @@ cache-keys = [{ file = "pyproject.toml" }, { file = "Cargo.toml" }, { file = "ru
 # uv will rebuild cpython extension modules automatically since [build-system] is configured with maturin
 # this avoids manually re-compling the native extension module with `maturin develop` anytime the rust source is modified
 # see: https://docs.astral.sh/uv/concepts/cache/#dynamic-metadata
+
+# + ===================== +
+# | From Rus to CUDA Rust |
+# + ===================== +
+extra-build-variables = { borscht = { CARGO = ".cargo/maturin-cargo" } }
+# we configure the cargo that maturin runs to be .cargo/maturin-cargo, which compiles through `cargo oxide build`,
+# so that the #[kernel]s in rust/kernelsgpu.rs are compiled to PTX and embedded in the extension module (see that file)
+# see: https://docs.astral.sh/uv/reference/settings/#extra-build-variables
