@@ -6,34 +6,14 @@
 #      ,89           AbmmmqMA  8M       8M       8M""""""  MM 8M""""""  MM     ,pm9MM  MM  8M""""""          MM 8M""""""  MM    MM  `YMMMa. 8M     M8 MM                                                             
 #    ""Yb. ,,       A'     VML YM.    , YM.    , YM.    ,  MM YM.    ,  MM    8M   MM  MM  YM.    ,          MM YM.    ,  MM    MM  L.   I8 YA.   ,A9 MM                                                             
 #       88 db     .AMA.   .AMMA.YMbmd'   YMbmd'   `Mbmmd'.JMML.`Mbmmd'.JMML.  `Moo9^Yo.`Mbmo`Mbmmd'        .JMML.`Mbmmd'.JMML  JMML.M9mmmP'  `Ybmd9'.JMML.                                                           
-# (O)  .M'                                                                                                                                                                                                           
+# (O)  .M'
 #  bmmmd'                                                                                                                                                                                                            
-#                                                                                                                                                                                                                   
-#                                                                                                                     ,,                                                                                             
-#                        db             `7MM"""YMM                                     `7MM"""Mq.              mm   `7MM                                 mm                `7MM"""Mq.                       mm       
-#                       ;MM:              MM    `7                                       MM   `MM.             MM     MM                                 MM                  MM   `MM.                      MM       
-#          pd""b.      ,V^MM.             MM   d `7Mb,od8 ,pW"Wq.`7MMpMMMb.pMMMb.        MM   ,M9 `7M'   `MF'mmMMmm   MMpMMMb.  ,pW"Wq.`7MMpMMMb.      mmMMmm ,pW"Wq.        MM   ,M9 `7MM  `7MM  ,pP"Ybd mmMMmm     
-#         (O)  `8b    ,M  `MM             MM""MM   MM' "'6W'   `Wb MM    MM    MM        MMmmdM9    VA   ,V    MM     MM    MM 6W'   `Wb MM    MM        MM  6W'   `Wb       MMmmdM9    MM    MM  8I   `"   MM       
-#              ,89    AbmmmqMA            MM   Y   MM    8M     M8 MM    MM    MM        MM          VA ,V     MM     MM    MM 8M     M8 MM    MM        MM  8M     M8       MM  YM.    MM    MM  `YMMMa.   MM       
-#            ""Yb.   A'     VML  ,,       MM       MM    YA.   ,A9 MM    MM    MM        MM           VVV      MM     MM    MM YA.   ,A9 MM    MM        MM  YA.   ,A9       MM   `Mb.  MM    MM  L.   I8   MM       
-#               88 .AMA.   .AMMA.db     .JMML.   .JMML.   `Ybmd9'.JMML  JMML  JMML.    .JMML.         ,V       `Mbmo.JMML  JMML.`Ybmd9'.JMML  JMML.      `Mbmo`Ybmd9'      .JMML. .JMM. `Mbod"YML.M9mmmP'   `Mbmo    
-#         (O)  .M'                                                                                   ,V                                                                                                              
-#          bmmmd'                                                                                 OOb"                                                                                                               
 # **********************************************************************************************************************
 #                                               borscht (Literary Source)
 # <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 4. Accelerate++ Tensor -->
-#     tensor_managed.py                               3A. From Python to Rust
-#                                                         - tensor_nativecpu.py
-#                                                           0. From Mathematics to Programming
-#                                                           1. From Lambda Calculus to Turing Machines
-#                                                           2. From Virtual Machines to Physical Machines
-#                                                         - pyproject.toml/Cargo.toml
-#                                                           3. From Python to C
-#                                                           4. From Python Rust
-#                                                     3B. From Rust to RISC-V
-#                                                         - lib.rs/kernelscpu.rs
-#                                                           5. From Big-O to Rooflines
-#                                                           6. von Neumann Architecture = Computation + Communication
+#             tensor_managed.py                          tensor_nativecpu.py
+#                                                        pyproject.toml/Cargo.toml
+#                                                        lib.rs/kernelscpu.rs
 # **********************************************************************************************************************
 
 [package]
@@ -49,3 +29,60 @@ crate-type = ["cdylib"]
 
 [dependencies]
 pyo3 = "0.29.0"
+cuda-device = { git = "https://github.com/NVIDIA/cuda-rust.git" }
+cuda-host = { git = "https://github.com/NVIDIA/cuda-rust.git" }
+# Shared host-side runtime. It has to come from the same repository as
+# cuda-host, which depends on it; a crates.io copy is a second cuda-core.
+cuda-core = { git = "https://github.com/NVIDIA/cuda-rust.git" }
+
+#                                                            ,,                                                           
+#                         db                               `7MM                          mm                               
+#                        ;MM:                                MM                          MM                               
+#      ,AM              ,V^MM.    ,p6"bo   ,p6"bo   .gP"Ya   MM  .gP"Ya `7Mb,od8 ,6"Yb.mmMMmm .gP"Ya      M         M     
+#     AVMM             ,M  `MM   6M'  OO  6M'  OO  ,M'   Yb  MM ,M'   Yb  MM' "'8)   MM  MM  ,M'   Yb     M         M     
+#   ,W' MM             AbmmmqMA  8M       8M       8M""""""  MM 8M""""""  MM     ,pm9MM  MM  8M"""""" mmmmMmmmm mmmmMmmmm 
+# ,W'   MM   ,,       A'     VML YM.    , YM.    , YM.    ,  MM YM.    ,  MM    8M   MM  MM  YM.    ,     M         M     
+# AmmmmmMMmm db     .AMA.   .AMMA.YMbmd'   YMbmd'   `Mbmmd'.JMML.`Mbmmd'.JMML.  `Moo9^Yo.`Mbmo`Mbmmd'     M         M     
+#       MM                                                                                                                
+#       MM                                                                                                                
+# **********************************************************************************************************************
+#                                               borscht (Literary Source)
+# <-- File 3. Accelerate Tensor               -- File 4. Accelerate++ Tensor --                     File 4. Abstract Accelerate -->
+#             tensor_nativecpu.py                        tensor_nativegpu.py
+#             pyproject.toml/Cargo.toml                  
+#             lib.rs/kernelscpu.rs
+# **********************************************************************************************************************
+
+# + ====================== +
+# | From Rust to CUDA Rust |
+# + ====================== +
+# ubuntu ➜ /workspaces/asitpofborscht (master) $ tree -aL 1
+# .
+# |-- .devcontainer <-------------------------------------------------------
+# |-- .git
+# |-- .gitattributes
+# |-- .githooks
+# |-- .github
+# |-- .gitignore
+# |-- .gitmodules
+# |-- .vscode
+
+# ubuntu ➜ /workspaces/asitpofborscht/borscht (master) $ tree -aL 1
+# .
+# |-- .cargo
+# |-- .gitignore
+# |-- .venv
+# |-- Cargo.lock
+# |-- Cargo.toml
+# |-- pyproject.toml
+# |-- python
+# |-- rust
+# |-- rust-toolchain.toml
+# |-- rustfmt.toml
+# |-- setup.sh
+# |-- target
+# `-- uv.lock
+
+[[bin]]
+name = "borscht"
+path = "rust/main.rs"
