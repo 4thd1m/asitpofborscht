@@ -192,6 +192,6 @@ if $PATH_CHANGED; then
   echo "    open a new shell to put cargo and uv on PATH"
 fi
 echo "    cd borscht && uv run pytest     # python tests against the built extension"
-echo "    cd borscht && cargo test        # rust tests"
+echo "    cd borscht && cargo oxide test  # rust tests, with their CUDA kernels compiled to PTX"
 echo "    cd borscht && cargo oxide build # rust/ with its CUDA kernels compiled to PTX"
 echo "    cd borscht && cargo oxide doctor  # check the CUDA toolchain, driver, and GPU"

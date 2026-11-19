@@ -23,6 +23,8 @@ done
 
 $touches_borscht || exit 0
 
+# cargo oxide test rather than cargo test: the rust tests launch CUDA kernels, which only cargo-oxide
+# compiles to PTX (under plain cargo the test binary fails to link)
 cd borscht &&
   echo "borscht: testing python 🐍..." >&2 && uv run pytest &&
-  echo "borscht: testing rust 🦀..." >&2 && cargo test
+  echo "borscht: testing rust 🦀..." >&2 && cargo oxide test
