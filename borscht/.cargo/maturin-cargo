@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# The cargo that maturin runs (pyproject.toml points CARGO here through [tool.uv] extra-build-variables).
+#
+# maturin compiles the borscht._borscht extension module with `$CARGO rustc <args>`. Plain cargo compiles
+# rust/kernelsgpu.rs's #[kernel]s for the CPU only, leaving no PTX in the module for kernels::load to find
+# (the link fails on an undefined cuda_oxide_artifact_anchor_* symbol). So that one compile goes through
+# `cargo oxide build` instead, which also compiles the kernels to PTX and embeds it in the .so. Every other
+# subcommand maturin runs, such as `cargo metadata`, goes to cargo unchanged.
+set -euo pipefail
+unset CARGO # so cargo and cargo-oxide find the real cargo rather than this script
+if [ "${1:-}" = rustc ]; then
+  shift
+  exec cargo oxide build -- "$@"
+fi
+exec cargo "$@"
