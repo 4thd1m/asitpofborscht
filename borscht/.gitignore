@@ -70,3 +70,25 @@ docs/_build/
 
 # Pyenv
 .python-version
+
+# CUDA
+/target/
+**/*.bc
+.DS_Store
+**/*.cubin
+**/*.cubin.identity
+**/*.cubin.target
+**/*.cubin.tmp
+**/*.iface.tilebc
+**/*.impl.tilebc
+**/*.kernels
+**/*.ll
+**/*.ltoir
+**/*.opt.ll
+**/*.options
+**/*.ptx
+**/*.ptx.identity
+**/*.target
+**/*.tileexports.json
+**/*.tilelib
+**/*.tilelib.mlir

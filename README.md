@@ -28,6 +28,14 @@ From SITP to SOTA [FS2S Part 1 (ARCH/OPT): From modded-nanogpt to dsv3 and k3]()
 
 Reading a literary program also involves running files (modules) as scripts.<br>
 Ensure you have Python and Rust toolchains on your machine by running [`borscht/setup.sh`](./borscht/setup.sh) in your shell.
+
+```sh
+docker ps
+docker exec -it
+cuda oxide doctor
+cuda oxide run
+```
+
 - File 1. Hello borscht: [`python/borscht/__init__.py`](./borscht/python/borscht/__init__.py)
 - File 2. Hello Tensor: [`python/borscht/tensor_managed.py`](./borscht/python/borscht/tensor_managed.py)
 - File 3. Accelerate Tensor

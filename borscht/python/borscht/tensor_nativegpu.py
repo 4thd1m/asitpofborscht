@@ -1,13 +1,19 @@
+#                                                            ,,                                                           
+#                         db                               `7MM                          mm                               
+#                        ;MM:                                MM                          MM                               
+#      ,AM              ,V^MM.    ,p6"bo   ,p6"bo   .gP"Ya   MM  .gP"Ya `7Mb,od8 ,6"Yb.mmMMmm .gP"Ya      M         M     
+#     AVMM             ,M  `MM   6M'  OO  6M'  OO  ,M'   Yb  MM ,M'   Yb  MM' "'8)   MM  MM  ,M'   Yb     M         M     
+#   ,W' MM             AbmmmqMA  8M       8M       8M""""""  MM 8M""""""  MM     ,pm9MM  MM  8M"""""" mmmmMmmmm mmmmMmmmm 
+# ,W'   MM   ,,       A'     VML YM.    , YM.    , YM.    ,  MM YM.    ,  MM    8M   MM  MM  YM.    ,     M         M     
+# AmmmmmMMmm db     .AMA.   .AMMA.YMbmd'   YMbmd'   `Mbmmd'.JMML.`Mbmmd'.JMML.  `Moo9^Yo.`Mbmo`Mbmmd'     M         M     
+#       MM                                                                                                                
+#       MM                                                                                                                
 # **********************************************************************************************************************
 #                                               borscht (Literary Source)
 # <-- File 3. Accelerate Tensor               -- File 4. Accelerate++ Tensor --                     File 4. Abstract Accelerate -->
-#     3A. From Python to Rust
-#         - tensor_nativecpu.py
-#         - pyproject.toml
-#         - Cargo.toml
-#         - rust/lib.rs
-#     3B. From Rust to RISC-V
-#         - kernelscpu.rs
+#             tensor_nativecpu.py                        tensor_nativegpu.py
+#             pyproject.toml/Cargo.toml                  Cargo.toml
+#             lib.rs/kernelscpu.rs                       main.rs/kernelsgpu.rs
 # **********************************************************************************************************************
 
 from borscht.tensor_managed import Tensor                 # Let us import Tensor to define our GPU accelerated mm routine
@@ -20,30 +26,23 @@ def _main():
     import doctest
     doctest.testmod()
 
-    # === File 2. Hello Tensor
-    A = full((2,3), 3.141592) # some pie ...
-    B = full((3,2), 3.141592)
-    C = mm_managed(A,B) # .. and some borscht!
-    print(C)
-
     n = 256
     A, B = full((n, n), 1.0), full((n, n), 1.0)
     import time    
 
-    # matmul implemented by a managed language running on a virtual machine
+    # matmul implemented by a managed language running on a virtual machine (File 2)
     t0 = time.perf_counter()
     mm_managed(A, B)
     t = time.perf_counter() - t0
     print(f"{n}x{n} mm_managed: {t*1e3:.1f} ms, {2*n**3 / t / 1e9:.4f} GFLOP/s")
 
-    # === File 3. Hello Tensor
-    # matmul implemented by a native language running on a physical latency-oriented machine
+    # matmul implemented by a native language running on a physical latency-oriented machine (File 3)
     t0 = time.perf_counter()
     mm_native(A, B)
     t = time.perf_counter() - t0
     print(f"{n}x{n} mm_native: {t*1e3:.1f} ms, {2*n**3 / t / 1e9:.4f} GFLOP/s")
 
-    # matmul implemented  by a native language running on a physical throughput-oriented machine
+    # matmul implemented  by a native language running on a physical throughput-oriented machine (File 4)
 
 import math
 
