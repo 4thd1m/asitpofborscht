@@ -199,6 +199,7 @@ fi
 
 # pre-commit typechecks, formatchecks, and lints borscht; pre-push runs its tests.
 git -C "$ROOT" config core.hooksPath .githooks
+git config --global core.editor "vim"
 
 # Under GitHub Actions, hand cargo and uv to the job's later steps, which start
 # new shells that don't see the PATH exported above.
@@ -210,7 +211,7 @@ fi
 echo
 echo "setup: done. Next:"
 if $PATH_CHANGED; then
-  echo "    open a new shell to put cargo and uv on PATH"
+  echo "    . \"\$HOME/.cargo/env\"  # put cargo on PATH in this shell (or open a new shell for cargo and uv)"
 fi
 echo "    cd borscht && uv run pytest     # python tests against the built extension"
 echo "    cd borscht && cargo oxide test  # rust tests, with their CUDA kernels compiled to PTX"
