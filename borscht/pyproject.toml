@@ -31,6 +31,39 @@
 #                                                ├── rust-toolchain.toml
 #                                                └── uv.lock
 
+[project]
+name = "borscht"                                    # it's delicious!
+requires-python = ">=3.15"
+dynamic = ["version"]                               # we configure which keys were intentionally unspecified
+                                                    # see: https://packaging.python.org/en/latest/specifications/pyproject-toml/#dynamic
+
+                                                    # we configure version, so that the maturin build backend
+                                                    # automagically fills in at build time *from* Cargo.toml's version field
+                                                    # see: https://www.maturin.rs/metadata.html#dynamic-metadata
+                                                    # see: https://doc.rust-lang.org/cargo/reference/manifest.html#the-version-field
+
+[dependency-groups]                                 # borscht uses numpy and torch as oracles. see chapter (todo).
+dev = [
+    "numpy>=2.5.4",
+    "pyrefly>=1.4.1",
+    "pytest>=9.1.1",
+    "torch>=2.15.0; platform_machine != 'riscv64'", # we configure an environment marker to skip torch on risc-v, since pytorch publishes no riscv64 wheels
+                                                    # see: https://packaging.python.org/en/latest/specifications/dependency-specifiers/#environment-markers
+]
+
+[tool.pyrefly]                                      # pyrefly is our static type checker run by the editor and by `uv run pyrefly check`
+project-includes = ["python"]                       # we configure the files to type check
+disable-project-excludes-heuristics = true          # we configure pyrefly to stop excluding site-packages paths, since the editable install of borscht puts python/ itself on the interpreter's site-packages path (see the .pth file in .venv/lib/python3.15/site-packages)
+preset = "strict"                                   # we configure the strict preset
+
+
+[tool.pytest.ini_options]
+testpaths = ["python/tests"]                        # we configure the list of directories that python should search for
+                                                    # when no specific directories, files, or test ids are given in the command line
+                                                    # we set this to python/tests (maturin does by default),
+                                                    # presumably because Cargo uses top-level tests/ for integration
+                                                    # see: https://docs.pytest.org/en/stable/reference/reference.html#confval-testpaths
+
 # borscht has a mixed source of Python, Rust, and CUDA, coloquially quipped as "the three language problem"[0].
 # Python for productivity, Rust for performance on the CPU, and CUDA for performance on GPU.
 # Let us first explain how Python and Rust interop with one another.
@@ -116,40 +149,6 @@
 
 # [0]: See the Mojo programming language (by Chris Lattner of clang, llvm and swift), attempting to replace all three languages with one.
 # [1]: Although CPython's is getting a JIT compiler (Sea of Nodes! Thanks Ken Jin), for Python implementations like PyPy for instance
-
-[project]
-name = "borscht"      # it's delicious!
-requires-python = ">=3.15"
-dynamic = ["version"] # we configure which keys were intentionally unspecified
-                      # see: https://packaging.python.org/en/latest/specifications/pyproject-toml/#dynamic
-
-                      # we configure version, so that the maturin build backend
-                      # automagically fills in at build time *from* Cargo.toml's version field
-                      # see: https://www.maturin.rs/metadata.html#dynamic-metadata
-                      # see: https://doc.rust-lang.org/cargo/reference/manifest.html#the-version-field
-
-[dependency-groups]   # borscht uses numpy and torch as oracles. see chapter (todo).
-dev = [
-    "numpy>=2.5.4",
-    "pyrefly>=1.4.1",
-    "pytest>=9.1.1",
-    "torch>=2.15.0; platform_machine != 'riscv64'", # we configure an environment marker to skip torch on risc-v, since pytorch publishes no riscv64 wheels
-                                                    # see: https://packaging.python.org/en/latest/specifications/dependency-specifiers/#environment-markers
-]
-
-[tool.pyrefly]                              # pyrefly is our static type checker run by the editor and by `uv run pyrefly check`
-project-includes = ["python"]              # we configure the files to type check
-disable-project-excludes-heuristics = true # we configure pyrefly to stop excluding site-packages paths, since the editable install of borscht puts python/ itself on the interpreter's site-packages path (see the .pth file in .venv/lib/python3.15/site-packages)
-preset = "strict"                          # we configure the strict preset
-
-
-[tool.pytest.ini_options]
-testpaths = ["python/tests"] # we configure the list of directories that python should search for
-                             # when no specific directories, files, or test ids are given in the command line
-                             # we set this to python/tests (maturin does by default),
-                             # presumably because Cargo uses top-level tests/ for integration
-                             # see: https://docs.pytest.org/en/stable/reference/reference.html#confval-testpaths
-
 [build-system]
 requires = ["maturin>=1.14,<2.0"] # maturin is our build backend that compiles native rust source into cpython extension modules via pyo3
 build-backend = "maturin"         # see: https://docs.python.org/3/tutorial/modules.html
