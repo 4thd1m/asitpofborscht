@@ -7,7 +7,7 @@
 #    ""Yb. ,,       A'     VML YM.    , YM.    , YM.    ,  MM YM.    ,  MM    8M   MM  MM  YM.    ,          MM YM.    ,  MM    MM  L.   I8 YA.   ,A9 MM                                                             
 #       88 db     .AMA.   .AMMA.YMbmd'   YMbmd'   `Mbmmd'.JMML.`Mbmmd'.JMML.  `Moo9^Yo.`Mbmo`Mbmmd'        .JMML.`Mbmmd'.JMML  JMML.M9mmmP'  `Ybmd9'.JMML.                                                           
 # (O)  .M'
-#  bmmmd'                                                                                                                                                                                                            
+#  bmmmd'   In File 3B pyproject.toml we configured the manifest for the Python package. We now configure the manifest for the Rust package.
 # **********************************************************************************************************************
 #                                               borscht (Literary Source)
 # <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 4. Accelerate++ Tensor -->
@@ -19,19 +19,36 @@
 #                                                                                                      device.rs
 # **********************************************************************************************************************
 
-[package]
-name = "borscht"
-version = "0.1.0"
-edition = "2024"
+[package]         # a package is a collection of .rs source files and a Cargo.toml manifest file that is distributed in a package registry
+                  # we could publish borscht's rust package to the default package registry (crates.io) independently of borscht's python package and pypi.org
+                  # one use case could be the frontend for a Tensor library being authored in Julia needing native acceleration
+name = "borscht"  # it's rusty! (this is the only the field required) see: https://doc.rust-lang.org/cargo/reference/manifest.html#the-package-section
+version = "0.1.0" # TODO: versioning with pyo3
+edition = "2024"  # automatically specified with cargo new. Rust editions are a language feature for language evolution i.e Rust's "stability without stagnation"
+                  # see: https://doc.rust-lang.org/edition-guide/editions/
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-[lib]
-name = "borscht"
-path = "rust/lib.rs"
-crate-type = ["cdylib"]
+# a package has n target(s), where target can be a library, binary, example, test, or benchmark,
+#        which corresponds to an artifact for the target machine: linkable library, an executable binary, and generated documentation
+# see: https://doc.rust-lang.org/cargo/appendix/glossary.html#package
+# see: https://doc.rust-lang.org/cargo/appendix/glossary.html#target
+# see: https://doc.rust-lang.org/cargo/appendix/glossary.html#artifact
+[lib] # see: https://doc.rust-lang.org/cargo/reference/cargo-targets.html#configuring-a-target
+name = "borscht"        # The name of the target. For library targets, the name defaults to the name of the package.
+path = "rust/lib.rs"    # The source file of the target.
+crate-type = ["cdylib"] # The crate types to generate.
+                        # The following fields are already configured by default
+test = true             # Is tested by default.
+doctest = true          # Documentation examples are tested by default.
+bench = true            # Is benchmarked by default.
+doc = true              # Is documented by default.
+proc-macro = false      # Set to `true` for a proc-macro library.
+harness = true          # Use libtest harness.
 
 [dependencies]
-pyo3 = "0.29.0"
+pyo3 = "0.29.0"    # The pyo3 crate, which we will learn more about it in the next file of lib.rs
+                   # That is all we need to configure for borscht's native acceleration on CPU (File 3. Accelerate Tensor)
+                   # Relatively simple compared to the Python package's pyproject.toml manifest! This is because the Rust package is 
+                   # The remainder of dependencies are there for borscht's native  acceleratio non GPU (File 4. Accelerate++Tensor)
 
 
 
@@ -65,11 +82,20 @@ pyo3 = "0.29.0"
 #                                                          host.rs
 #                                                          device.rs
 # **********************************************************************************************************************
-cuda-device = { git = "https://github.com/NVIDIA/cuda-rust.git" }
-cuda-host = { git = "https://github.com/NVIDIA/cuda-rust.git" }
+cuda-device = { git = "https://github.com/NVIDIA/cuda-rust.git", optional = true }
+cuda-host = { git = "https://github.com/NVIDIA/cuda-rust.git", optional = true }
 # Shared host-side runtime. It has to come from the same repository as
 # cuda-host, which depends on it; a crates.io copy is a second cuda-core.
-cuda-core = { git = "https://github.com/NVIDIA/cuda-rust.git" }
+cuda-core = { git = "https://github.com/NVIDIA/cuda-rust.git", optional = true }
+
+[features]
+default = ["cuda"]
+cuda = ["dep:cuda-device", "dep:cuda-host", "dep:cuda-core"]
+# we configure the cuda dependencies as optional behind a cuda feature (on by default), so that machines with no CUDA
+# (macos, riscv64, ...) can still build the CPU half of borscht with --no-default-features.
+# lib.rs compiles rust/kernelsgpu/ only #[cfg(feature = "cuda")], and .cargo/maturin-cargo turns the feature off
+# whenever cargo-oxide isn't installed, so `uv run` works on those machines without any flags.
+# see: https://doc.rust-lang.org/cargo/reference/features.html#optional-dependencies
 
 
 # + ====================== +

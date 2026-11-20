@@ -1,3 +1,8 @@
 {
-  "rust-analyzer.linkedProjects": ["borscht/Cargo.toml"]
+  "rust-analyzer.linkedProjects": ["borscht/Cargo.toml"],
+  "[toml]": {
+    "editor.formatOnSave": false,
+    "files.trimFinalNewlines": false,
+    "files.trimTrailingWhitespace": false
+  }
 }

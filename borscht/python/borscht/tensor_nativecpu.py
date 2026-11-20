@@ -24,7 +24,7 @@ from borscht.tensor_managed import full, mm as mm_managed # Let us import the fu
 # **********************************************************************************************************************            |
 #                                               borscht (Literary Source)                                                           |
 # <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 4. Accelerate++ Tensor -->            v
-#             tensor_managed.py                        > 3A. tensor_nativecpu.py <               4A. tensor_nativegpu.py <--------- A. Python Source
+#             tensor_managed.py                        > 3A. tensor_nativecpu.py <               4A. tensor_nativegpu.py <--------- A. Python source
 #                                                        3B. pyproject.toml/Cargo.toml/lib.rs    4B. Cargo.toml/lib.rs   <--------- B. Python/Rust interop
 #                                                        3C. kernelscpu.rs                       4C. kernelsgpu.rs       <--------- C. Rust/CUDA Rust source
 #                                                                                                      utils.rs

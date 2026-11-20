@@ -103,7 +103,7 @@
 # We say roughly speaking because sometimes people call these collections under names,
 # but there will always be these two collections of features: code organization and distribution.
 # With Python's primary implementation of the CPython interpreter, you can of course evaluate expressions and enter statements.
-# But of course upon exiting the interpreter none our program persists. This is problematic for programmers who want to share, and distribute code.
+# But upon exiting the interpreter none our program persists. This is problematic for programmers who want to share, and distribute code.
 # We are writing a deep learning framework, so this is something we'd like to do.
 
   # + ------------------------------------------- Module/Script ≜ File -----------------------------------------------
@@ -118,15 +118,7 @@
   # However, this method doesn't scale when projects naturally consists of multiple files, which you can see we have below.
   # 
 
-
-  # + ------------------------------------------- Project ≜  ----------------------------------------
-  # 
-
-  # + ------------------------------------------- Wheel ≜  ----------------------------------------
-  # 
-
-  # + ------------------------------------------- Package Registry ≜  ----------------------------------------
-  # 
+  # We will talk about projects, distributions, and wheels in File 3B pyproject.toml
 
   # uv run pyrefly check && uv run pytest
   # uv run python
