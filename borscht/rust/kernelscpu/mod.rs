@@ -11,9 +11,12 @@
 // **********************************************************************************************************************
 //                                               borscht (Literary Source)
 // <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 4. Accelerate++ Tensor -->
-//             tensor_managed.py                          tensor_nativecpu.py
-//                                                        pyproject.toml/Cargo.toml
-//                                                        lib.rs/kernelscpu.rs
+//             tensor_managed.py                          tensor_nativecpu.py                     tensor_nativegpu.py
+//                                                        pyproject.toml/Cargo.toml/lib.rs        Cargo.toml/lib.rs
+//                                                      > kernelscpu.rs <                         kernelsgpu.rs
+//                                                                                                  utils.rs
+//                                                                                                  host.rs
+//                                                                                                  device.rs
 // **********************************************************************************************************************
 
 // After reading File 2. tensor_managed.py, you now understand the core essence of the Tensor concept and it's primary algorithm of matrix multiplication

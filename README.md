@@ -28,21 +28,22 @@ From SITP to SOTA [FS2S Part 1 (ARCH/OPT): From modded-nanogpt to dsv3 and k3]()
 ![](./sitp/src/assets/gpu_banner.png)
 ## Deep Learning Framework
 
-Reading a literary program also involves running files (modules) as scripts.<br>
+Reading a literary program also involves running Python and Rust modules as scripts and binaries respectively.<br>
 Ensure you have Python and Rust toolchains on your machine by running [`borscht/setup.sh`](./borscht/setup.sh) in your shell.
 
-```sh
+<!-- ```sh
 docker ps
 docker exec -it
 cuda oxide doctor
 cuda oxide run
-```
+``` -->
 
-- File 1. Hello borscht: [`python/borscht/__init__.py`](./borscht/python/borscht/__init__.py)
-- File 2. Hello Tensor: [`python/borscht/tensor_managed.py`](./borscht/python/borscht/tensor_managed.py)
+- File 1. Hello borscht [(`__init__.py`)](./borscht/python/borscht/__init__.py)
+- File 2. Hello Tensor [(`tensor_managed.py`)](./borscht/python/borscht/tensor_managed.py)
 - File 3. Accelerate Tensor
-  - File 3A: From Python to Rust [`python/borscht/tensor_nativecpu.py`](./borscht/python/borscht/tensor_nativecpu.py), [`pyproject.toml`](./borscht/pyproject.toml), [`Cargo.toml`](./borscht/Cargo.toml), [`rust/lib.rs`](./borscht/rust/lib.rs)
-  - File 3B: From Rust to RISC-V:  [`rust/kernelscpu.rs`](./borscht/rust/kernelscpu.rs)
+  - File 3A: From Analytical Big-O to Empirical Rooflines [(`tensor_nativecpu.py`)](./borscht/python/borscht/tensor_nativecpu.py)
+  - File 3B: From Managed Python to Native Rust [(`pyproject.toml/Cargo.toml`)](./borscht/pyproject.toml)
+  - File 3C: From Rust to RISC-V [(`kernelscpu.rs`)](./borscht/rust/kernelscpu.rs)
 - File 4. Accelerate++ Tensor
   - File 4A: From Rust to CUDA Rust:
   - File 4B: Accelerate Tensor on GPU: [`python/borscht/tensor_nativegpu.py`](), [`rust/kernelsgpu.rs`]()
