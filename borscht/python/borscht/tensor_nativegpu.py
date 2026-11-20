@@ -1,25 +1,61 @@
-#                                                            ,,                                                           
-#                         db                               `7MM                          mm                               
-#                        ;MM:                                MM                          MM                               
-#      ,AM              ,V^MM.    ,p6"bo   ,p6"bo   .gP"Ya   MM  .gP"Ya `7Mb,od8 ,6"Yb.mmMMmm .gP"Ya      M         M     
-#     AVMM             ,M  `MM   6M'  OO  6M'  OO  ,M'   Yb  MM ,M'   Yb  MM' "'8)   MM  MM  ,M'   Yb     M         M     
-#   ,W' MM             AbmmmqMA  8M       8M       8M""""""  MM 8M""""""  MM     ,pm9MM  MM  8M"""""" mmmmMmmmm mmmmMmmmm 
-# ,W'   MM   ,,       A'     VML YM.    , YM.    , YM.    ,  MM YM.    ,  MM    8M   MM  MM  YM.    ,     M         M     
-# AmmmmmMMmm db     .AMA.   .AMMA.YMbmd'   YMbmd'   `Mbmmd'.JMML.`Mbmmd'.JMML.  `Moo9^Yo.`Mbmo`Mbmmd'     M         M     
-#       MM                                                                                                                
-#       MM                                                                                                                
+#                                                            ,,                                                                                                                    
+#                         db                               `7MM                          mm                                   MMP""MM""YMM                                         
+#                        ;MM:                                MM                          MM                                   P'   MM   `7                                         
+#      ,AM              ,V^MM.    ,p6"bo   ,p6"bo   .gP"Ya   MM  .gP"Ya `7Mb,od8 ,6"Yb.mmMMmm .gP"Ya      M         M              MM  .gP"Ya `7MMpMMMb.  ,pP"Ybd  ,pW"Wq.`7Mb,od8 
+#     AVMM             ,M  `MM   6M'  OO  6M'  OO  ,M'   Yb  MM ,M'   Yb  MM' "'8)   MM  MM  ,M'   Yb     M         M              MM ,M'   Yb  MM    MM  8I   `" 6W'   `Wb MM' "' 
+#   ,W' MM             AbmmmqMA  8M       8M       8M""""""  MM 8M""""""  MM     ,pm9MM  MM  8M"""""" mmmmMmmmm mmmmMmmmm          MM 8M""""""  MM    MM  `YMMMa. 8M     M8 MM     
+# ,W'   MM   ,,       A'     VML YM.    , YM.    , YM.    ,  MM YM.    ,  MM    8M   MM  MM  YM.    ,     M         M              MM YM.    ,  MM    MM  L.   I8 YA.   ,A9 MM     
+# AmmmmmMMmm db     .AMA.   .AMMA.YMbmd'   YMbmd'   `Mbmmd'.JMML.`Mbmmd'.JMML.  `Moo9^Yo.`Mbmo`Mbmmd'     M         M            .JMML.`Mbmmd'.JMML  JMML.M9mmmP'  `Ybmd9'.JMML.   
+#       MM
 # **********************************************************************************************************************
 #                                               borscht (Literary Source)
 # <-- File 3. Accelerate Tensor               -- File 4. Accelerate++ Tensor --          File 5. Abstract Accelerate -->
 #             tensor_nativecpu.py                        tensor_nativegpu.py
 #             pyproject.toml/Cargo.toml                  Cargo.toml
-#             lib.rs/kernelscpu.rs                       main.rs/kernelsgpu.rs
+#             lib.rs/kernelscpu.rs                       kernelsgpu/
+#                                                          utils.rs
+#                                                          host.rs
+#                                                          device.rs
 # **********************************************************************************************************************
 
 from borscht.tensor_managed import Tensor                 # Let us import Tensor to define our GPU accelerated mm routine
 from borscht.tensor_managed import full, mm as mm_managed # Let us import the full constructor and managed matrix multiply routine
 from borscht.tensor_nativecpu import mm as mm_native      # Let us import                          native  matrix multiply routine
 __all__ = ["Tensor", "full", "mm"]             # Let us re-export the full constructor and Tensor concept as-is from tensor_managed.py as well as our natively GPU accelerated mm
+
+# +=============================================================================+
+# |                HOST INTERFACE  ::  PCIe Gen5 x16  /  NVLink 4               |
+# +=============================================================================+
+# |          GigaThread Engine  --  deals thread blocks out to idle SMs         |
+# +-----------------------------------------------------------------------------+
+# |                                                                             |
+# |  +--------- GPC 0 ---------+  +--------- GPC 1 ---------+  +-- GPC 2..7 --+ |
+# |  | +-TPC-+ +-TPC-+ +-TPC-+ |  | +-TPC-+ +-TPC-+ +-TPC-+ |  |              | |
+# |  | |SM|SM| |SM|SM| |SM|SM| |  | |SM|SM| |SM|SM| |SM|SM| |  |   [ ... ]    | |
+# |  | +-----+ +-----+ +-----+ |  | +-----+ +-----+ +-----+ |  |              | |
+# |  | +-TPC-+ +-TPC-+ +-TPC-+ |  | +-TPC-+ +-TPC-+ +-TPC-+ |  |   same as    | |
+# |  | |SM|SM| |SM|SM| |SM|SM| |  | |SM|SM| |SM|SM| |SM|SM| |  |   GPC 0,     | |
+# |  | +-----+ +-----+ +-----+ |  | +-----+ +-----+ +-----+ |  |   x6 more    | |
+# |  |  . . .  (9 TPC / GPC)   |  |  . . .  (9 TPC / GPC)   |  |              | |
+# |  +------------+------------+  +------------+------------+  +------+-------+ |
+# |               |                            |                      |         |
+# |  =============v============================v======================v=======  |
+# |  ||              L2 CACHE  ::  50 MB  ::  shared by all SMs             ||  |
+# |  ========^=============^=============^=============^=============^========  |
+# |          |             |             |             |             |          |
+# |     +----+----+   +----+----+   +----+----+   +----+----+   +----+----+     |
+# |     | MC 0,1  |   | MC 2,3  |   | MC 4,5  |   | MC 6,7  |   | MC 8,9  |     |
+# |     +----+----+   +----+----+   +----+----+   +----+----+   +----+----+     |
+# +==========|=============|=============|=============|=============|==========+
+#            |             |             |             |             |
+#       .----+----.   .----+----.   .----+----.   .----+----.   .----+----.
+#       |  HBM3   |   |  HBM3   |   |  HBM3   |   |  HBM3   |   |  HBM3   |
+#       |=========|   |=========|   |=========|   |=========|   |=========|
+#       |=========|   |=========|   |=========|   |=========|   |=========|
+#       |=========|   |=========|   |=========|   |=========|   |=========|
+#       '---------'   '---------'   '---------'   '---------'   '---------'
+#          16 GB         16 GB         16 GB         16 GB         16 GB
+
 
 
 def _main():

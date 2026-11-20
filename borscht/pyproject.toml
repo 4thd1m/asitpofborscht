@@ -6,38 +6,30 @@
 #      ,89           AbmmmqMA  8M       8M       8M""""""  MM 8M""""""  MM     ,pm9MM  MM  8M""""""          MM 8M""""""  MM    MM  `YMMMa. 8M     M8 MM                                                             
 #    ""Yb. ,,       A'     VML YM.    , YM.    , YM.    ,  MM YM.    ,  MM    8M   MM  MM  YM.    ,          MM YM.    ,  MM    MM  L.   I8 YA.   ,A9 MM                                                             
 #       88 db     .AMA.   .AMMA.YMbmd'   YMbmd'   `Mbmmd'.JMML.`Mbmmd'.JMML.  `Moo9^Yo.`Mbmo`Mbmmd'        .JMML.`Mbmmd'.JMML  JMML.M9mmmP'  `Ybmd9'.JMML.                                                           
-# (O)  .M'                                                                                                                                                                                                           
+# (O)  .M'
 #  bmmmd'                                                                                                                                                                                                            
 # **********************************************************************************************************************
 #                                               borscht (Literary Source)
 # <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 4. Accelerate++ Tensor -->
-#             tensor_managed.py                          tensor_nativecpu.py
-#                                                        pyproject.toml/Cargo.toml
-#                                                        lib.rs/kernelscpu.rs
+#             tensor_managed.py                          3A. tensor_nativecpu.py                 4A. tensor_nativegpu.py
+#                                                        3B. >pyproject.toml</Cargo.toml/lib.rs  4B. Cargo.toml/lib.rs
+#                                                        3C. kernelscpu.rs                       4C. kernelsgpu.rs
+#                                                                                                      utils.rs
+#                                                                                                      host.rs
+#                                                                                                      device.rs
 # **********************************************************************************************************************
-
-
-# + =============== +
-# | Python Modules  |
-# + =============== +
-
-# $ tree -L 1
-# .
-# ├── Cargo.lock
-# ├── Cargo.toml
-# ├── pyproject.toml <--- We are currently here
-# ├── python
-# ├── rust
-# ├── target
-# ├── rust-toolchain.toml
-# └── uv.lock
-
-
-
-
-# + ================ +
-# | From Python to C |
-# + ================ +
+#                                                0. From Managed Python to Native C    <-- HERE
+#                                                1. From Managed Python to Native Rust
+#                                                $ tree -L 1
+#                                                .
+#                                                ├── Cargo.lock
+#                                                ├── Cargo.toml
+#                                                ├── pyproject.toml <-- HERE
+#                                                ├── python
+#                                                ├── rust
+#                                                ├── target
+#                                                ├── rust-toolchain.toml
+#                                                └── uv.lock
 
 # borscht has a mixed source of Python, Rust, and CUDA, coloquially quipped as "the three language problem"[0].
 # Python for productivity, Rust for performance on the CPU, and CUDA for performance on GPU.
@@ -72,9 +64,22 @@
 # CPython extension module 🎯 wed nov 4
 # https://docs.python.org/3/extending/first-extension-module.html#first-extension-module
 
-# + =================== +
-# | From Python to Rust |
-# + =================== +
+
+
+
+
+# **********************************************************************************************************************
+#                                               borscht (Literary Source)
+# <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 4. Accelerate++ Tensor -->
+#             tensor_managed.py                          tensor_nativecpu.py                     tensor_nativegpu.py
+#                                                      > pyproject.toml </Cargo.toml/lib.rs      Cargo.toml/lib.rs
+#                                                        kernelscpu.rs                           kernelsgpu.rs
+#                                                                                                  utils.rs
+#                                                                                                  host.rs
+#                                                                                                  device.rs
+# **********************************************************************************************************************
+#                                                0. From Python to C
+#                                                1. From Python to Rust <-- HERE
 
 # For CPU accelerated code, borscht uses the Rust programming language rather than C/C++,
 # while still maintaining the Python veneer for user productivity.
