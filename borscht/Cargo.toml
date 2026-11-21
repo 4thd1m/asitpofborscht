@@ -12,8 +12,8 @@
 #                                               borscht (Literary Source)
 # <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 4. Accelerate++ Tensor -->
 #             tensor_managed.py                          3A. tensor_nativecpu.py                 4A. tensor_nativegpu.py
-#                                                        3B. pyproject.toml/>Cargo.toml</lib.rs  4B. Cargo.toml/lib.rs
-#                                                        3C. kernelscpu.rs                       4C. kernelsgpu.rs
+#                                                        3B. pyproject.toml/>Cargo.toml<         4B. Cargo.toml/lib.rs
+#                                                        3C. lib.rs/kernelscpu.rs                4C. kernelsgpu.rs
 #                                                                                                      utils.rs
 #                                                                                                      host.rs
 #                                                                                                      device.rs
@@ -23,7 +23,7 @@
                   # we could publish borscht's rust package to the default package registry (crates.io) independently of borscht's python package and pypi.org
                   # one use case could be the frontend for a Tensor library being authored in Julia needing native acceleration
 name = "borscht"  # it's rusty! (this is the only the field required) see: https://doc.rust-lang.org/cargo/reference/manifest.html#the-package-section
-version = "0.1.0" # TODO: versioning with pyo3
+version = "0.1.0" # the version for *both* the python project and the Rust package
 edition = "2024"  # automatically specified with cargo new. Rust editions are a language feature for language evolution i.e Rust's "stability without stagnation"
                   # see: https://doc.rust-lang.org/edition-guide/editions/
 
@@ -36,19 +36,14 @@ edition = "2024"  # automatically specified with cargo new. Rust editions are a 
 name = "borscht"        # The name of the target. For library targets, the name defaults to the name of the package.
 path = "rust/lib.rs"    # The source file of the target.
 crate-type = ["cdylib"] # The crate types to generate.
-                        # The following fields are already configured by default
-test = true             # Is tested by default.
-doctest = true          # Documentation examples are tested by default.
-bench = true            # Is benchmarked by default.
-doc = true              # Is documented by default.
-proc-macro = false      # Set to `true` for a proc-macro library.
-harness = true          # Use libtest harness.
-
-[dependencies]
+                        # see: https://doc.rust-lang.org/cargo/reference/cargo-targets.html#the-crate-type-field
+                        # see: https://doc.rust-lang.org/reference/linkage.html
+[dependencies]          
 pyo3 = "0.29.0"    # The pyo3 crate, which we will learn more about it in the next file of lib.rs
                    # That is all we need to configure for borscht's native acceleration on CPU (File 3. Accelerate Tensor)
                    # Relatively simple compared to the Python package's pyproject.toml manifest! This is because the Rust package is 
                    # The remainder of dependencies are there for borscht's native  acceleratio non GPU (File 4. Accelerate++Tensor)
+
 
 
 

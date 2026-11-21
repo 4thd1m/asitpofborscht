@@ -12,8 +12,8 @@
 //                                               borscht (Literary Source)
 // <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 4. Accelerate++ Tensor -->
 //             tensor_managed.py                          3A. tensor_nativecpu.py                 4A. tensor_nativegpu.py
-//                                                        3B. pyproject.toml/Cargo.toml/>lib.rs<  4B. Cargo.toml/lib.rs
-//                                                        3C. kernelscpu.rs                       4C. kernelsgpu.rs
+//                                                        3B. pyproject.toml/Cargo.toml           4B. Cargo.toml/lib.rs
+//                                                        3C. >lib.rs</kernelscpu.rs              4C. kernelsgpu.rs
 //                                                                                                      utils.rs
 //                                                                                                      host.rs
 //                                                                                                      device.rs
@@ -23,7 +23,6 @@ use pyo3::prelude::*;
 // mod tensor;
 // mod engine;
 mod kernelscpu;
-mod kernelsgpu;
 
 /// A Python module implemented in Rust.
 #[pymodule]
@@ -32,6 +31,7 @@ mod _borscht {
 
   #[pymodule_export]
   use crate::kernelscpu::_gemm;
+  #[cfg(feature = "cuda")]
   #[pymodule_export]
   use crate::kernelsgpu::{_sgemm, _sgemm_bench};
 
@@ -41,3 +41,6 @@ mod _borscht {
     Ok((a + b).to_string())
   }
 }
+
+#[cfg(feature = "cuda")] // see [features] in Cargo.toml
+mod kernelsgpu;

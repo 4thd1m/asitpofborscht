@@ -25,8 +25,8 @@ from borscht.tensor_managed import full, mm as mm_managed # Let us import the fu
 #                                               borscht (Literary Source)                                                           |
 # <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 4. Accelerate++ Tensor -->            v
 #             tensor_managed.py                        > 3A. tensor_nativecpu.py <               4A. tensor_nativegpu.py <--------- A. Python source
-#                                                        3B. pyproject.toml/Cargo.toml/lib.rs    4B. Cargo.toml/lib.rs   <--------- B. Python/Rust interop
-#                                                        3C. kernelscpu.rs                       4C. kernelsgpu.rs       <--------- C. Rust/CUDA Rust source
+#                                                        3B. pyproject.toml/Cargo.toml           4B. Cargo.toml/lib.rs   <--------- B. Python/Rust interop
+#                                                        3C. lib.rs/kernelscpu.rs                4C. kernelsgpu.rs       <--------- C. Rust/CUDA Rust source
 #                                                                                                      utils.rs
 #                                                                                                      host.rs
 #                                                                                                      device.rs
@@ -198,7 +198,7 @@ tensor([[29.6088, 29.6088],
 # <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 4. Accelerate++ Tensor -->
 #             tensor_managed.py                        > 3A. tensor_nativecpu.py <               4A. tensor_nativegpu.py
 #                                                        3B. pyproject.toml/Cargo.toml/lib.rs    4B. Cargo.toml/lib.rs
-#                                                        3C. kernelscpu.rs                       4C. kernelsgpu.rs
+#                                                        3C. lib.rs/kernelscpu.rs                4C. kernelsgpu.rs
 #                                                                                                      utils.rs
 #                                                                                                      host.rs
 #                                                                                                      device.rs
@@ -213,6 +213,12 @@ tensor([[29.6088, 29.6088],
 # In contrast, with the artifical sciences like computation, we have *access* to the source code of our computational processes.
 # We can model the cost of our program (in this case the cost we care about is *time*)
 # by assigning an *idealized* cost to each operation, and simply adding up the costs of all operations in our program.
+def _main(): # run the file as a script (i.e uv run tensor_nativecpu.py) on your machine
+    n = 256
+    A, B = full((n, n), 1.0), full((n, n), 1.0)
+    C = mm(A,B)
+
+    # TODO: big-O
     # we need to use a *cost model*.
     # The first cost model we use 
 
@@ -221,16 +227,13 @@ tensor([[29.6088, 29.6088],
     # The transition from mathematics to programming is the transition from lambda calculus' substitution model
     # of computation to turing machines von neumann model of computation
 
-def _main():
-    n = 256
-    A, B = full((n, n), 1.0), full((n, n), 1.0)
-
+    # TODO: can we do better than n^3? look in the classic CLRS. we find Strassen
     # Continuing down the route of classical algorithm analysis,
     # we would be led to an algorithm known as Strassen's Algorithm, with time complexity n -> n^2.7.,. lg()
 
 
 
-    
+
 
     # Instead of analytically analyzing the software algorithm's asymptotics to predict worst-case time *complexity*,
     #     we can empirically        use the hardware performance counters    to measure actual time
@@ -243,29 +246,31 @@ def _main():
     #                         |___..--'__..-'                             '.    6    .'
     #                         +------------------------> n                  '-.....-'
 
-    # Running the file as a script (i.e uv run tensor_nativecpu.py) on your machine
+    import time # We want to empirically measure actual wall-clock time, rather than analytically analyzing an upper bound
+    def time_virtual_mm(A: Tensor, B: Tensor, n: int):
+        t0 = time.perf_counter()
+        _ = mm_managed(A, B)  # ignore the output. we care about performance right now, not correctness
+        t = time.perf_counter() - t0 # mm_managed is the matrix multiplication routine implemented from File 2. tensor_managed.py
+        return t
+
     t_virtual = time_virtual_mm(A,B,n) # baseline
     print(f"{n}x{n} mm_managed: {t_virtual*1e3:.1f} ms")
 
-    # — while the *absolute* speed will vary depending on your hardware —
-    # What is the *relative speedup* of the Rust implementation with respect to the Python one? 2x, 5x, 10x, 20x, 50x?
-    # What explains this?
-    t_physical = time_native_mm(A,B,n)
-    print(f"{n}x{n} mm_managed: {t_physical*1e3:.1f} ms, speedup: {t_virtual / t_physical:.2f}x")
-    
 
-import time # We want to empirically measure actual wall-clock time, rather than analytically analyzing an upper bound
-def time_virtual_mm(A: Tensor, B: Tensor, n: int):
-    t0 = time.perf_counter()
-    _ = mm_managed(A, B) # ignore the output. we care about performance right now, not correctness
-    t = time.perf_counter() - t0
-    return t
-    
-def time_native_mm(A: Tensor, B: Tensor, n: int):
-    t0 = time.perf_counter()
-    _ = mm_native(A, B) # matrix multiplication algorithm that is executed *directly* by your machine's physical processor 
-    t = time.perf_counter() - t0
-    return t
+    # Moreover, the first optimization we make to the standard matrix multiplication triple loop algorithm is
+    # to simply change the implementation language from Python to Rust so that the code gets executed *directly* by a physical processor
+    # That is, to follow the advice of the crowd and "rewrite it in Rust".
+    def time_native_mm(A: Tensor, B: Tensor, n: int):
+        t0 = time.perf_counter()
+        _ = mm_native(A, B) # mm_native is implemented with a native language
+        t = time.perf_counter() - t0
+        return t
+        
+    # While the *absolute* speed will vary depending on your hardware,
+    t_physical = time_native_mm(A,B,n) # What is the *relative speedup* of the Rust implementation with respect to the Python one?
+    print(f"{n}x{n} mm_managed: {t_physical*1e3:.1f} ms, speedup: {t_virtual / t_physical:.2f}x")
+                                                                  # 2x, 5x, 10x, 20x, 50x?
+    # What explains this?
 
 
 
@@ -276,7 +281,7 @@ def time_native_mm(A: Tensor, B: Tensor, n: int):
 # <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 4. Accelerate++ Tensor -->
 #             tensor_managed.py                        > 3A. tensor_nativecpu.py <               4A. tensor_nativegpu.py
 #                                                        3B. pyproject.toml/Cargo.toml/lib.rs    4B. Cargo.toml/lib.rs
-#                                                        3C. kernelscpu.rs                       4C. kernelsgpu.rs
+#                                                        3C. lib.rs/kernelscpu.rs                4C. kernelsgpu.rs
 #                                                                                                      utils.rs
 #                                                                                                      host.rs
 #                                                                                                      device.rs
@@ -286,13 +291,61 @@ def time_native_mm(A: Tensor, B: Tensor, n: int):
 #                                                 1. From Analytical Big-O to Empirical Time
 #                                                 2. From Virtual Machines to Physical Machines <-- HERE
 
+# As already hinted by the different names of mm_managed and mm_native, besides Python and Rust offering different language *features* to programmers
+# (for instance, they provide different features with respect to mutation and asynchrony), they are also differentiated by their *evaluation*,
+# meaning, how do the expressions and statements in source programs written in a .py file and a .rs get run?
 
+# The physical processors that are implemented with silicon and electricity only understand a more primitive machine language referred to as *instruction sets*
+# — the primary ones being x86, ARM, RISC-V — so how is this gap of semantics (semantic gap) bridged?
+# It can be bridged by *interpretation* or *compilation*.
+    # We will explain the difference from the programmers perspective, but in order to understand from the implementor's perspective,
+    # see Structure and Interpretation of Computer Programs Chapter 4. Metalinguistic Abstraction https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-25.html#%_chap_4
+    #                                                   and Chapter 5. Computing with Register Machines https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-30.html#%_chap_5
+    # If you prefer to implement a more Pythonic language rather a Lispy one,
+    # see Programming and Programming Languages Chapter 25. Processing Programs: A First Look at Interpretation https://papl.cs.brown.edu/2020/Processing_Programs__Parsing.html
+    # We can't explain everything in this textbook! We are implementing an interpreter for Tensor Programs, not Computer Programs!
 
+# An interpreter *simulates* the source program with a virtual machine implemented with software (another programming language)
+#    i.e The primary Python interpreter CPython is implemented with C/C++.
+# A compiler *translates* the source program to a target program.
+#   i.e The primary Rust compiler rustc translates Rust programs to x86/ARM/RISC-V programs
+#                                             The target program is then *executed* with a physical machine implemented with hardware (silicon)
+
+#       
+#          (1) Interpretation                         (2) Compilation
+#       
+#          source program   input                     source program                            input
+#                 |           |                              |                                    |
+#                 v           v                              v                                    v
+#             +------------------+                       +------------------+            +------------------+
+#             |   interpreter    |                       |     compiler     |   emits    |  target program  |
+#             |    (software)    | ---> output           |    (software)    | ---------> |  (machine code)  | ---> output
+#             +------------------+                       +------------------+            +------------------+
+#             |     hardware     |                       |     hardware     |            |     hardware     |
+#             +------------------+                       +------------------+            +------------------+
+#             <---- run time ---->                       <-- compile time -->            <---- run time ---->
+
+# In both scenarios, there is of course underlying hardware running.
+# The question is *which* evaluator your program is evaluated by: a *virtual machine* or a *physical machine*?
+    # If your program is being interpreted, it's *indirectly* running on hardware, because there is a *layer* of indirection (i.e the interpeter).
+    # If your program is first compiled, then executed, it's *directly* running on hardware.
+
+    # This is *why* mm_native() has a speedup of 2x, 5x, 10x, 20x, depending on the underlying machine.
+    #               mm_native() runs directly on the hardware.
+
+# We now understand that the semantic gap is bridged either with an intepreter *or compiler,
+#            and in turn whether the program is evaluated by a virtual machine *or physical machine.
+# and that mm_native() has a speedup over mm_managed() because it's written in Rust.
+
+#                                                                              * Interpretation vs compilation and virtual vs physical machine is a false dichotomy and actually a spectrum
+#                                                                                for there is JIT compilation which starts off by interpreting code and then switched to compilation for performance-sensitive spots.
+#                                                                                This is what the Java Virtual Machine (JVM) does.
 
 
 # Here, we re-define the matrix multiplication algorithm from File 2. Hello Tensor (tensor_managed.py)
 #       with a native programming language so that the program can be executed directly on a physical processor
-# The only two lines that are noteworthy of your attention is L282 and L290
+# The only *two* lines that are noteworthy of your attention are L282 and L290
+# ---------------------------------------------------------------------------------------------------------------------
 
 def mm(A: Tensor, B: Tensor) -> Tensor: # mm has the same definition from File 2..
     # the same doctest..

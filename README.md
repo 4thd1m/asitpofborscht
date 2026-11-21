@@ -41,7 +41,7 @@ cuda oxide run
 - File 1. Hello borscht [(`__init__.py`)](./borscht/python/borscht/__init__.py)
 - File 2. Hello Tensor [(`tensor_managed.py`)](./borscht/python/borscht/tensor_managed.py)
 - File 3. Accelerate Tensor
-  - File 3A: From Analytical Big-O to Empirical Rooflines [(`tensor_nativecpu.py`)](./borscht/python/borscht/tensor_nativecpu.py)
+  - File 3A: From Analytical Big-O to Empirical Time [(`tensor_nativecpu.py`)](./borscht/python/borscht/tensor_nativecpu.py)
   - File 3B: From Managed Python to Native Rust [(`pyproject.toml/Cargo.toml`)](./borscht/pyproject.toml)
   - File 3C: From Rust to RISC-V [(`kernelscpu.rs`)](./borscht/rust/kernelscpu.rs)
 - File 4. Accelerate++ Tensor

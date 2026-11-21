@@ -15,8 +15,8 @@
 #                                               borscht (Literary Source)
 # <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 4. Accelerate++ Tensor -->
 #             tensor_managed.py                          3A. tensor_nativecpu.py                 4A. tensor_nativegpu.py
-#                                                        3B. >pyproject.toml</Cargo.toml/lib.rs  4B. Cargo.toml/lib.rs
-#                                                        3C. kernelscpu.rs                       4C. kernelsgpu.rs
+#                                                        3B. >pyproject.toml</Cargo.toml         4B. Cargo.toml/lib.rs
+#                                                        3C. lib.rs/kernelscpu.rs                4C. kernelsgpu.rs
 #                                                                                                      utils.rs
 #                                                                                                      host.rs
 #                                                                                                      device.rs

@@ -17,6 +17,8 @@
 #                                                          host.rs
 #                                                          device.rs
 # **********************************************************************************************************************
+#                                              > 3A. tensor_nativecpu.py <
+#                                                 0. From Latency-Oriented to Throughput-Oriented Processors
 
 from borscht.tensor_managed import Tensor                 # Let us import Tensor to define our GPU accelerated mm routine
 from borscht.tensor_managed import full, mm as mm_managed # Let us import the full constructor and managed matrix multiply routine
