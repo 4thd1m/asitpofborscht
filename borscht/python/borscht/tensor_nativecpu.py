@@ -6,20 +6,16 @@
 #      ,89           AbmmmqMA  8M       8M       8M""""""  MM 8M""""""  MM     ,pm9MM  MM  8M""""""          MM 8M""""""  MM    MM  `YMMMa. 8M     M8 MM                                                             
 #    ""Yb. ,,       A'     VML YM.    , YM.    , YM.    ,  MM YM.    ,  MM    8M   MM  MM  YM.    ,          MM YM.    ,  MM    MM  L.   I8 YA.   ,A9 MM                                                             
 #       88 db     .AMA.   .AMMA.YMbmd'   YMbmd'   `Mbmmd'.JMML.`Mbmmd'.JMML.  `Moo9^Yo.`Mbmo`Mbmmd'        .JMML.`Mbmmd'.JMML  JMML.M9mmmP'  `Ybmd9'.JMML.                                                           
-# (O)  .M'
-#  bmmmd'
-# After reading File 1. Hello Borscht __init__.py, you have a 50,000 ft view of borscht's internals.
-# After reading File 2. Hello Tensor tensor_managed.py, you now understand the core essence of the Tensor concept and it's primary algorithm of matrix multiplication
+# (O)  .M' After reading File 1. Hello Borscht (__init__.py), you have a 50,000 ft view of borscht's internals.
+#  bmmmd'  After reading File 2. Hello Tensor (tensor_managed.py), you understand the core essence of the Tensor concept and it's primary algorithm of matrix multiplication
                                                           # In fact, we will be reusing such data structure and algorithm:
 from borscht.tensor_managed import Tensor                 # Let us import Tensor defined from File 2 to define our accelerated mm routine
                                                           #               aspirationally representing the set R^{d1 \times \cdots, \times dn} known as a field
 from borscht.tensor_managed import full, mm as mm_managed # Let us import the full constructor and managed matrix multiply routine also defined in FIle 2
                                                           #               aspirationally representing the function L1: R^k -> R^n and L2: R^m -> R^k known as a composition of linear transformation                                                                                             
-
 # In Files 3 and 4, we will be natively* accelerating the matrix multiplication algorithm
 #                   on a RISC-V CPU and NVIDIA (PTX/SASS) GPU using Rust and CUDA Rust respectively
 #                              * where natively means the algorithm's program is executed directly by the physical processor
-
 #                   Both Files are split across three groups of files --------------------------------------------------------------+
 # **********************************************************************************************************************            |
 #                                               borscht (Literary Source)                                                           |

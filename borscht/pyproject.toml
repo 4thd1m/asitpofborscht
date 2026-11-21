@@ -6,11 +6,13 @@
 #      ,89           AbmmmqMA  8M       8M       8M""""""  MM 8M""""""  MM     ,pm9MM  MM  8M""""""          MM 8M""""""  MM    MM  `YMMMa. 8M     M8 MM                                                             
 #    ""Yb. ,,       A'     VML YM.    , YM.    , YM.    ,  MM YM.    ,  MM    8M   MM  MM  YM.    ,          MM YM.    ,  MM    MM  L.   I8 YA.   ,A9 MM                                                             
 #       88 db     .AMA.   .AMMA.YMbmd'   YMbmd'   `Mbmmd'.JMML.`Mbmmd'.JMML.  `Moo9^Yo.`Mbmo`Mbmmd'        .JMML.`Mbmmd'.JMML  JMML.M9mmmP'  `Ybmd9'.JMML.                                                           
-# (O)  .M' borscht has a mixed source of Python, Rust, and CUDA, coloquially quipped as "the three language problem"[0].
-#  bmmmd'  Python for productivity, Rust for native CPU performance, and CUDA for native GPU performance.
-#          Before we translate our matrix multiplication algorithm to Rust with File 3C. kernelscpu.rs,
-#          we will understand how borscht's mixed source of Python and Rust interop via CPython API.
-#          That means understanding Python and Rust's module system, configured by the pyproject.toml and Cargo.toml manifest files
+# (O)  .M' After reading File 1. Hello Borscht (__init__.py), you have a 50,000 ft view of borscht's internals.
+#  bmmmd'  After reading File 2. Hello Tensor (tensor_managed.py), you understand the core essence of the Tensor concept and it's primary algorithm of matrix multiplication
+#          After reading File 3A. Accelerate Tensor (tensor_nativecpu.py), you understand why deep learning frameworks accelerate their algorithms using native languages that execute on physical machines
+#          Before we translate our matrix multiplication algorithm to Rust with File 3C. kernelscpu.rs's _gemm() routine
+#          we will understand how borscht's mixed source of Python and Rust interop with one another via CPython API and Rust FFI
+#                                                                          with File's 3B pyproject.toml and Cargo.toml manifest files
+#                                                                          If you prefer, you can open up the pyproject.toml and Cargo.toml manifest files side by side.
 # **********************************************************************************************************************
 #                                               borscht (Literary Source)
 # <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 4. Accelerate++ Tensor -->
@@ -21,62 +23,129 @@
 #                                                                                                      host.rs
 #                                                                                                      device.rs
 # **********************************************************************************************************************
-#                                                0. Python's Module and Packaging System <-- HERE
-#                                                1. From Managed Python to Native C
-#                                                2. From Managed Python to Native Rust
-
-# First, starting with borscht's Python source, you've already seen the internal 50,000ft view of the
-# various *modules* defined by the borscht *package* in File 1. Hello borscht (__init__.py)
-#      i.e - borscht.nn           Here in File 3B pyproject.toml/Cargo.toml/lib.rs, we will understand how the native borscht._borscht module is natively implemented with Rust, and interops with Python
-#          - borscht.optim        To differentiate between modules like borscht._borscht that are implemented natively, and the others that are implemented virtually,
-#          - borscht.linalg       the latter are referred to as *pure modules* whereas the former is referred to as *extension modules*
-#          - borscht.Tensor       see: https://packaging.python.org/en/latest/glossary/#term-Pure-Module
-#          - borscht._borscht     # see: https://packaging.python.org/en/latest/glossary/#term-Extension-Module
+#                                                0. From Managed Python to Native C (CPython API) <-- HERE
 
 # Now that the borscht package is *organized* as a package with a module system, we'd like to *distribute* said package.
 # Rather than zipping and hosting the files for end-users to manually download,
 # we'd like to deploy the borscht package to Python's default package index pypi.org
-# so that borscht is distributed to end-users with a `pip install borscht` or `uv add borscht` installation
+# so that borscht is distributed to end-users with a `pip install borscht` or `uv add borscht`
 # see: https://packaging.python.org/en/latest/glossary/#term-Package-Index
 
-# In order to deploy the borscht package, we define a *project* via this tool-agnostic pyproject.toml manifest
-# A project
+# This is done with a *project*, which we define with a pyproject.toml
+# Below we interweave the project's source tree with the command line tool tree and the project's specification
+# see: https://packaging.python.org/en/latest/glossary/#term-Project
+# see: https://packaging.python.org/en/latest/glossary/#term-Project-Source-Tree
+# see: https://packaging.python.org/en/latest/glossary/#term-Pyproject-Metadata
 
 # asitpofborscht/borscht $ tree -L 4
-# ├── borscht <------------------------------------------ the project directory, which can be arbitraily named
+# ├── borscht <------------------------------------------ the project directory, which although can be arbitraily named, it's convention to name after the package
 # │   ├── pyproject.toml <------------------------------- the tool agnostic manifest file for the project
-# │   ├── python <--------------------------------------- the source directory of the project (canonically named src/), which can include many packages. we only have..
-# │   │   ├── borscht <---------------------------------- the borscht package, where end users import in their source with import borscht
-# │   │   │   ├── __init__.py <-------------------------- the borscht package's modules are initialized
-# │   │   │   ├── _borscht.cpython-315-darwin.so <------- extension module (note the .so file name)
-# │   │   │   ├── _borscht.pyi
-# │   │   │   ├── compile.py
-# │   │   │   ├── engine.py
+[project]                                                 # In order to deploy the borscht package, we define a *project* via this tool-agnostic pyproject.toml manifest
+name = "borscht"                                          # it's delicious! the field is configured to borscht, so end users can install with pip install borscht or uv add borscht
+requires-python = ">=3.15"                                # released October 9th 2026                                                                                             |
+dynamic = ["version"]                                     # we configure which keys were intentionally unspecified (version) and will be dynamically populated at build time      |
+                                                          #                                                                                                                       |
+                                                          #                                                                                                                       |
+                                                          #                                                                                                                       |
+# │   ├── python <--------------------------------------- the source directory of the project (conventially named src/), which can include many packages. we only have..          |
+# │   │   ├── borscht <---------------------------------- the borscht package, where end users import in their source with import borscht ----------------------------------------+
+# │   │   │   ├── __init__.py <-------------------------- the borscht package's modules are initialized                                    to differentiate between the package manager's installation
+# │   │   │   ├── _borscht.cpython-315-darwin.so <------- extension module (note the .so file name)                                        and the source code import, the former is referred to as the
+# │   │   │   ├── _borscht.pyi                                                                                                             distribution package and the latter as the import package
+# │   │   │   ├── compile.py <--------------------------- pure module (plain old .py)                                                      a project is often synonymous with it's distribution package
+# │   │   │   ├── engine.py                                                                                                                see: https://packaging.python.org/en/latest/discussions/distribution-package-vs-import-package/
 # │   │   │   ├── func.py
 # │   │   │   ├── kernels
 # │   │   │   ├── linalg.py
 # │   │   │   ├── nn.py
 # │   │   │   ├── ops.py
-# │   │   │   ├── optim.py
+# │   │   │   ├── optim.py                                
 # │   │   │   ├── py.typed
-# │   │   │   ├── tensor_managed.py <-------------------- pure module
-# │   │   │   ├── tensor_nativecpu.py
-# │   │   │   ├── tensor_nativegpu.py
-# │   │   │   └── tensor.py
-# │   │   └── tests
-# │   │       ├── __pycache__
-# │   │       └── test_tensor_managed.py
-# │   ├── rust
-# │   │   ├── ...
+# │   │   │   ├── tensor_managed.py <-------------------- When you run tensor_managed.py file as a script with uv run tensor_managed.pyh
+# │   │   │   ├── tensor_nativecpu.py                     the _gemm(a,b,n,k,m) routine is imported from the _borscht.cpython-315-darwin.so extension module
+# │   │   │   ├── tensor_nativegpu.py                     and executed *directly* on the physical machine
+# │   │   │   └── tensor.py                               How does this work? ----------------------------------------------------------------------------+
+# │   │   └── tests                                       -> Enter the CPython API                                                                        |
+# │   │       ├── __pycache__                                                                                                                             |
+# │   │       └── test_tensor_managed.py                                                                                                                  |
+# │   ├── rust                                                                                                                                            |
+# │   │   ├── ...                                                                                                                                         |
+                                  #                                                                                                                       |
+[build-system]                    #                                                                                                                       |
+requires = ["maturin>=1.14,<2.0"] # maturin is our build backend that compiles native rust source into cpython extension modules via pyo3                 |
+build-backend = "maturin"         # see: https://docs.python.org/3/tutorial/modules.html                                                                  |
+                                  # see: https://pyo3.rs/v0.30.1/ and http://maturin.rs/                                                                  |
+                                  # see Cargo.toml for the native's configuration manifest                                                                |
+                                  #                                                                                                                       |
+[tool.maturin]                    # maturin supports multiple python/rust project layouts depending on the use-case                                       |
+python-source = "python"          # we configure python-source because we are not simply wrapping a 100% rust source with python                          |
+module-name = "borscht._borscht"  # we configure module-name, importing rust source as a submodule -------------------------------------------------------+
+exclude = [                       # see: https://www.maturin.rs/project_layout.html#mixed-rustpython-project
+    "**/__pycache__",             # see: https://www.maturin.rs/project_layout.html#import-rust-as-a-submodule-of-your-project
+    "**/*.pyc",
+    "**/*.pyo"
+]
 
-[project]
-name = "borscht"                                    # it's delicious! the name field is borscht, so end users can install with pip install borscht or uv add borscht
-requires-python = ">=3.15"                          # released October 9th 2026
-dynamic = ["version"]                               # we configure which keys were intentionally unspecified (version)
-                                                    # so that the maturin build backend automagically fills in at build time *from* Cargo.toml's version field
-                                                    # see: https://packaging.python.org/en/latest/specifications/pyproject-toml/#dynamic
-                                                    # see: https://www.maturin.rs/metadata.html#dynamic-metadata
-                                                    # see: https://doc.rust-lang.org/cargo/reference/manifest.html#the-version-field
+[tool.uv]                                                                                      # we configure uv's cache-keys manually, so that for development and testing with editable install of borscht,
+cache-keys = [{ file = "pyproject.toml" }, { file = "Cargo.toml" }, { file = "rust/**/*.rs" }] # uv will rebuild cpython extension modules automatically since [build-system] is configured with maturin
+                                                                                               # this avoids manually re-compling the native extension module with `maturin develop` anytime the rust source is modified
+                                                                                               # see: https://docs.astral.sh/uv/concepts/cache/#dynamic-metadata
+extra-build-variables = { borscht = { CARGO = ".cargo/maturin-cargo" } }                       # we configure the cargo that maturin runs to be .cargo/maturin-cargo, which compiles through `cargo oxide build`,
+                                                                                               # so that the #[kernel]s in rust/kernelsgpu.rs are compiled to PTX and embedded in the extension module (see that file)
+                                                                                               # see: https://docs.astral.sh/uv/reference/settings/#extra-build-variables
+
+
+
+
+
+
+
+
+
+
+# All programming languages are domain-specific languages in some sense, and Python was no exception to the rule.
+# Python started out as a "scripting" language primarily meant for "glue" code.
+# One of the primary use cases you want for a scripting language (often implemented by an interpreter) is to be able to
+#   1. extend the interpreter with accelerated code for performance critical areas
+#   2. embed the interpreter into native code
+
+    # 1. Extending the Interpreter
+    # The first use case of extending the interpreter is effectively all deep learning frameworks (a Python veneer over natively-accelerated code),
+    # but was even true for the CPython implementation long before any deep learning frameworks entered the scene.
+    # For instance, a lot of CPython's stdlib implementation is in pure Python (for the usual self-hosted reasons),
+    # but the mission critical modules such as json, pickle, and decimal are implemented in C/C++.
+    # This is because, depending on the workload, native code is generally 10x, 20x, 50x times faster than it's virtual counterpart.
+    # Of course, for the purposes of numpy, torch, jax and friends, this first use case is the primary one.
+
+    # 2. Embedding the Interpreter
+    # The second use case of embedding the interpeter appears when a performance-critical system such as a
+    # game engine wants to enable user-authored plugins without the user having to write native code
+    # Or perhaps imagine rocket software written in C++ wants astronauts to be able to write scripts more productively in Python.
+
+    # Both the extension and embeding of the CPython interpreter has been possible since the early '90s
+    # thanks to what is known as the **C API** https://docs.python.org/3/extending/index.html#guides-for-intermediate-topics
+    # Note that is only possible with the *CPython* interpreter. This is *not* a feature of *the* Python language itself
+        # Moreover, both use cases of extension and embedding is *different* from simply *calling* C *from* Python.
+        # You can do the latter using Python's ctypes or cffi modules in the stdlib,
+        # which would better preserve the portability of code across Python implementations[1].
+
+    # There is a tutorial: https://docs.python.org/3/extending/first-extension-module.html#first-extension-module
+    #      and a reference manual: https://docs.python.org/3/c-api/index.html#c-api-index
+
+    # We will briefly cover how to manually write a C extension module similar to the tutorial,
+    # which can be automated by third-party tools such as pybind/nanobind and pyo3 for C++ and Rust respectively.
+    # pytorch and jax in fact use the former, whereas with borscht we will be using the latter.
+
+
+
+
+
+
+
+
+
+
+
 
 [dependency-groups]                                 # borscht uses numpy and torch as oracles. see chapter (todo).
 dev = [
@@ -99,102 +168,3 @@ testpaths = ["python/tests"]                        # we configure the list of d
                                                     # we set this to python/tests (maturin does by default),
                                                     # presumably because Cargo uses top-level tests/ for integration
                                                     # see: https://docs.pytest.org/en/stable/reference/reference.html#confval-testpaths
-
-
-# borscht has a mixed source of Python, Rust, and CUDA, coloquially quipped as "the three language problem"[0].
-# Python for productivity, Rust for performance on the CPU, and CUDA for performance on GPU.
-# Let us first explain how Python and Rust interop with one another.
-
-# All programming languages are domain-specific languages in some sense, and Python was no exception to the rule.
-# Python started out as a "scripting" language primarily meant for "glue" code.
-# One of the primary use cases you want for a scripting language (often implemented by an interpreter) is to be able to
-# 1. extend the interpreter with accelerated code for performance critical areas
-# 2. embed the interpreter into native code
-
-# The first use case of extending the interpreter is effectively all deep learning frameworks (a Python veneer over natively-accelerated code),
-# but was even true for the CPython implementation long before any deep learning frameworks entered the scene.
-# For instance, a lot of CPython's stdlib implementation is in pure Python (for the usual self-hosted reasons),
-# but the mission critical modules such as json, pickle, and decimal are implemented in C/C++.
-# This is because, depending on the workload, native code is generally* 10x, 20x, 50x times faster than it's virtual counterpart.
-# For sticklers, pay attention to the use of the qualifier in the preceding sentence.
-# Of course, for the purposes of numpy, torch, jax and friends, this first use case is the primary one.
-
-# The second use case of embedding the interpeter appears when a performance-critical system such as a
-# game engine wants to enable user-authored plugins without the user having to write native code
-# Or perhaps imagine rocket software written in C++ wants astronauts to be able to write scripts more productively in Python.
-
-# Both the extension and embeding of the CPython interpreter has been possible since the early '90s thanks to what is known as the C API.
-# Note that is only possible with the *CPython* interpreter. This is *not* a feature of *the* Python language itself
-# There is a user guide: https://docs.python.org/3/extending/index.html#extending-index
-#      and a reference manual: https://docs.python.org/3/c-api/index.html#c-api-index
-# Moreover, both use cases of extension and embedding is *different* from simply *calling* C *from* Python.
-# You can do the latter using Python's ctypes or cffi modules in the stdlib,
-# which would better preserve the portability of code across Python implementations[1].
-
-# CPython extension module 🎯 wed nov 4
-# https://docs.python.org/3/extending/first-extension-module.html#first-extension-module
-
-[build-system]
-requires = ["maturin>=1.14,<2.0"] # maturin is our build backend that compiles native rust source into cpython extension modules via pyo3
-build-backend = "maturin"         # see: https://docs.python.org/3/tutorial/modules.html
-                                  # see: https://pyo3.rs/v0.30.1/ and http://maturin.rs/
-                                  # see Cargo.toml for the native's configuration manifest
-
-[tool.maturin]                    # maturin supports multiple python/rust project layouts depending on the use-case
-python-source = "python"          # we configure python-source because we are not simply wrapping a 100% rust source with python
-module-name = "borscht._borscht"  # we configure module-name, importing rust source as a submodule
-exclude = [                       # see: https://www.maturin.rs/project_layout.html#mixed-rustpython-project
-    "**/__pycache__",             # see: https://www.maturin.rs/project_layout.html#import-rust-as-a-submodule-of-your-project
-    "**/*.pyc",
-    "**/*.pyo"
-]
-
-
-
-
-
-# **********************************************************************************************************************
-#                                               borscht (Literary Source)
-# <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 4. Accelerate++ Tensor -->
-#             tensor_managed.py                          3A. tensor_nativecpu.py                 4A. tensor_nativegpu.py
-#                                                        3B. >pyproject.toml</Cargo.toml/lib.rs  4B. Cargo.toml/lib.rs
-#                                                        3C. kernelscpu.rs                       4C. kernelsgpu.rs
-#                                                                                                      utils.rs
-#                                                                                                      host.rs
-#                                                                                                      device.rs
-# **********************************************************************************************************************
-#                                                0. Python's Module and Packaging System
-#                                                1. From Managed Python to Native C
-#                                                2. From Managed Python to Native Rust <-- HERE
-
-# For CPU accelerated code, borscht uses the Rust programming language rather than C/C++,
-# while still maintaining the Python veneer for user productivity.
-# This is possible *because* the Rust language has a feature that supports Foreign Function Interface (FFI) with the keyword extern
-# — In short, FFI is a way for a programming language A to define functions and enable programming language B to call them
-#   by specifying a specific Application Binary Interface (ABI) which affects the format of the compiled assembly code.
-#   In particular, we would specifcy the "C" ABI chosen by the dominant compiler *for* the current target
-
-# [unsafe(no_mangle)]
-# pub extern "C" fn call_from_c() {
-#     println!("Just called a Rust function from C!");
-# }
-# book: https://rust-book.cs.brown.edu/ch20-01-unsafe-rust.html#calling-rust-functions-from-other-languages
-# rustonomicon: https://doc.rust-lang.org/nomicon/ffi.html#ffi-and-unwinding
-# reference: https://doc.rust-lang.org/reference/items/external-blocks.html#abi
-# 
-
-# For any performance critical borscht code, we can write Rust code with externs,
-# but ... (pyo3 and maturin) 🎯 wed nov 4
-[tool.uv] # we configure uv's cache-keys manually, so that for development and testing with editable install of borscht,
-cache-keys = [{ file = "pyproject.toml" }, { file = "Cargo.toml" }, { file = "rust/**/*.rs" }]
-# uv will rebuild cpython extension modules automatically since [build-system] is configured with maturin
-# this avoids manually re-compling the native extension module with `maturin develop` anytime the rust source is modified
-# see: https://docs.astral.sh/uv/concepts/cache/#dynamic-metadata
-
-# + ===================== +
-# | From Rus to CUDA Rust |
-# + ===================== +
-extra-build-variables = { borscht = { CARGO = ".cargo/maturin-cargo" } }
-# we configure the cargo that maturin runs to be .cargo/maturin-cargo, which compiles through `cargo oxide build`,
-# so that the #[kernel]s in rust/kernelsgpu.rs are compiled to PTX and embedded in the extension module (see that file)
-# see: https://docs.astral.sh/uv/reference/settings/#extra-build-variables

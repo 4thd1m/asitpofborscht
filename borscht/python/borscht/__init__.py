@@ -45,7 +45,7 @@
 #                                  POST TRAINER
 
 # Welcome to the teaching deep learning framework borscht, a hackable subset of pytorch.
-# We continue the hacker's spirit that lives in teaching systems such as
+# We continue the hacker's spirit that lives in teaching systems written from scratch such as
 # MIT's teaching operating system xv6[0], Cornell's educational compiler IR bril[1], and Berkeley's educational core sodor[2]
 
 # borscht's source is heavily commented following Knuth's literate programming[3] philosophy
@@ -209,19 +209,3 @@ from ._borscht import * # this underscore follows the naming convention of nativ
 __doc__ = _borscht.__doc__
 if hasattr(_borscht, "__all__"):
     __all__ = _borscht.__all__
-
-# One question you may be asking is how does one decide to write framework code in Python vs in Rust?
-# When we say "framework code", we are referring to all code that runs on the CPU unrelated to the code that runs on the GPU
-# To answer that question, head on over to tensor_managed.py, the primary module of borscht
-
-
-# 🎨 DESIGN CHOICE (DEEP vs SHALLOW embedding)
-# in borscht/pt1/hips-autograd, AD is implemented via operator overloading and tape
-# in jax/pt2, AD is implemented via source transformation
-# see: Uwe's `dco` vs `dcr`
-
-# scaffold ch.4.1 automatic difefrentiation
-# extend Lab 7: Custom Autograd Backwards for VLA
-# def backwards(self):
-    # self.grad = Tensor()
-    # raise NotImplementedError("")

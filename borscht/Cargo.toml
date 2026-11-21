@@ -1,13 +1,16 @@
-#                                                          ,,                                                                                                                                                        
-#                       db                               `7MM                          mm               MMP""MM""YMM                                                                                                 
-#                      ;MM:                                MM                          MM               P'   MM   `7                                                                                                 
-#  pd""b.             ,V^MM.    ,p6"bo   ,p6"bo   .gP"Ya   MM  .gP"Ya `7Mb,od8 ,6"Yb.mmMMmm .gP"Ya           MM  .gP"Ya `7MMpMMMb.  ,pP"Ybd  ,pW"Wq.`7Mb,od8                                                         
-# (O)  `8b           ,M  `MM   6M'  OO  6M'  OO  ,M'   Yb  MM ,M'   Yb  MM' "'8)   MM  MM  ,M'   Yb          MM ,M'   Yb  MM    MM  8I   `" 6W'   `Wb MM' "'                                                         
-#      ,89           AbmmmqMA  8M       8M       8M""""""  MM 8M""""""  MM     ,pm9MM  MM  8M""""""          MM 8M""""""  MM    MM  `YMMMa. 8M     M8 MM                                                             
-#    ""Yb. ,,       A'     VML YM.    , YM.    , YM.    ,  MM YM.    ,  MM    8M   MM  MM  YM.    ,          MM YM.    ,  MM    MM  L.   I8 YA.   ,A9 MM                                                             
-#       88 db     .AMA.   .AMMA.YMbmd'   YMbmd'   `Mbmmd'.JMML.`Mbmmd'.JMML.  `Moo9^Yo.`Mbmo`Mbmmd'        .JMML.`Mbmmd'.JMML  JMML.M9mmmP'  `Ybmd9'.JMML.                                                           
-# (O)  .M'
-#  bmmmd'   In File 3B pyproject.toml we configured the manifest for the Python package. We now configure the manifest for the Rust package.
+#                                                          ,,
+#                       db                               `7MM                          mm               MMP""MM""YMM
+#                      ;MM:                                MM                          MM               P'   MM   `7
+#  pd""b.             ,V^MM.    ,p6"bo   ,p6"bo   .gP"Ya   MM  .gP"Ya `7Mb,od8 ,6"Yb.mmMMmm .gP"Ya           MM  .gP"Ya `7MMpMMMb.  ,pP"Ybd  ,pW"Wq.`7Mb,od8
+# (O)  `8b           ,M  `MM   6M'  OO  6M'  OO  ,M'   Yb  MM ,M'   Yb  MM' "'8)   MM  MM  ,M'   Yb          MM ,M'   Yb  MM    MM  8I   `" 6W'   `Wb MM' "'
+#      ,89           AbmmmqMA  8M       8M       8M""""""  MM 8M""""""  MM     ,pm9MM  MM  8M""""""          MM 8M""""""  MM    MM  `YMMMa. 8M     M8 MM
+#    ""Yb. ,,       A'     VML YM.    , YM.    , YM.    ,  MM YM.    ,  MM    8M   MM  MM  YM.    ,          MM YM.    ,  MM    MM  L.   I8 YA.   ,A9 MM
+#       88 db     .AMA.   .AMMA.YMbmd'   YMbmd'   `Mbmmd'.JMML.`Mbmmd'.JMML.  `Moo9^Yo.`Mbmo`Mbmmd'        .JMML.`Mbmmd'.JMML  JMML.M9mmmP'  `Ybmd9'.JMML.
+# (O)  .M' After reading File 1. Hello Borscht (__init__.py), you have a 50,000 ft view of borscht's internals.
+#  bmmmd'  After reading File 2. Hello Tensor (tensor_managed.py), you understand the core essence of the Tensor concept and it's primary algorithm of matrix multiplication
+#          After reading File 3A. Accelerate Tensor (tensor_nativecpu.py), you understand why deep learning frameworks accelerate their algorithms using native languages that execute on physical machines
+#          After reading File 3B. Accelerate Tensor (pyproject.toml), you understand how the Python package can implement extension modules via CPython API
+#          We finish with File 3B. Accelrate Tensor (Cargo.toml), to understand how the Rust package implements an extension module with Rust FFI
 # **********************************************************************************************************************
 #                                               borscht (Literary Source)
 # <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 4. Accelerate++ Tensor -->
@@ -41,10 +44,8 @@ crate-type = ["cdylib"] # The crate types to generate.
 [dependencies]          
 pyo3 = "0.29.0"    # The pyo3 crate, which we will learn more about it in the next file of lib.rs
                    # That is all we need to configure for borscht's native acceleration on CPU (File 3. Accelerate Tensor)
-                   # Relatively simple compared to the Python package's pyproject.toml manifest! This is because the Rust package is 
+                   # Relatively simple compared to the Python package's pyproject.toml manifest! This is because the Rust package is not aware that it's being used as a Python extension module via CPython API!
                    # The remainder of dependencies are there for borscht's native  acceleratio non GPU (File 4. Accelerate++Tensor)
-
-
 
 
 

@@ -23,8 +23,8 @@ Deep neural networks you train throughout the SITP textbook, which are located i
 - Model 11: Post-trained Transformer (nanochat)
 - Model 12: Post-trained Transformer (nanoreasoner)
 
-After Model 12, you might be interested in the first research blog series
-From SITP to SOTA [FS2S Part 1 (ARCH/OPT): From modded-nanogpt to dsv3 and k3]().
+<!-- After Model 12, you might be interested in the first research blog series
+From SITP to SOTA [FS2S Part 1 (ARCH/OPT): From modded-nanogpt to dsv3 and k3](). -->
 
 ![](./sitp/src/assets/gpu_banner.webp)
 ## Deep Learning Framework
@@ -38,16 +38,16 @@ cuda oxide doctor
 cuda oxide run
 ``` -->
 
-- File 1. Hello borscht [(`__init__.py`)](./borscht/python/borscht/__init__.py)
-- File 2. Hello Tensor [(`tensor_managed.py`)](./borscht/python/borscht/tensor_managed.py)
+- File 1. Hello borscht ([`__init__.py`](./borscht/python/borscht/__init__.py))
+- File 2. Hello Tensor ([`tensor_managed.py`)](./borscht/python/borscht/tensor_managed.py))
 - File 3. Accelerate Tensor
-  - File 3A: From Analytical Big-O to Empirical Time [(`tensor_nativecpu.py`)](./borscht/python/borscht/tensor_nativecpu.py)
-  - File 3B: From Managed Python to Native Rust [(`pyproject.toml/Cargo.toml`)](./borscht/pyproject.toml)
-  - File 3C: From Rust to RISC-V [(`kernelscpu.rs`)](./borscht/rust/kernelscpu.rs)
+  - File 3A: From Analytical Big-O to Empirical Time ([`tensor_nativecpu.py`](./borscht/python/borscht/tensor_nativecpu.py))
+  - File 3B: From Managed Python to Native Rust (CPython API: [`pyproject.toml`](./borscht/pyproject.toml) Rust FFI: [`Cargo.toml`](./borscht/Cargo.toml))
+  - File 3C: From Rust to RISC-V (PyO3: [`lib.rs`](./borscht/rust/lib.rs), [`kernelscpu.rs`](./borscht/rust/kernelscpu/mod.rs))
 - File 4. Accelerate++ Tensor
-  - File 4A: From Rust to CUDA Rust:
-  - File 4B: Accelerate Tensor on GPU: [`python/borscht/tensor_nativegpu.py`](), [`rust/kernelsgpu.rs`]()
-- File 5. Abstracting Acceleration with `Dispatcher`, `Storage`, `Allocator`: [`borscht/python/borscht/tensor.py`](./borscht/python/borscht/tensor.py)
+  - File 4A: From Rust to CUDA Rust ([`tensor_nativegpu.py`](./borscht/python/borscht/tensor_nativegpu.py))
+  - File 4B: Accelerate Tensor on GPU [`kernelsgpu.rs`](./borscht/rust/kernelsgpu/mod.rs)
+- File 5. Abstracting Acceleration with `Dispatcher`, `Storage`, `Allocator`: [`tensor.py`](./borscht/python/borscht/tensor.py)
 - File 6. Adding Forward Ops
 - File 7. Hello Autograd
 - File 8. Adding Backward Ops
@@ -56,9 +56,9 @@ cuda oxide run
 - File 11. Hello Tensor Compiler
 - File 12. Hello Inference Engine
 
-After Model 12, you might be interested in the second and third research blog series From SITP to SOTA
+<!-- After Model 12, you might be interested in the second and third research blog series From SITP to SOTA
 - [FS2S Part 1 (SYS): From Hopper to Blackwell and Rubin]()
-- [FS2S Part 2 (DISTSYS): From FSDP to MP]()
+- [FS2S Part 2 (DISTSYS): From FSDP to MP]() -->
 
 ## License
 
