@@ -32,8 +32,9 @@ from borscht.tensor_managed import full, mm as mm_managed # Let us import the fu
 #                                                                                                      device.rs
 # **********************************************************************************************************************
 #                                              > 3A. tensor_nativecpu.py <
-#                                                 0. From Mathematics to Programming          <-- HERE
-#                                                 1. From Analytical Big-O to Empirical Rooflines
+#                                                 0. From Mathematics to Programming            <-- HERE
+#                                                 1. From Analytical Big-O to Empirical Time
+#                                                 2. From Virtual Machines to Physical Machines
 
 # If a mathematician or physicist didn't know about the internals of computers started using borscht.Tensors,
 # they could construct and read Tensors...
@@ -204,7 +205,8 @@ tensor([[29.6088, 29.6088],
 # **********************************************************************************************************************
 #                                              > 3A. tensor_nativecpu.py <
 #                                                 0. From Mathematics to Programming
-#                                                 1. From Virtual Big-O to Physical Rooflines <-- HERE
+#                                                 1. From Analytical Big-O to Empirical Time    <-- HERE
+#                                                 2. From Virtual Machines to Physical Machines
 # Since we programmers care about performance, and in this case, speed, we need a way of modeling the cost of a program with respect to time.
 # In the natural sciences, in order to model a physical process, experimental data must be collected and the underlying analytical formula (if there is one) must be inferred.
 # — In fact, that is the essence of machine learning and deep learning: they mechanize induction.
@@ -220,37 +222,69 @@ tensor([[29.6088, 29.6088],
     # of computation to turing machines von neumann model of computation
 
 def _main():
-    # Recall the running example from File 2. Hello Tensor (tensor_managed.py)..
-    A = full((2,3), 3.141592)
-    B = full((3,2), 3.141592)
-    C = mm_managed(A,B)
-    print(C)
-
     n = 256
     A, B = full((n, n), 1.0), full((n, n), 1.0)
 
     # Continuing down the route of classical algorithm analysis,
     # we would be led to an algorithm known as Strassen's Algorithm, with time complexity n -> n^2.7.,. lg()
+
+
+
+    
+
     # Instead of analytically analyzing the software algorithm's asymptotics to predict worst-case time *complexity*,
     #     we can empirically        use the hardware performance counters    to measure actual time
+    #                        T(n)
+    #                         ^               /                             .-'''''-.
+    #                         |  O(n^3)      /       / O(n^2.81)          .'    12   '.
+    #                         |             /      .'                    /      |      \ python: 400ms
+    #                         |           .'    .-'      ---------->    | 9     o--   3 |
+    #                         |        .-'   .-'                         \             / rust: 40ms
+    #                         |___..--'__..-'                             '.    6    .'
+    #                         +------------------------> n                  '-.....-'
 
-    time_virtually_managed_mm(A,B,n)
-    time_physically_native_mm(A,B,n)
+    # Running the file as a script (i.e uv run tensor_nativecpu.py) on your machine
+    t_virtual = time_virtual_mm(A,B,n) # baseline
+    print(f"{n}x{n} mm_managed: {t_virtual*1e3:.1f} ms")
 
-import time # We want empirically measure actual wall-clock time, *not* analytically analyzing an upper bound
-def time_virtually_managed_mm(A: Tensor, B: Tensor, n: int):
-    # matmul implemented by a managed language running on a virtual machine
+    # — while the *absolute* speed will vary depending on your hardware —
+    # What is the *relative speedup* of the Rust implementation with respect to the Python one? 2x, 5x, 10x, 20x, 50x?
+    # What explains this?
+    t_physical = time_native_mm(A,B,n)
+    print(f"{n}x{n} mm_managed: {t_physical*1e3:.1f} ms, speedup: {t_virtual / t_physical:.2f}x")
+    
+
+import time # We want to empirically measure actual wall-clock time, rather than analytically analyzing an upper bound
+def time_virtual_mm(A: Tensor, B: Tensor, n: int):
     t0 = time.perf_counter()
-    mm_managed(A, B)
+    _ = mm_managed(A, B) # ignore the output. we care about performance right now, not correctness
     t = time.perf_counter() - t0
-    print(f"{n}x{n} mm_managed: {t*1e3:.1f} ms, {2*n**3 / t / 1e9:.4f} GFLOP/s")
-
-def time_physically_native_mm(A: Tensor, B: Tensor, n: int):
-    # matmul implemented by a native language running on a physical machine
+    return t
+    
+def time_native_mm(A: Tensor, B: Tensor, n: int):
     t0 = time.perf_counter()
-    mm_native(A, B)
+    _ = mm_native(A, B) # matrix multiplication algorithm that is executed *directly* by your machine's physical processor 
     t = time.perf_counter() - t0
-    print(f"{n}x{n} mm_native: {t*1e3:.1f} ms, {2*n**3 / t / 1e9:.4f} GFLOP/s")
+    return t
+
+
+
+
+
+# **********************************************************************************************************************
+#                                               borscht (Literary Source)
+# <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 4. Accelerate++ Tensor -->
+#             tensor_managed.py                        > 3A. tensor_nativecpu.py <               4A. tensor_nativegpu.py
+#                                                        3B. pyproject.toml/Cargo.toml/lib.rs    4B. Cargo.toml/lib.rs
+#                                                        3C. kernelscpu.rs                       4C. kernelsgpu.rs
+#                                                                                                      utils.rs
+#                                                                                                      host.rs
+#                                                                                                      device.rs
+# **********************************************************************************************************************
+#                                              > 3A. tensor_nativecpu.py <
+#                                                 0. From Mathematics to Programming
+#                                                 1. From Analytical Big-O to Empirical Time
+#                                                 2. From Virtual Machines to Physical Machines <-- HERE
 
 
 
@@ -258,10 +292,10 @@ def time_physically_native_mm(A: Tensor, B: Tensor, n: int):
 
 # Here, we re-define the matrix multiplication algorithm from File 2. Hello Tensor (tensor_managed.py)
 #       with a native programming language so that the program can be executed directly on a physical processor
-# The only two lines that are noteworthy of your attention is L285 and L294-----------------------------------------------------
+# The only two lines that are noteworthy of your attention is L282 and L290
 
-def mm(A: Tensor, B: Tensor) -> Tensor:
-    # mm has the same definition from File 2..
+def mm(A: Tensor, B: Tensor) -> Tensor: # mm has the same definition from File 2..
+    # the same doctest..
     """Multiply the (n,k) matrix `A` with the (k,m) matrix `B` into a new (n,m) matrix.
 
     Examples:
@@ -275,22 +309,24 @@ def mm(A: Tensor, B: Tensor) -> Tensor:
         ...
         RuntimeError: A and B shapes cannot be multiplied (2x3 and 2x3)
     """
-    # preconditions for well-defined matrix multiplication
+    # the same preconditions for well-defined matrix multiplication..
     (nrows, p), (p2, mcols) = A.shape, B.shape
     if len(A.shape) != 2 or len(B.shape) != 2: raise RuntimeError("self must be a matrix" if len(A.shape) != 2 else "B must be a matrix")
     if p != p2: raise RuntimeError(f"A and B shapes cannot be multiplied ({nrows}x{p} and {p2}x{mcols})")
-    C = mm_native(A,B) # <--- mm is just a facade (i.e a wrapper) for mm_native
+    C = mm_native(A,B) # <--- but now we call mm_native! that is, mm is just a facade (i.e a wrapper) for mm_native
     return C
 
-from borscht._borscht import _gemm   # The _gemm(a,b,n,k,m) routine is implemented via Rust
-                                     # which we will implement for ourselves in File 3C
-                                     
-def mm_native(A: Tensor, B: Tensor) -> Tensor:
+from borscht._borscht import _gemm # in turn, mm_native will also be a facade for the _gemm(a,b,n,k,m) routine imported from the _borscht module implemented in Rust
+                                   # the module name is prepended with a leading underscore following PEP 8 see: https://peps.python.org/pep-0008/#package-and-module-names
+def mm_native(A: Tensor, B: Tensor) -> Tensor: # we now define mm_native
     (nrows, p), (p2, mcols) = A.shape, B.shape          # realias..
     C = full((nrows, mcols), 0.0)                 # construct output
     C.storage = _gemm(A.storage, B.storage, nrows, p, mcols) # <-- and in turn, mm_native is also a facade for _gemm
-    return C
+    return C                                                                #     where _gemm() takes the flat storages of A and B and produces the flat storage for C
 
-if __name__ == "__main__": _main()
-__all__ = ["Tensor", "full", "mm"] # Let us export the full() constructor and Tensor concept as-is from File 2. Hello Tensor
-                                              # as well as our natively accelerated mm(), a facade for mm_native() which in turn, is a facade for _gemm()
+if __name__ == "__main__": _main()            # Just running the file is used as a script
+__all__ = ["Tensor", "full", "mm"] # Exports for when the file is used as a module
+                                              # Here we maintain the same API as File 2. Hello Tensor (tensor_managed.py)
+                                              # and export mm rather than mm_native
+                                              # Now, before we implement _gemm(a,b,n,km) File 3C kernelcpu.rs to implement the matrix multiplication algorithm in Rust,
+                                              # we set up the mixed Python and Rust source in pyproject.toml, Cargo.toml and lib.rs
