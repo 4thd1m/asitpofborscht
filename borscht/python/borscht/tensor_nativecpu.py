@@ -28,7 +28,7 @@ from borscht.tensor_managed import full, mm as mm_managed # Let us import the fu
 #                                                                                                      device.rs
 # **********************************************************************************************************************
 #                                              > 3A. tensor_nativecpu.py <
-#                                                 0. From Mathematics to Programming            <-- HERE
+#                                                 0. From Mathematical Lambda Calculus to Programming Turing Machine
 #                                                 1. From Analytical Big-O to Empirical Time
 #                                                 2. From Virtual Machines to Physical Machines
 
@@ -120,18 +120,30 @@ tensor([[29.6088, 29.6088],
 #                                                                   C_buf[i*istridec + j*jstridec] = dot_product
 
 
-#   While the mathematicians have to come to terms with their ideals of  real numbers and real analysis not actually being so *real*
-#   and join the physicists and computer scientists in reality with floating point numerics, and numerical analysis (which we'll learn more about soon),
-#   the current Tensor data structure and matrix multiplication algorithm is satisfactory — They don't even need to worry about any striding nonsense!
-#                                                                                           Striding memory is so below the working mathematician!
+# While the mathematicians have to come to terms with their ideals of real numbers and real analysis not actually being so *real*
+# and join the physicists, computer scientists, and numerical analysts in reality with floating point numerics
+# the current Tensor data structure and matrix multiplication algorithm is satisfactory — They don't even need to worry about any striding nonsense!
+#                                                                                           Striding memory is so beneath the working mathematician!
+    # When we first learned the art of designing programs, we learned that the rules how procedure application became evaluated were similar to that of middle school algebra.
+    # That is, *substitution*. see Structure and Interpretation of Computer Programs Chapter 1.1.5 The Substitution Model for Procedure Application https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-10.html#%_sec_1.1.5
+    # This substitution model of computation is similar to the one that mathematicians and physicists have when an interpreter evaluates their program.
+
+    # As programmers, we know there is stateful memory. And so once our programs started using mutation,
+    # we refined our model of evaluation to that of the *environment* model where there was an environment of bindings which associated aliases to values.
+    # see Structure and Interpretation of Computer Programs Chapter 3.2 The Environment Model of Evaluation https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-21.html#%_sec_3.2
+
+    # The two models are similar to the two models of computation in theoretical computer science of Lambda Calculus and Turing Machines. Go take a theory of computation course!
 
 # While mathematics and computation have a close relationship where they concern themselves with
 # the same objects or the same mathema (μάθημα), which in greek literally means “that which is learnt”, “what one gets to know” and “these things.”
 # In the case of the Tensor data structure and it's matrix multiplication algorithm, mathematicians prioritize the *definitions* and the *proofs* of their properties.
-# They are not so much interested in their *evaluation* (except for perhaps, numerical analysts. Numerical analysts are more like our first cousins, while mathematicians second cousins),
-# **This is where programmers differ from our mathematical cousins, because we care about the evaluation of these objects.**
-# That is, in addition to caring about *correctness*  i.e did I get the right answer?
-#                   we also care about *performance*. i.e did I get the right answer cheaply*?
+
+
+    # They are not so much interested in their *evaluation*.
+
+    # **This is where programmers differ from our mathematical cousins, because we care about the evaluation of these objects.**
+    # That is, in addition to caring about *correctness*  i.e did I get the right answer?
+    #                   we also care about *performance*. i.e did I get the right answer cheaply*?
 
 #                   * we use cheaply here because performance is about the *cost* of inputs, to receive an output
 #                     where the cost can be running time, memory space, energy, bandwidth.
@@ -189,6 +201,10 @@ tensor([[29.6088, 29.6088],
 #                                                                                                                                           MM                                                                                                     
 #                                                                                                                                         .JMML.
 
+
+
+
+
 # **********************************************************************************************************************
 #                                               borscht (Literary Source)
 # <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 4. Accelerate++ Tensor -->
@@ -200,19 +216,43 @@ tensor([[29.6088, 29.6088],
 #                                                                                                      device.rs
 # **********************************************************************************************************************
 #                                              > 3A. tensor_nativecpu.py <
-#                                                 0. From Mathematics to Programming
+#                                                 0. From Mathematical Lambda Calculus to Programming Turing Machine
 #                                                 1. From Analytical Big-O to Empirical Time    <-- HERE
 #                                                 2. From Virtual Machines to Physical Machines
+
 # Since we programmers care about performance, and in this case, speed, we need a way of modeling the cost of a program with respect to time.
 # In the natural sciences, in order to model a physical process, experimental data must be collected and the underlying analytical formula (if there is one) must be inferred.
 # — In fact, that is the essence of machine learning and deep learning: they mechanize induction.
-# In contrast, with the artifical sciences like computation, we have *access* to the source code of our computational processes.
-# We can model the cost of our program (in this case the cost we care about is *time*)
-# by assigning an *idealized* cost to each operation, and simply adding up the costs of all operations in our program.
+# In contrast, with the artifical sciences like computer science, we have *access* to the source code of our computational processes.
+
+
+
+
 def _main(): # run the file as a script (i.e uv run tensor_nativecpu.py) on your machine
     n = 256
     A, B = full((n, n), 1.0), full((n, n), 1.0)
-    C = mm(A,B)
+
+    # Given that processes in the artificial sciences are not black box like the ones of the natural sciences,
+    # we can model the cost of our program (in this case the cost we care about is *time*)
+    # by assigning an *idealized* cost to each operation, and simply adding up the costs of all operations in our program.
+
+    # The code below is the inlined version of def mm(A: Tensor, B: Tensor) -> Tensor:
+    (nrows, p), (p2, mcols) = A.shape, B.shape
+    if len(A.shape) != 2 or len(B.shape) != 2: raise RuntimeError("self must be a matrix" if len(A.shape) != 2 else "B must be a matrix")
+    if p != p2: raise RuntimeError(f"A and B shapes cannot be multiplied ({nrows}x{p} and {p2}x{mcols})")
+    C = full((nrows, mcols), 0.0) # empty C
+    A_NP, B_PM, C_NM = A, B, C # alias input's A, B and output C with hungarian notation shape suffixes
+    (ijmp, kjmp), (k2jmp, jjmp), (istridec, jstridec) = A.stride, B.stride, C.stride
+    A_buf, B_buf, C_buf = A_NP.storage, B_PM.storage, C_NM.storage # alias their storage buffers
+    for i in range(nrows): # for each of A's n rows..
+        for j in range(mcols): # ..loop through of B's m cols..
+            dot_product = 0.0
+            for k in range(p):   # ..take their k-dimensional dot product A[(i,k)] + B[(k,j)]..
+                dot_product += A_buf[i*ijmp + k*kjmp] * B_buf[k*k2jmp + j*jjmp] # ..we map logical indices (i,k) and (k,j) to physical ones with strides
+            C_buf[i*istridec + j*jstridec] = dot_product # update C[(i,j)] (strided)..by flushing dot_product
+
+            # repeat for the rest of B's columns
+        # repeat for the rest of A's rows
 
     # TODO: big-O
     # we need to use a *cost model*.
@@ -251,7 +291,6 @@ def _main(): # run the file as a script (i.e uv run tensor_nativecpu.py) on your
 
     t_virtual = time_virtual_mm(A,B,n) # baseline
     print(f"{n}x{n} mm_managed: {t_virtual*1e3:.1f} ms")
-
 
     # Moreover, the first optimization we make to the standard matrix multiplication triple loop algorithm is
     # to simply change the implementation language from Python to Rust so that the code gets executed *directly* by a physical processor
