@@ -32,12 +32,8 @@ from borscht.tensor_managed import full, mm as mm_managed # Let us import the fu
 # **********************************************************************************************************************
 #                                              > 3A. tensor_nativecpu.py <
 #                                                 0. From Stateless Substitution to Stateful Environments
-#                                                 1. From Asymptotic Analysis of Growthto Empirical Measurement of Time <-- HERE
-#                                                 2. Optimization 1: From Virtual Machines to Physical Machines
-#                                              Particularly with File 3A. Accelerate Tensor (tensor_native_cpu.py), TODO: didn't define inner contraction
-#                                              we will walk through the two shifts in mindset when viewing Tensor's and their inner contractions
-#                                                1. From the Mathematician to Programmer (§0)
-#                                                2. From the Programmer to Performance Engineer (§1, §2)
+#                                                 1. Analysis 1: From Asymptotic Analysis of Growth to Empirical Measurement of Time <-- HERE
+#                                                 2. Three Language Problem: From Virtual Machines to Physical Machines
 
 # If a mathematician or physicist didn't know about the internals of computers started using borscht.Tensors,
 # they could construct and read Tensors...
@@ -132,12 +128,15 @@ tensor([[29.6088, 29.6088],
 # the current Tensor data structure and matrix multiplication algorithm is satisfactory — They don't even need to worry about any striding nonsense!
 #                                                                                           Striding memory is so beneath the working mathematician!
     # When we first learned the art of designing programs, we learned that the rules how procedure application became evaluated were similar to that of middle school algebra.
-    # That is, *substitution*. see Structure and Interpretation of Computer Programs Chapter 1.1.5 The Substitution Model for Procedure Application https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-10.html#%_sec_1.1.5
+    # That is, *substitution*.
     # This substitution model of computation is similar to the one that mathematicians and physicists have when an interpreter evaluates their program.
+    # see Structure and Interpretation of Computer Programs Chapter 1.1.5 The Substitution Model for Procedure Application
+    #     https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-10.html#%_sec_1.1.5
 
     # As programmers, we know there is stateful memory. And so once our programs started using mutation,
     # we refined our model of evaluation to that of the *environment* model where there was an environment of bindings which associated aliases to values.
-    # see Structure and Interpretation of Computer Programs Chapter 3.2 The Environment Model of Evaluation https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-21.html#%_sec_3.2
+    # see Structure and Interpretation of Computer Programs Chapter 3.2 The Environment Model of Evaluation
+    #     https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book-Z-H-21.html#%_sec_3.2
 
     # The two models are similar to the two models of computation in theoretical computer science of Lambda Calculus and Turing Machines. Go take a theory of computation course!
 

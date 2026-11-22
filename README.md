@@ -38,6 +38,7 @@ cuda oxide doctor
 cuda oxide run
 ``` -->
 
+**From Arrays to NDArrays (`borscht.Tensor`)**
 - File 1. Hello borscht ([`__init__.py`](./borscht/python/borscht/__init__.py))
 - File 2. Hello Tensor ([`tensor_managed.py`)](./borscht/python/borscht/tensor_managed.py))
 - File 3. Accelerate Tensor
@@ -51,15 +52,37 @@ cuda oxide run
 - File 5. Accelerate++ Tensor
   - File 5A: Three Language Problem: From Latency-Oriented to Throughput-Oriented Machines ([`tensor_nativegpu.py`](./borscht/python/borscht/tensor_nativegpu.py))
   - File 5B: Optimization (GEMM4): From Rust to CUDA Rust [`kernelsgpu.rs`](./borscht/rust/kernelsgpu/mod.rs)
+- File 6. Abstracting Acceleration
+  - File 6A: `Storage` [`tensor.py`](./borscht/python/borscht/tensor.py)
+  - File 6B: `Dispatcher`
+  - File 6C: `Allocator`
+  - File 6D: `TensorIterator`
+- File ?? From `borscht.Tensor` to `torch.Tensor`
 
-<!-- - File 5. Abstracting Acceleration with `Dispatcher`, `Storage`, `Allocator`: [`tensor.py`](./borscht/python/borscht/tensor.py)
-- File 6. Adding Forward Ops
+**From Numerical Linear Algebra Library to Deep Learning Framework (`borscht.nn`, `borscht.Tensor.backwards()`, `borscht.optim`)**
 - File 7. Hello Autograd
-- File 8. Adding Backward Ops
-- File 9. From Volta to Ampere (sm80)
-- File 10. From Ampere (sm80) to Hopper (sm90)
-- File 11. Hello Tensor Compiler
-- File 12. Hello Inference Engine -->
+- File 8. Adding Forward Ops
+- File 9. Adding Backward Ops
+- File 10. Cross Entropy
+- File 11. From `borscht.nn` to [`torch.nn`]()
+- File 12. From `borscht.optim` to [`torch.optim`]()
+- File 13. From `borscht.autograd` to [`torch.autograd`]()
+
+**From CPU Kernels to GPU Kernels (`beets`)**
+- File ??. From Volta (sm70) to Ampere (sm80)
+- File ??. From Ampere (sm80) to Hopper (sm90)
+- File ??. From Hopper (sm90) to Blackwell (sm100)
+- File ??. From GPUs to TPUs
+- File ??. From `beets` to [`quack`](https://github.com/Dao-AILab/quack) and [`flash-attention`](https://github.com/dao-ailab/flash-attention)
+
+**From Interpreters to Compilers (`bt2`)**
+- File ??. Hello Tensor Compiler
+- File ??. From `bortsch bynamo` and `borscht binductor` to [`torch dynamo`](https://github.com/pytorch/pytorch/tree/main/torch/_dynamo) and [`torch inductor`](https://github.com/pytorch/pytorch/tree/main/torch/_inductor)
+
+ **Runtimes (`bllm`)**
+- File ??. Hello Inference Engine
+- File ??. From `bllm` to [`vllm`](https://github.com/vllm-project/vllm)
+
 
 <!-- After Model 12, you might be interested in the second and third research blog series From SITP to SOTA
 - [FS2S Part 1 (SYS): From Hopper to Blackwell and Rubin]()
