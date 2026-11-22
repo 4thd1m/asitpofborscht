@@ -28,9 +28,14 @@ from borscht.tensor_managed import full, mm as mm_managed # Let us import the fu
 #                                                                                                      device.rs
 # **********************************************************************************************************************
 #                                              > 3A. tensor_nativecpu.py <
-#                                                 0. From Mathematical Lambda Calculus to Programming Turing Machine
-#                                                 1. From Analytical Big-O to Empirical Time
-#                                                 2. From Virtual Machines to Physical Machines
+#                                                 0. From Stateless Substitution to Stateful Environments
+#                                                 1. From Analytically Analyzing Growth to Empirically Measuring Time <-- HERE
+#                                                 2. From Virtual RAM to Physical Machine Memory Hierarchies
+
+#                                              Particularly with File 3A. Accelerate Tensor (tensor_native_cpu.py), TODO: didn't define inner contraction
+#                                              we will walk through the two shifts in mindset when viewing Tensor's and their inner contractions
+#                                                1. From the Mathematician to Programmer (§0)
+#                                                2. From the Programmer to Performance Engineer (§1, §2)
 
 # If a mathematician or physicist didn't know about the internals of computers started using borscht.Tensors,
 # they could construct and read Tensors...
@@ -142,7 +147,7 @@ tensor([[29.6088, 29.6088],
     # They are not so much interested in their *evaluation*.
 
     # **This is where programmers differ from our mathematical cousins, because we care about the evaluation of these objects.**
-    # That is, in addition to caring about *correctness*  i.e did I get the right answer?
+    #   meaning, in addition to caring about *correctness*  i.e did I get the right answer?
     #                   we also care about *performance*. i.e did I get the right answer cheaply*?
 
 #                   * we use cheaply here because performance is about the *cost* of inputs, to receive an output
@@ -216,27 +221,29 @@ tensor([[29.6088, 29.6088],
 #                                                                                                      device.rs
 # **********************************************************************************************************************
 #                                              > 3A. tensor_nativecpu.py <
-#                                                 0. From Mathematical Lambda Calculus to Programming Turing Machine
-#                                                 1. From Analytical Big-O to Empirical Time    <-- HERE
-#                                                 2. From Virtual Machines to Physical Machines
-
-# Since we programmers care about performance, and in this case, speed, we need a way of modeling the cost of a program with respect to time.
-# In the natural sciences, in order to model a physical process, experimental data must be collected and the underlying analytical formula (if there is one) must be inferred.
-# — In fact, that is the essence of machine learning and deep learning: they mechanize induction.
-# In contrast, with the artifical sciences like computer science, we have *access* to the source code of our computational processes.
-
-
+#                                                 0. From Stateless Substitution to Stateful Environments
+#                                                 1. From Analytically Analyzing Growth to Empirically Measuring Time <-- HERE
+#                                                 2. From Virtual RAM to Physical Machine Memory Hierarchies
 
 
 def _main(): # run the file as a script (i.e uv run tensor_nativecpu.py) on your machine
     n = 256
     A, B = full((n, n), 1.0), full((n, n), 1.0)
+    C = mm(A, B)
+    # Since we programmers care about performance, and in this case, speed, how much time did our matrix multiplication algorithm take?
+    # One way is to measure 
 
-    # Given that processes in the artificial sciences are not black box like the ones of the natural sciences,
-    # we can model the cost of our program (in this case the cost we care about is *time*)
-    # by assigning an *idealized* cost to each operation, and simply adding up the costs of all operations in our program.
 
-    # The code below is the inlined version of def mm(A: Tensor, B: Tensor) -> Tensor:
+
+
+    # Since we programmers care about performance, and in this case, speed, we need a way of modeling the cost of a program with respect to time.
+    # In the natural sciences, in order to model a physical process, experimental data must be collected and the underlying analytical formula (if there is one) must be inferred.
+    # — In fact, that is the essence of machine learning and deep learning: they mechanize induction.
+    # In contrast, with the artifical sciences like computer science, we have *access* to the source code of our computational processes.
+
+    # Given that processes in the artificial sciences are not black box like the ones of the natural sciences
+    # (we have access to the source!) we can *model* and *predict* the cost of our program (in this case the cost we care about is *time*)
+    # Consider the code of the inlined def mm(A: Tensor, B: Tensor) -> Tensor:
     (nrows, p), (p2, mcols) = A.shape, B.shape
     if len(A.shape) != 2 or len(B.shape) != 2: raise RuntimeError("self must be a matrix" if len(A.shape) != 2 else "B must be a matrix")
     if p != p2: raise RuntimeError(f"A and B shapes cannot be multiplied ({nrows}x{p} and {p2}x{mcols})")
@@ -254,18 +261,17 @@ def _main(): # run the file as a script (i.e uv run tensor_nativecpu.py) on your
             # repeat for the rest of B's columns
         # repeat for the rest of A's rows
 
-    # TODO: big-O
-    # we need to use a *cost model*.
-    # The first cost model we use 
+    # Before we can analyze the algorithm, we need a model of the underlying machine that will execute the program.
+    # Most algorithm analysis follows a model similar to the environment model of computation known as the RAM model.
+    # 
 
     # Is this fast?
     # According to Big-O, the time complexity is n -> n^3.
-    # The transition from mathematics to programming is the transition from lambda calculus' substitution model
-    # of computation to turing machines von neumann model of computation
-
+    
     # TODO: can we do better than n^3? look in the classic CLRS. we find Strassen
     # Continuing down the route of classical algorithm analysis,
     # we would be led to an algorithm known as Strassen's Algorithm, with time complexity n -> n^2.7.,. lg()
+    
 
 
 
@@ -322,9 +328,9 @@ def _main(): # run the file as a script (i.e uv run tensor_nativecpu.py) on your
 #                                                                                                      device.rs
 # **********************************************************************************************************************
 #                                              > 3A. tensor_nativecpu.py <
-#                                                 0. From Mathematics to Programming
-#                                                 1. From Analytical Big-O to Empirical Time
-#                                                 2. From Virtual Machines to Physical Machines <-- HERE
+#                                                 0. From Stateless Substitution to Stateful Environments
+#                                                 1. From Analytically Analyzing Growth to Empirically Measuring Time <-- HERE
+#                                                 2. From Virtual RAM to Physical Machine Memory Hierarchies
 
 # As already hinted by the different names of mm_managed and mm_native, besides Python and Rust offering different language *features* to programmers
 # (for instance, they provide different features with respect to mutation and asynchrony), they are also differentiated by their *evaluation*,
