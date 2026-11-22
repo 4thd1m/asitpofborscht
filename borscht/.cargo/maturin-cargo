@@ -6,10 +6,17 @@
 # (the link fails on an undefined cuda_oxide_artifact_anchor_* symbol). So that one compile goes through
 # `cargo oxide build` instead, which also compiles the kernels to PTX and embeds it in the .so. Every other
 # subcommand maturin runs, such as `cargo metadata`, goes to cargo unchanged.
+#
+# Machines with no CUDA (macos, riscv64, ...) have no cargo-oxide, since setup.sh installs it alongside the
+# CUDA Toolkit. There, that compile stays on plain cargo with the cuda feature off (see [features] in
+# Cargo.toml), building a CPU-only extension module: borscht._borscht has _gemm but not _sgemm.
 set -euo pipefail
 unset CARGO # so cargo and cargo-oxide find the real cargo rather than this script
 if [ "${1:-}" = rustc ]; then
   shift
-  exec cargo oxide build -- "$@"
+  if command -v cargo-oxide >/dev/null 2>&1; then
+    exec cargo oxide build -- "$@"
+  fi
+  exec cargo rustc --no-default-features "$@"
 fi
 exec cargo "$@"

@@ -1,10 +1,14 @@
 #!/bin/sh
 if ! git diff --cached --quiet -- borscht/; then
+  # no cargo-oxide means no CUDA on this machine (macos, riscv64, ...): lint just the CPU half, since the cuda
+  # feature's cuda-bindings needs the CUDA Toolkit's headers to build (see [features] in borscht/Cargo.toml)
+  features=""
+  command -v cargo-oxide >/dev/null 2>&1 || features="--no-default-features"
   (
     cd borscht &&
     echo "borscht: typechecking python 🐍..." >&2 && uv run pyrefly check &&
     echo "borscht: formatchecking rust 🦀..." >&2 && cargo fmt --check &&
-    echo "borscht: linting rust 🦀..." >&2 && cargo clippy --all-targets -- -D warnings
+    echo "borscht: linting rust 🦀..." >&2 && cargo clippy --all-targets $features -- -D warnings
   )
 fi
 

@@ -24,7 +24,13 @@ done
 $touches_borscht || exit 0
 
 # cargo oxide test rather than cargo test: the rust tests launch CUDA kernels, which only cargo-oxide
-# compiles to PTX (under plain cargo the test binary fails to link)
+# compiles to PTX (under plain cargo the test binary fails to link). No cargo-oxide means no CUDA on this
+# machine (macos, riscv64, ...), so test just the CPU half there (see [features] in borscht/Cargo.toml).
+if command -v cargo-oxide >/dev/null 2>&1; then
+  rust_test="cargo oxide test"
+else
+  rust_test="cargo test --no-default-features"
+fi
 cd borscht &&
   echo "borscht: testing python 🐍..." >&2 && uv run pytest &&
-  echo "borscht: testing rust 🦀..." >&2 && cargo oxide test
+  echo "borscht: testing rust 🦀..." >&2 && $rust_test
