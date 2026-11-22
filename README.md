@@ -42,23 +42,24 @@ cuda oxide run
 - File 2. Hello Tensor ([`tensor_managed.py`)](./borscht/python/borscht/tensor_managed.py))
 - File 3. Accelerate Tensor
   - File 3A: Analysis: From Asymptotic Analysis of Growth to Empirical Measurement of Time ([`tensor_nativecpu.py`](./borscht/python/borscht/tensor_nativecpu.py))
-  - File 3B: Optimization: From Virtual to Physical Machines (CPython API: [`pyproject.toml`](./borscht/pyproject.toml) Rust FFI: [`Cargo.toml`](./borscht/Cargo.toml))
-  - File 3C: GEMM1: From Rust to RISC-V (PyO3: [`lib.rs`](./borscht/rust/lib.rs), [`kernelscpu.rs`](./borscht/rust/kernelscpu/mod.rs))
+  - File 3B: Three Language Problem: From Virtual to Physical Machines (CPython API: [`pyproject.toml`](./borscht/pyproject.toml) Rust FFI: [`Cargo.toml`](./borscht/Cargo.toml))
+  - File 3C: Optimization (GEMM1): From Rust to RISC-V (PyO3: [`lib.rs`](./borscht/rust/lib.rs), [`kernelscpu.rs`](./borscht/rust/kernelscpu/mod.rs))
 - File 4. Accelerate+ Tensor
   - File 4A: Analysis: From Asymptotic Analysis of RAM Roofline Analysis of Memory Hierarchies
-  - File 4B: GEMM2: Loop Ordering
-  - File 4C: GEMM3: Threaded
+  - File 4B: Optimization (GEMM2): Loop Ordering
+  - File 4C: Optimization (GEMM3): Threaded
 - File 5. Accelerate++ Tensor
-  - File 5A: From Rust to CUDA Rust ([`tensor_nativegpu.py`](./borscht/python/borscht/tensor_nativegpu.py))
-  - File 5B: Accelerate Tensor on GPU [`kernelsgpu.rs`](./borscht/rust/kernelsgpu/mod.rs)
-- File 5. Abstracting Acceleration with `Dispatcher`, `Storage`, `Allocator`: [`tensor.py`](./borscht/python/borscht/tensor.py)
+  - File 5A: Three Language Problem: From Latency-Oriented to Throughput-Oriented Machines ([`tensor_nativegpu.py`](./borscht/python/borscht/tensor_nativegpu.py))
+  - File 5B: Optimization (GEMM4): From Rust to CUDA Rust [`kernelsgpu.rs`](./borscht/rust/kernelsgpu/mod.rs)
+
+<!-- - File 5. Abstracting Acceleration with `Dispatcher`, `Storage`, `Allocator`: [`tensor.py`](./borscht/python/borscht/tensor.py)
 - File 6. Adding Forward Ops
 - File 7. Hello Autograd
 - File 8. Adding Backward Ops
 - File 9. From Volta to Ampere (sm80)
 - File 10. From Ampere (sm80) to Hopper (sm90)
 - File 11. Hello Tensor Compiler
-- File 12. Hello Inference Engine
+- File 12. Hello Inference Engine -->
 
 <!-- After Model 12, you might be interested in the second and third research blog series From SITP to SOTA
 - [FS2S Part 1 (SYS): From Hopper to Blackwell and Rubin]()

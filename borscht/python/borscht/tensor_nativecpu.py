@@ -34,16 +34,6 @@ from borscht.tensor_managed import full, mm as mm_managed # Let us import the fu
 #                                                 0. From Stateless Substitution to Stateful Environments
 #                                                 1. From Asymptotic Analysis of Growthto Empirical Measurement of Time <-- HERE
 #                                                 2. Optimization 1: From Virtual Machines to Physical Machines
-
-
-
-
-
-
-
-
-
-
 #                                              Particularly with File 3A. Accelerate Tensor (tensor_native_cpu.py), TODO: didn't define inner contraction
 #                                              we will walk through the two shifts in mindset when viewing Tensor's and their inner contractions
 #                                                1. From the Mathematician to Programmer (§0)
@@ -206,17 +196,17 @@ tensor([[29.6088, 29.6088],
 #    .JMML.     .JMML.   `Ybmd9'   YMMMMMb  .JMML.  `Moo9^Yo..JMML  JMML  JMML..JMML  JMML  JMML.`Mbmmd'.JMML.   M9mmmP'      YMbmd'  `Moo9^Yo..JMML.   `Mbmmd'     `Moo9^Yo.P^YbmdP'   `Ybmd9'  `Mbod"YML. `Mbmo                                  
 #                                 6'     dP                                                                                                                                                                                                        
 #                                 Ybmmmd'                                                                                                                                                                                                          
-#                                                                                                                                                               
-#                                                                                                                                 ,,                                     ,...                                                                      
-#                                                         mm                                                                    `7MM                                   .d' ""                                                                      
-#                                                         MM                                                                      MM                                   dM`                                                                         
-#     ,p6"bo   ,pW"Wq.`7Mb,od8 `7Mb,od8 .gP"Ya   ,p6"bo mmMMmm `7MMpMMMb.  .gP"Ya  ,pP"Ybd ,pP"Ybd      ,6"Yb.  `7MMpMMMb.   ,M""bMM      `7MMpdMAo.  .gP"Ya `7Mb,od8 mMMmm,pW"Wq.`7Mb,od8 `7MMpMMMb.pMMMb.   ,6"Yb.  `7MMpMMMb.  ,p6"bo   .gP"Ya  
-#    6M'  OO  6W'   `Wb MM' "'   MM' "',M'   Yb 6M'  OO   MM     MM    MM ,M'   Yb 8I   `" 8I   `"     8)   MM    MM    MM ,AP    MM        MM   `Wb ,M'   Yb  MM' "'  MM 6W'   `Wb MM' "'   MM    MM    MM  8)   MM    MM    MM 6M'  OO  ,M'   Yb 
-#    8M       8M     M8 MM       MM    8M"""""" 8M        MM     MM    MM 8M"""""" `YMMMa. `YMMMa.      ,pm9MM    MM    MM 8MI    MM        MM    M8 8M""""""  MM      MM 8M     M8 MM       MM    MM    MM   ,pm9MM    MM    MM 8M       8M"""""" 
-#    YM.    , YA.   ,A9 MM       MM    YM.    , YM.    ,  MM     MM    MM YM.    , L.   I8 L.   I8     8M   MM    MM    MM `Mb    MM        MM   ,AP YM.    ,  MM      MM YA.   ,A9 MM       MM    MM    MM  8M   MM    MM    MM YM.    , YM.    , 
-#     YMbmd'   `Ybmd9'.JMML.   .JMML.   `Mbmmd'  YMbmd'   `Mbmo.JMML  JMML.`Mbmmd' M9mmmP' M9mmmP'     `Moo9^Yo..JMML  JMML.`Wbmd"MML.      MMbmmd'   `Mbmmd'.JMML.  .JMML.`Ybmd9'.JMML.   .JMML  JMML  JMML.`Moo9^Yo..JMML  JMML.YMbmd'   `Mbmmd' 
-#                                                                                                                                           MM                                                                                                     
-#                                                                                                                                         .JMML.
+#                                                                                                                                                                                                                                                               
+#                                                                                                     q   p                            ,,   q   p                                      ,...                                                                      
+#                                                      mm                                              \ /                           `7MM    \ /                                     .d' ""                                                                      
+#                                                      MM                                           o=--*--=o                          MM o=--*--=o                                  dM`                                                                         
+#  ,p6"bo   ,pW"Wq.`7Mb,od8 `7Mb,od8 .gP"Ya   ,p6"bo mmMMmm `7MMpMMMb.  .gP"Ya  ,pP"Ybd ,pP"Ybd        / \   ,6"Yb.  `7MMpMMMb.   ,M""bMM    / \        `7MMpdMAo.  .gP"Ya `7Mb,od8 mMMmm,pW"Wq.`7Mb,od8 `7MMpMMMb.pMMMb.   ,6"Yb.  `7MMpMMMb.  ,p6"bo   .gP"Ya  
+# 6M'  OO  6W'   `Wb MM' "'   MM' "',M'   Yb 6M'  OO   MM     MM    MM ,M'   Yb 8I   `" 8I   `"       d   b 8)   MM    MM    MM ,AP    MM   d   b         MM   `Wb ,M'   Yb  MM' "'  MM 6W'   `Wb MM' "'   MM    MM    MM  8)   MM    MM    MM 6M'  OO  ,M'   Yb 
+# 8M       8M     M8 MM       MM    8M"""""" 8M        MM     MM    MM 8M"""""" `YMMMa. `YMMMa.              ,pm9MM    MM    MM 8MI    MM                 MM    M8 8M""""""  MM      MM 8M     M8 MM       MM    MM    MM   ,pm9MM    MM    MM 8M       8M"""""" 
+# YM.    , YA.   ,A9 MM       MM    YM.    , YM.    ,  MM     MM    MM YM.    , L.   I8 L.   I8             8M   MM    MM    MM `Mb    MM                 MM   ,AP YM.    ,  MM      MM YA.   ,A9 MM       MM    MM    MM  8M   MM    MM    MM YM.    , YM.    , 
+#  YMbmd'   `Ybmd9'.JMML.   .JMML.   `Mbmmd'  YMbmd'   `Mbmo.JMML  JMML.`Mbmmd' M9mmmP' M9mmmP'             `Moo9^Yo..JMML  JMML.`Wbmd"MML.               MMbmmd'   `Mbmmd'.JMML.  .JMML.`Ybmd9'.JMML.   .JMML  JMML  JMML.`Moo9^Yo..JMML  JMML.YMbmd'   `Mbmmd' 
+#                                                                                                                                                         MM                                                                                                     
+#                                                                                                                                                       .JMML.                                                                                                   
 
 
 
@@ -224,13 +214,16 @@ tensor([[29.6088, 29.6088],
 
 # **********************************************************************************************************************
 #                                               borscht (Literary Source)
-# <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 4. Accelerate++ Tensor -->
+# <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 5. Accelerate++ Tensor -->
 #             tensor_managed.py                        > 3A. tensor_nativecpu.py <               4A. tensor_nativegpu.py
-#                                                        3B. pyproject.toml/Cargo.toml/lib.rs    4B. Cargo.toml/lib.rs
+#                                                        3B. pyproject.toml/Cargo.toml           4B. Cargo.toml/lib.rs
 #                                                        3C. lib.rs/kernelscpu.rs                4C. kernelsgpu.rs
 #                                                                                                      utils.rs
 #                                                                                                      host.rs
 #                                                                                                      device.rs
+#
+#                                                File 4. Accelerate+ Tensor
+
 # **********************************************************************************************************************
 #                                              > 3A. tensor_nativecpu.py <
 #                                                 0. From Stateless Substitution to Stateful Environments
@@ -273,6 +266,7 @@ def _main(): # run the file as a script (i.e uv run tensor_nativecpu.py) on your
             # repeat for the rest of B's columns
         # repeat for the rest of A's rows
 
+    # TODO 1: (Mon. Nov 23): BIG-O
     # Before we can analyze the algorithm, we need a model of the underlying machine that will execute the program.
     # Most algorithm analysis follows a model similar to the environment model of computation known as the RAM model.
     # 
@@ -280,10 +274,9 @@ def _main(): # run the file as a script (i.e uv run tensor_nativecpu.py) on your
     # Is this fast?
     # According to Big-O, the time complexity is n -> n^3.
     
-    # TODO: can we do better than n^3? look in the classic CLRS. we find Strassen
+    # TODO 2: (Mon. Nov 23): Divide and Conquer (CLRS) Strassen
     # Continuing down the route of classical algorithm analysis,
     # we would be led to an algorithm known as Strassen's Algorithm, with time complexity n -> n^2.7.,. lg()
-    
 
 
 
@@ -299,7 +292,27 @@ def _main(): # run the file as a script (i.e uv run tensor_nativecpu.py) on your
     #                         |        .-'   .-'                         \             / rust: 40ms
     #                         |___..--'__..-'                             '.    6    .'
     #                         +------------------------> n                  '-.....-'
-
+    #                                                                                     ,,                     ,,                     ,,                                           ,,                      ,,                    
+    # `7MM"""YMM                                           db                           `7MM              mm     db                   `7MM            db                           `7MM                      db                    
+    #   MM    `7                                          ;MM:                            MM              MM                            MM           ;MM:                            MM                                            
+    #   MM   d `7Mb,od8 ,pW"Wq.`7MMpMMMb.pMMMb.          ,V^MM.    `7MMpMMMb.   ,6"Yb.    MM `7M'   `MF'mmMMmm `7MM  ,p6"bo   ,6"Yb.    MM          ,V^MM.    `7MMpMMMb.   ,6"Yb.    MM `7M'   `MF',pP"Ybd `7MM  ,pP"Ybd           
+    #   MM""MM   MM' "'6W'   `Wb MM    MM    MM         ,M  `MM      MM    MM  8)   MM    MM   VA   ,V    MM     MM 6M'  OO  8)   MM    MM         ,M  `MM      MM    MM  8)   MM    MM   VA   ,V  8I   `"   MM  8I   `"           
+    #   MM   Y   MM    8M     M8 MM    MM    MM         AbmmmqMA     MM    MM   ,pm9MM    MM    VA ,V     MM     MM 8M        ,pm9MM    MM         AbmmmqMA     MM    MM   ,pm9MM    MM    VA ,V   `YMMMa.   MM  `YMMMa.           
+    #   MM       MM    YA.   ,A9 MM    MM    MM        A'     VML    MM    MM  8M   MM    MM     VVV      MM     MM YM.    , 8M   MM    MM        A'     VML    MM    MM  8M   MM    MM     VVV    L.   I8   MM  L.   I8           
+    # .JMML.   .JMML.   `Ybmd9'.JMML  JMML  JMML.    .AMA.   .AMMA..JMML  JMML.`Moo9^Yo..JMML.   ,V       `Mbmo.JMML.YMbmd'  `Moo9^Yo..JMML.    .AMA.   .AMMA..JMML  JMML.`Moo9^Yo..JMML.   ,V     M9mmmP' .JMML.M9mmmP'           
+    #                                                                                           ,V                                                                                         ,V                                      
+    #                                                                                        OOb"                                                                                       OOb"                                       
+                                                                                                                                                                                                                                
+    #                                                                ,,             ,,                     ,,                                                                                                                      
+    # MMP""MM""YMM          `7MM"""YMM                               db             db                   `7MM      `7MMM.     ,MMF'                                                                                          mm    
+    # P'   MM   `7            MM    `7                                                                     MM        MMMb    dPMM                                                                                            MM    
+    #      MM  ,pW"Wq.        MM   d    `7MMpMMMb.pMMMb. `7MMpdMAo.`7MM  `7Mb,od8 `7MM  ,p6"bo   ,6"Yb.    MM        M YM   ,M MM  .gP"Ya   ,6"Yb.  ,pP"Ybd `7MM  `7MM  `7Mb,od8 .gP"Ya `7MMpMMMb.pMMMb.  .gP"Ya `7MMpMMMb.mmMMmm  
+    #      MM 6W'   `Wb       MMmmMM      MM    MM    MM   MM   `Wb  MM    MM' "'   MM 6M'  OO  8)   MM    MM        M  Mb  M' MM ,M'   Yb 8)   MM  8I   `"   MM    MM    MM' "',M'   Yb  MM    MM    MM ,M'   Yb  MM    MM  MM    
+    #      MM 8M     M8       MM   Y  ,   MM    MM    MM   MM    M8  MM    MM       MM 8M        ,pm9MM    MM        M  YM.P'  MM 8M""""""  ,pm9MM  `YMMMa.   MM    MM    MM    8M""""""  MM    MM    MM 8M""""""  MM    MM  MM    
+    #      MM YA.   ,A9       MM     ,M   MM    MM    MM   MM   ,AP  MM    MM       MM YM.    , 8M   MM    MM        M  `YM'   MM YM.    , 8M   MM  L.   I8   MM    MM    MM    YM.    ,  MM    MM    MM YM.    ,  MM    MM  MM    
+    #    .JMML.`Ybmd9'      .JMMmmmmMMM .JMML  JMML  JMML. MMbmmd' .JMML..JMML.   .JMML.YMbmd'  `Moo9^Yo..JMML.    .JML. `'  .JMML.`Mbmmd' `Moo9^Yo.M9mmmP'   `Mbod"YML..JMML.   `Mbmmd'.JMML  JMML  JMML.`Mbmmd'.JMML  JMML.`Mbmo 
+    #                                                      MM                                                                                                                                                                      
+    #                                                    .JMML.                                                                                                                                                                         
     import time # We want to empirically measure actual wall-clock time, rather than analytically analyzing an upper bound
     def time_virtual_mm(A: Tensor, B: Tensor, n: int):
         t0 = time.perf_counter()
@@ -331,13 +344,16 @@ def _main(): # run the file as a script (i.e uv run tensor_nativecpu.py) on your
 
 # **********************************************************************************************************************
 #                                               borscht (Literary Source)
-# <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 4. Accelerate++ Tensor -->
+# <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 5. Accelerate++ Tensor -->
 #             tensor_managed.py                        > 3A. tensor_nativecpu.py <               4A. tensor_nativegpu.py
-#                                                        3B. pyproject.toml/Cargo.toml/lib.rs    4B. Cargo.toml/lib.rs
+#                                                        3B. pyproject.toml/Cargo.toml           4B. Cargo.toml/lib.rs
 #                                                        3C. lib.rs/kernelscpu.rs                4C. kernelsgpu.rs
 #                                                                                                      utils.rs
 #                                                                                                      host.rs
 #                                                                                                      device.rs
+#
+#                                                File 4. Accelerate+ Tensor
+
 # **********************************************************************************************************************
 #                                              > 3A. tensor_nativecpu.py <
 #                                                 0. From Stateless Substitution to Stateful Environments
@@ -364,40 +380,48 @@ def _main(): # run the file as a script (i.e uv run tensor_nativecpu.py) on your
 #   i.e The primary Rust compiler rustc translates Rust programs to x86/ARM/RISC-V programs
 #                                             The target program is then *executed* with a physical machine implemented with hardware (silicon)
 
-#       
-#          (1) Interpretation                         (2) Compilation
-#       
-#          source program   input                     source program                            input
+#                                                                                                                                In both scenarios, there is of course underlying hardware running.
+#          (1) Interpretation                         (2) Compilation                                                            The question is *which* evaluator your program is evaluated by: a *virtual machine* or a *physical machine*?
+#                                                                                                                                    If your program is being interpreted, it's *indirectly* running on hardware, because there is a *layer* of indirection (i.e the interpeter).
+#          source program   input                     source program                            input                                If your program is first compiled, then executed, it's *directly* running on hardware.
 #                 |           |                              |                                    |
-#                 v           v                              v                                    v
-#             +------------------+                       +------------------+            +------------------+
+#                 v           v                              v                                    v                                  This is *why* mm_native() has a speedup of 2x, 5x, 10x, 20x, depending on the underlying machine.
+#             +------------------+                       +------------------+            +------------------+                                      mm_native() runs directly on the hardware.
 #             |   interpreter    |                       |     compiler     |   emits    |  target program  |
-#             |    (software)    | ---> output           |    (software)    | ---------> |  (machine code)  | ---> output
+#             |    (software)    | ---> output           |    (software)    | ---------> |  (machine code)  | ---> output        We now understand that the semantic gap is bridged either with an intepreter *or compiler,
+#             +------------------+                       +------------------+            +------------------+                               and in turn whether the program is evaluated by a virtual machine *or physical machine.
+#             |     hardware     |                       |     hardware     |            |     hardware     |                    and that mm_native() has a speedup over mm_managed() because it's written in Rust.
 #             +------------------+                       +------------------+            +------------------+
-#             |     hardware     |                       |     hardware     |            |     hardware     |
-#             +------------------+                       +------------------+            +------------------+
-#             <---- run time ---->                       <-- compile time -->            <---- run time ---->
-
-# In both scenarios, there is of course underlying hardware running.
-# The question is *which* evaluator your program is evaluated by: a *virtual machine* or a *physical machine*?
-    # If your program is being interpreted, it's *indirectly* running on hardware, because there is a *layer* of indirection (i.e the interpeter).
-    # If your program is first compiled, then executed, it's *directly* running on hardware.
-
-    # This is *why* mm_native() has a speedup of 2x, 5x, 10x, 20x, depending on the underlying machine.
-    #               mm_native() runs directly on the hardware.
-
-# We now understand that the semantic gap is bridged either with an intepreter *or compiler,
-#            and in turn whether the program is evaluated by a virtual machine *or physical machine.
-# and that mm_native() has a speedup over mm_managed() because it's written in Rust.
-
-#                                                                              * Interpretation vs compilation and virtual vs physical machine is a false dichotomy and actually a spectrum
-#                                                                                for there is JIT compilation which starts off by interpreting code and then switched to compilation for performance-sensitive spots.
-#                                                                                This is what the Java Virtual Machine (JVM) does.
+#             <---- run time ---->                       <-- compile time -->            <---- run time ---->                    * Interpretation vs compilation and virtual vs physical machine is a false dichotomy and actually a spectrum
+#                                                                                                                                  for there is JIT compilation which starts off by interpreting code and then switched to compilation for performance-sensitive spots.
+#                                                                                                                                  This is what the Java Virtual Machine (JVM) does.
+#                                                                                                    ,,                           ,,                         ,,                                ,,                  ,,                        
+#            `7MMF'            mm                                               mm            mm     db                           db               .M"""bgd  db                              `7MM           mm     db                        
+#              MM              MM                                               MM            MM                                                  ,MI    "Y                                    MM           MM                               
+#              MM  `7MMpMMMb.mmMMmm .gP"Ya `7Mb,od8 `7MMpdMAo.`7Mb,od8 .gP"Ya mmMMmm  ,6"Yb.mmMMmm `7MM  ,pW"Wq.`7MMpMMMb.      `7MM  ,pP"Ybd     `MMb.    `7MM  `7MMpMMMb.pMMMb.`7MM  `7MM    MM   ,6"Yb.mmMMmm `7MM  ,pW"Wq.`7MMpMMMb.     
+#              MM    MM    MM  MM  ,M'   Yb  MM' "'   MM   `Wb  MM' "',M'   Yb  MM   8)   MM  MM     MM 6W'   `Wb MM    MM        MM  8I   `"       `YMMNq.  MM    MM    MM    MM  MM    MM    MM  8)   MM  MM     MM 6W'   `Wb MM    MM     
+#              MM    MM    MM  MM  8M""""""  MM       MM    M8  MM    8M""""""  MM    ,pm9MM  MM     MM 8M     M8 MM    MM        MM  `YMMMa.     .     `MM  MM    MM    MM    MM  MM    MM    MM   ,pm9MM  MM     MM 8M     M8 MM    MM     
+#              MM    MM    MM  MM  YM.    ,  MM       MM   ,AP  MM    YM.    ,  MM   8M   MM  MM     MM YA.   ,A9 MM    MM        MM  L.   I8     Mb     dM  MM    MM    MM    MM  MM    MM    MM  8M   MM  MM     MM YA.   ,A9 MM    MM  ,, 
+#            .JMML..JMML  JMML.`Mbmo`Mbmmd'.JMML.     MMbmmd' .JMML.   `Mbmmd'  `Mbmo`Moo9^Yo.`Mbmo.JMML.`Ybmd9'.JMML  JMML.    .JMML.M9mmmP'     P"Ybmmd" .JMML..JMML  JMML  JMML.`Mbod"YML..JMML.`Moo9^Yo.`Mbmo.JMML.`Ybmd9'.JMML  JMML.db 
+#                                                     MM                                                                                                                                                                                     
+#                                                   .JMML.                                                                                                                                                                                   
+                                                                                                                                                                                                                                
+#                                                            ,,    ,,                  ,,                           ,,                                                             ,,                  ,,                                    
+#              .g8"""bgd                                     db  `7MM           mm     db                           db              MMP""MM""YMM                                 `7MM           mm     db                                    
+#            .dP'     `M                                           MM           MM                                                  P'   MM   `7                                   MM           MM                                           
+#            dM'       ` ,pW"Wq.`7MMpMMMb.pMMMb. `7MMpdMAo.`7MM    MM   ,6"Yb.mmMMmm `7MM  ,pW"Wq.`7MMpMMMb.      `7MM  ,pP"Ybd          MM  `7Mb,od8 ,6"Yb.  `7MMpMMMb.  ,pP"Ybd  MM   ,6"Yb.mmMMmm `7MM  ,pW"Wq.`7MMpMMMb.                 
+#            MM         6W'   `Wb MM    MM    MM   MM   `Wb  MM    MM  8)   MM  MM     MM 6W'   `Wb MM    MM        MM  8I   `"          MM    MM' "'8)   MM    MM    MM  8I   `"  MM  8)   MM  MM     MM 6W'   `Wb MM    MM                 
+#            MM.        8M     M8 MM    MM    MM   MM    M8  MM    MM   ,pm9MM  MM     MM 8M     M8 MM    MM        MM  `YMMMa.          MM    MM     ,pm9MM    MM    MM  `YMMMa.  MM   ,pm9MM  MM     MM 8M     M8 MM    MM                 
+#            `Mb.     ,'YA.   ,A9 MM    MM    MM   MM   ,AP  MM    MM  8M   MM  MM     MM YA.   ,A9 MM    MM        MM  L.   I8          MM    MM    8M   MM    MM    MM  L.   I8  MM  8M   MM  MM     MM YA.   ,A9 MM    MM  ,,             
+#              `"bmmmd'  `Ybmd9'.JMML  JMML  JMML. MMbmmd' .JMML..JMML.`Moo9^Yo.`Mbmo.JMML.`Ybmd9'.JMML  JMML.    .JMML.M9mmmP'        .JMML..JMML.  `Moo9^Yo..JMML  JMML.M9mmmP'.JMML.`Moo9^Yo.`Mbmo.JMML.`Ybmd9'.JMML  JMML.db             
+#                                                  MM                                                                                                                                                                                        
+#                                                .JMML.                                                                                                                                                                                      
 
 
 # Here, we re-define the matrix multiplication algorithm from File 2. Hello Tensor (tensor_managed.py)
 #       with a native programming language so that the program can be executed directly on a physical processor
-# The only *two* lines that are noteworthy of your attention are L282 and L290
+# The only *two* lines that are noteworthy of your attention are L282 and L290.
+# After skimming how we call the natively accelerated _gemm() routine, head on over to File 3B (pyproject.toml/Cargo.toml)
 # ---------------------------------------------------------------------------------------------------------------------
 
 def mm(A: Tensor, B: Tensor) -> Tensor: # mm has the same definition from File 2..
@@ -435,4 +459,4 @@ __all__ = ["Tensor", "full", "mm"] # Exports for when the file is used as a modu
                                               # Here we maintain the same API as File 2. Hello Tensor (tensor_managed.py)
                                               # and export mm rather than mm_native
                                               # Now, before we implement _gemm(a,b,n,km) File 3C kernelcpu.rs to implement the matrix multiplication algorithm in Rust,
-                                              # we set up the mixed Python and Rust source in pyproject.toml, Cargo.toml and lib.rs
+                                              # we set up the mixed Python and Rust source in pyproject.toml, Cargo.toml
