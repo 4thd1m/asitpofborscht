@@ -41,12 +41,16 @@ cuda oxide run
 - File 1. Hello borscht ([`__init__.py`](./borscht/python/borscht/__init__.py))
 - File 2. Hello Tensor ([`tensor_managed.py`)](./borscht/python/borscht/tensor_managed.py))
 - File 3. Accelerate Tensor
-  - File 3A: From Analytical Big-O to Empirical Time ([`tensor_nativecpu.py`](./borscht/python/borscht/tensor_nativecpu.py))
-  - File 3B: From Managed Python to Native Rust (CPython API: [`pyproject.toml`](./borscht/pyproject.toml) Rust FFI: [`Cargo.toml`](./borscht/Cargo.toml))
-  - File 3C: From Rust to RISC-V (PyO3: [`lib.rs`](./borscht/rust/lib.rs), [`kernelscpu.rs`](./borscht/rust/kernelscpu/mod.rs))
-- File 4. Accelerate++ Tensor
-  - File 4A: From Rust to CUDA Rust ([`tensor_nativegpu.py`](./borscht/python/borscht/tensor_nativegpu.py))
-  - File 4B: Accelerate Tensor on GPU [`kernelsgpu.rs`](./borscht/rust/kernelsgpu/mod.rs)
+  - File 3A: Analysis: From Asymptotic Analysis of Growth to Empirical Measurement of Time ([`tensor_nativecpu.py`](./borscht/python/borscht/tensor_nativecpu.py))
+  - File 3B: Optimization: From Virtual to Physical Machines (CPython API: [`pyproject.toml`](./borscht/pyproject.toml) Rust FFI: [`Cargo.toml`](./borscht/Cargo.toml))
+  - File 3C: GEMM1: From Rust to RISC-V (PyO3: [`lib.rs`](./borscht/rust/lib.rs), [`kernelscpu.rs`](./borscht/rust/kernelscpu/mod.rs))
+- File 4. Accelerate+ Tensor
+  - File 4A: Analysis: From Asymptotic Analysis of RAM Roofline Analysis of Memory Hierarchies
+  - File 4B: GEMM2: Loop Ordering
+  - File 4C: GEMM3: Threaded
+- File 5. Accelerate++ Tensor
+  - File 5A: From Rust to CUDA Rust ([`tensor_nativegpu.py`](./borscht/python/borscht/tensor_nativegpu.py))
+  - File 5B: Accelerate Tensor on GPU [`kernelsgpu.rs`](./borscht/rust/kernelsgpu/mod.rs)
 - File 5. Abstracting Acceleration with `Dispatcher`, `Storage`, `Allocator`: [`tensor.py`](./borscht/python/borscht/tensor.py)
 - File 6. Adding Forward Ops
 - File 7. Hello Autograd

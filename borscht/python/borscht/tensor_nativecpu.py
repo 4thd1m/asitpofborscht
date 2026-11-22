@@ -19,18 +19,30 @@ from borscht.tensor_managed import full, mm as mm_managed # Let us import the fu
 #                   Both Files are split across three groups of files --------------------------------------------------------------+
 # **********************************************************************************************************************            |
 #                                               borscht (Literary Source)                                                           |
-# <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 4. Accelerate++ Tensor -->            v
+# <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 5. Accelerate++ Tensor -->            v
 #             tensor_managed.py                        > 3A. tensor_nativecpu.py <               4A. tensor_nativegpu.py <--------- A. Python source
 #                                                        3B. pyproject.toml/Cargo.toml           4B. Cargo.toml/lib.rs   <--------- B. Python/Rust interop
 #                                                        3C. lib.rs/kernelscpu.rs                4C. kernelsgpu.rs       <--------- C. Rust/CUDA Rust source
 #                                                                                                      utils.rs
 #                                                                                                      host.rs
 #                                                                                                      device.rs
+#
+#                                                File 4. Accelerate+ Tensor
+
 # **********************************************************************************************************************
 #                                              > 3A. tensor_nativecpu.py <
 #                                                 0. From Stateless Substitution to Stateful Environments
-#                                                 1. From Analytically Analyzing Growth to Empirically Measuring Time <-- HERE
-#                                                 2. From Virtual RAM to Physical Machine Memory Hierarchies
+#                                                 1. From Asymptotic Analysis of Growthto Empirical Measurement of Time <-- HERE
+#                                                 2. Optimization 1: From Virtual Machines to Physical Machines
+
+
+
+
+
+
+
+
+
 
 #                                              Particularly with File 3A. Accelerate Tensor (tensor_native_cpu.py), TODO: didn't define inner contraction
 #                                              we will walk through the two shifts in mindset when viewing Tensor's and their inner contractions
