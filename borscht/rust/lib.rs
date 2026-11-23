@@ -14,6 +14,7 @@
 //           With          File 3C. lib.rs and kernelscpu.rs, we will finally transliterate our matrix multiplication algorithm from Python to Rust with _gemm() in the _borscht extension module
 // **********************************************************************************************************************
 //                                               borscht (Literary Source)
+//#                                            Part 1: From Arrays to NDArrays
 // <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 4. Accelerate++ Tensor -->
 //             tensor_managed.py                          3A. tensor_nativecpu.py                 4A. tensor_nativegpu.py
 //                                                        3B. pyproject.toml/Cargo.toml           4B. Cargo.toml/lib.rs

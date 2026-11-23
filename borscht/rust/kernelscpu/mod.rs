@@ -10,6 +10,7 @@
 //  bmmmd'
 // **********************************************************************************************************************
 //                                               borscht (Literary Source)
+//                                             Part 1: From Arrays to NDArrays
 // <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 4. Accelerate++ Tensor -->
 //             tensor_managed.py                          tensor_nativecpu.py                     tensor_nativegpu.py
 //                                                        pyproject.toml/Cargo.toml/lib.rs        Cargo.toml/lib.rs

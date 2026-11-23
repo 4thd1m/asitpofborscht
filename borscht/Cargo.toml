@@ -13,6 +13,7 @@
 #          We finish with File 3B. Accelrate Tensor (Cargo.toml), to understand how the Rust package implements an extension module with Rust FFI
 # **********************************************************************************************************************
 #                                               borscht (Literary Source)
+#                                             Part 1: From Arrays to NDArrays                                           
 # <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 4. Accelerate++ Tensor -->
 #             tensor_managed.py                          3A. tensor_nativecpu.py                 4A. tensor_nativegpu.py
 #                                                        3B. pyproject.toml/>Cargo.toml<         4B. Cargo.toml/lib.rs

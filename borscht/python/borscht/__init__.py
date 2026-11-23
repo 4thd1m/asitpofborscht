@@ -7,7 +7,8 @@
 #   MM  ,,       MM      MM YM.    ,  MM    MM YA.   ,A9      MM.   ,M9 YA.   ,A9 MM     L.   I8 YM.    , MM    MM  MM    
 # .JMML.db     .JMML.  .JMML.`Mbmmd'.JMML..JMML.`Ybmd9'       P^YbmdP'   `Ybmd9'.JMML.   M9mmmP'  YMbmd'.JMML  JMML.`Mbmo 
 # **********************************************************************************************************************
-#                                               borscht (Literary Source)
+#                                               borscht (Literary Source)   
+#                                             Part 1: From Arrays to NDArrays
 # <-- File 0. README.md                       -- File 1. Hello borscht --                       File 2. Hello Tensor -->
 #                                                        __init__.py                                    tensor_managed.py
 # **********************************************************************************************************************
@@ -158,8 +159,9 @@ import os
 _SHELANG = os.environ.get("SHELANG") or "BSL"
 
 
-if   _SHELANG == "BSL":   from .tensor_managed   import Tensor, full, mm  # BSL: beginning student language implements the Tensor concept with matrix multiplication
-elif _SHELANG == "ISL":   from .tensor_nativecpu import Tensor, full, mm  # ISL: intermediate student language accelerates the Tensor with the Rust programming language
+if   _SHELANG == "BSL":   from .tensor_managed   import Tensor1, full, mm  # BSL: beginning student language implements the Tensor concept with matrix multiplication
+elif _SHELANG == "ISL":   from .tensor_nativecpu import Tensor1, full, mm  # ISL: intermediate student language accelerates the Tensor with the Rust programming language
+elif _SHELANG == "foobar":   from .tensor_autograd import Tensor2
 # elif _SHELANG == "ISL+":  from .tensor_nativegpu import Tensor, full, mm  # ISL+: intermediate student language plus accelerates the Tensor with the CUDA Rust programming language
 # elif _SHELANG == "ASL":   from .tensor           import Tensor, full, mm  # ASL: advanced student language abstracts device acceleration with Dispatcher, Storage, and Allocator concepts
 else: raise ValueError(f"SHELANG must be one of 'BSL', 'ISL', 'ISL+', 'ASL' but got {_SHELANG!r}")

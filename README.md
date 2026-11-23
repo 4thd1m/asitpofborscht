@@ -52,11 +52,9 @@ cuda oxide run
 - File 5. Accelerate++ Tensor
   - File 5A: Three Language Problem: From Latency-Oriented to Throughput-Oriented Machines ([`tensor_nativegpu.py`](./borscht/python/borscht/tensor_nativegpu.py))
   - File 5B: Optimization (GEMM4): From Rust to CUDA Rust [`kernelsgpu.rs`](./borscht/rust/kernelsgpu/mod.rs)
-- File 6. Abstracting Acceleration
-  - File 6A: `Storage` [`tensor.py`](./borscht/python/borscht/tensor.py)
-  - File 6B: `Dispatcher`
-  - File 6C: `Allocator`
-  - File 6D: `TensorIterator`
+- File 6. Abstracted Accelerated Tensor
+  - File 6A: `Allocator`, `Storage` [`tensor_native.py`](./borscht/python/borscht/tensor_native.py)
+  - File 6B: `Dispatcher`, `Iterator`
 - File ?? From `borscht.Tensor` to `torch.Tensor`
 
 **From Numerical Linear Algebra Library to Deep Learning Framework (`borscht.nn`, `borscht.Tensor.backwards()`, `borscht.optim`)**

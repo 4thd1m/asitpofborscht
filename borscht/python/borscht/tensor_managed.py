@@ -8,6 +8,7 @@
 # Ammmmmmm db     .JMML.  .JMML.`Mbmmd'.JMML..JMML.`Ybmd9'         .JMML.`Mbmmd'.JMML  JMML.M9mmmP'  `Ybmd9'.JMML.
 # **********************************************************************************************************************
 #                                               borscht (Literary Source)                                               
+#                                            Part 1: From Arrays to NDArrays
 # <-- File 1. Hello borscht                   -- File 2. Hello Tensor --                   File 3. Accelerate Tensor -->
 #             __init__.py                                tensor_managed.py                         - tensor_nativecpu.py
 #                                                                                                  - pyproject.toml/Cargo.toml
@@ -226,7 +227,7 @@
 
 # Our task for the remainder of tensor.py is now to let the user construct (1), read (2), and multiply (3)
 # two matrices A and B with shapes (2,3) and and (3,2) respectively
-# Note that we will interchangeably describe a Tensor's with "a matrix of shape (2,3)" and "a 2x3 matrix".
+# Note that we will interchangeably describe a Tensor1's with "a matrix of shape (2,3)" and "a 2x3 matrix".
 # Both have the same meaning of *shape*.
 
 # For an interactive experience, cd into borscht's python source
@@ -264,7 +265,7 @@ def _main():
     print(C)
 
 # ensure you have the pyrefly extension installed with your editor
-# so that you see the inlay type hints that A, B, and C all have type Tensor
+# so that you see the inlay type hints that A, B, and C all have type Tensor1
 # for the vscode editor, configure these in your user settings
 #   "python.analysis.inlayHints.variableTypes": true,
 #   "python.analysis.inlayHints.functionReturnTypes": true,
@@ -273,15 +274,15 @@ def _main():
 
 import math
 
-def full(size: tuple[int, ...], fill_value: float) -> Tensor:
-    """Create a Tensor of shape `size` filled with `fill_value`.
+def full(size: tuple[int, ...], fill_value: float) -> Tensor1:
+    """Create a Tensor1 of shape `size` filled with `fill_value`.
 
     Args:
         size: Shape of the output tensor.
         fill_value: Value to fill with. Determines the dtype.
 
     Keyword Args:
-        out (Tensor, optional): Tensor to write the result into.
+        out (Tensor1, optional): Tensor1 to write the result into.
         dtype (dtype, optional): Data type of the result. Defaults to the type
             inferred from `fill_value`.
         layout (layout, optional): Memory layout of the result.
@@ -290,7 +291,7 @@ def full(size: tuple[int, ...], fill_value: float) -> Tensor:
             the result. Defaults to False.
 
     Returns:
-        A new Tensor.
+        A new Tensor1.
 
     Examples:
         >>> A = full((2, 3), 3.141592)
@@ -301,7 +302,7 @@ def full(size: tuple[int, ...], fill_value: float) -> Tensor:
         (2, 3)
     """
 
-    return Tensor(size, fill_value) #, dtype) # for now, .full(size, fill_value) is simply a wrapper around Tensor.__init__()
+    return Tensor1(size, fill_value) #, dtype) # for now, .full(size, fill_value) is simply a wrapper around Tensor1.__init__()
 
 # *********************************************************************************************************************
 #                                                borscht (Literary Source)
@@ -314,10 +315,10 @@ def full(size: tuple[int, ...], fill_value: float) -> Tensor:
 #                                                4. Testing Tensors
 
 # Although Python does indeed have @staticmethod and @classmethod decorator's,
-# borscht's Tensor constructors/factory methods are free functions,
+# borscht's Tensor1 constructors/factory methods are free functions,
 # following torch and numpy, which in turn, were inspired by MatLab and APL
 # Many design decisions of systems with history are implicitly inherited rather than explicitly designed.
-class Tensor: # The more accurate name for the Tensor data structure we all use is an NDArray like numpy, and jax.
+class Tensor1: # The more accurate name for the Tensor data structure we all use is an NDArray like numpy, and jax.
     def __init__(self, shape: tuple[int, ...], fill_value: float):
         # A tensor is nothing more than a multidimensional (that is, multi rank) array that approximates some element in R^{d0,...,dn}
         self.shape: tuple[int, ...] = shape # The shape field is a tuple which stores the (d0,...,dn)
@@ -337,7 +338,7 @@ class Tensor: # The more accurate name for the Tensor data structure we all use 
         # + ============================================================================================================
         #                                              Naive
         # + ============================================================================================================
-        # To state the naive solution, we *could* literally design the Tensor data structure with n nested arrays.
+        # To state the naive solution, we *could* literally design the Tensor1 data structure with n nested arrays.
         # One could argue that even if a single machine ran out of memory and storage, you could offload onto distributed machines.
         # — The primary reason why this is not a desirable design given that we have to *allocate* an array per additional rank.
         #   In systems programming, allocation is something that should be avoided if possible,
@@ -458,11 +459,11 @@ class Tensor: # The more accurate name for the Tensor data structure we all use 
         # We can optimize the following expression multiplying from right to left with a running product, but we'll keep it as is for now.
         self.stride: tuple[int, ...] = tuple(math.prod(self.shape[d+1:]) for d in range(len(self.shape)))
         self.storage: list[float] = [fill_value] * math.prod(self.shape) # The storage field is a flat list, only one allocation!
-        self.ndim: int = len(shape) # The ndim field is the rank of the Tensor i.e the number of dimensions
+        self.ndim: int = len(shape) # The ndim field is the rank of the Tensor1 i.e the number of dimensions
 
-        # That's all a Tensor is!
-        # A Tensor, computationally speaking, is a logical shape virtualized by a stride to physical storage
-        # A computational Tensor of shape (d1,...,d2) aspirationally represents the concept of the field R^{d1 x ... x dn}
+        # That's all a Tensor1 is!
+        # A Tensor1, computationally speaking, is a logical shape virtualized by a stride to physical storage
+        # A computational Tensor1 of shape (d1,...,d2) aspirationally represents the concept of the field R^{d1 x ... x dn}
         # We now recommend you to collapse/fold the __init__ method, along with all of it's commentary.                                                                                                                                                                                                                                            
                                                                                                                                                                                                                                             
 #                                                                                 ,,                                                                                                                                                             
@@ -519,14 +520,14 @@ class Tensor: # The more accurate name for the Tensor data structure we all use 
     >>> A
     tensor([[3.1416, 3.1416, 3.1416],
             [3.1416, 3.1416, 3.1416]])
-    <borscht.tensor.Tensor object at 0x10b264ad0>
+    <borscht.tensor.Tensor1 object at 0x10b264ad0>
     """
     # where print() converts arguments to __str__() see: https://docs.python.org/3/builtins/functions.html#print
     # and in turn, __str__() falls back to __repr__() see: https://docs.python.org/3/builtins/stdtypes.html#str
     # and in turn, inherits from object.__repr__'s
     # which in turn, prints the memory address of the allocated object
 
-    # Instead, what we'd like to print are the actual elements of the Tensor
+    # Instead, what we'd like to print are the actual elements of the Tensor1
     def __repr__(self) -> str:
         """
         Examples:
@@ -637,7 +638,7 @@ class Tensor: # The more accurate name for the Tensor data structure we all use 
 #  1. construct A and B
 #  2. read A and B (and thus C)
 # we can now implement a routine to evaluate an expression of matrix multiplication
-def mm(A: Tensor, B: Tensor) -> Tensor:
+def mm(A: Tensor1, B: Tensor1) -> Tensor1:
     # That is,
     """Multiply the (n,k) matrix `A` with the (k,m) matrix `B` into a new (n,m) matrix.
 
@@ -748,7 +749,7 @@ def mm(A: Tensor, B: Tensor) -> Tensor:
 
     # In summary,
     # we have now defined
-    # - the Tensor data structure...           aspirationally representing...           the set R^{d1 \times \cdots, \times dn} known as a field
+    # - the Tensor1 data structure...           aspirationally representing...           the set R^{d1 \times \cdots, \times dn} known as a field
     # - the matrix multiplication algorithm... aspirationally representing...           the function L1: R^k -> R^n and L2: R^m -> R^k known as a composition of linear transformation
                                                                                                                                                                                               
                                                                                                                                                                                                                      
@@ -804,7 +805,7 @@ if __name__ == "__main__": _main()
 # To summarize,
     # -after reading __init__.py, you have a 50,000 ft view of borscht's internals.
     # -after reading tensor_managed.py, you understand the core essence behind the Tensor concept
-    # it is now time to accelerate our Tensor with the Rust programming language!
+    # it is now time to accelerate our Tensor1 with the Rust programming language!
     # head on over to tensor_nativecpu.py
 
 # TODO:

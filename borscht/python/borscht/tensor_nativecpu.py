@@ -9,7 +9,7 @@
 # (O)  .M' After reading File 1. Hello Borscht (__init__.py), you have a 50,000 ft view of borscht's internals.
 #  bmmmd'  After reading File 2. Hello Tensor (tensor_managed.py), you understand the core essence of the Tensor concept and it's primary algorithm of matrix multiplication
                                                           # In fact, we will be reusing such data structure and algorithm:
-from borscht.tensor_managed import Tensor                 # Let us import Tensor defined from File 2 to define our accelerated mm routine
+from borscht.tensor_managed import Tensor1                # Let us import Tensor1 defined from File 2 to define our accelerated mm routine
                                                           #               aspirationally representing the set R^{d1 \times \cdots, \times dn} known as a field
 from borscht.tensor_managed import full, mm as mm_managed # Let us import the full constructor and managed matrix multiply routine also defined in FIle 2
                                                           #               aspirationally representing the function L1: R^k -> R^n and L2: R^m -> R^k known as a composition of linear transformation                                                                                             
@@ -19,6 +19,7 @@ from borscht.tensor_managed import full, mm as mm_managed # Let us import the fu
 #                   Both Files are split across three groups of files --------------------------------------------------------------+
 # **********************************************************************************************************************            |
 #                                               borscht (Literary Source)                                                           |
+#                                             Part 1: From Arrays to NDArrays                                                       |
 # <-- File 2. Hello Tensor                    -- File 3. Accelerate Tensor --            File 5. Accelerate++ Tensor -->            v
 #             tensor_managed.py                        > 3A. tensor_nativecpu.py <               4A. tensor_nativegpu.py <--------- A. Python source
 #                                                        3B. pyproject.toml/Cargo.toml           4B. Cargo.toml/lib.rs   <--------- B. Python/Rust interop
@@ -73,7 +74,7 @@ tensor([[3.1416, 3.1416],
 #   |    u     u   b   a                                   \ \     \   '---'   /
 #   |  T'  =  L   L   T                                    |\ \     '._______.'
 #   |    v     a   v   b                                   | \ \_______|   |_______           +----------------------------+
-#   |                                                      |  \         \ /        \          | Tensor                     |
+#   |                                                      |  \         \ /        \          | Tensor1                    |
 #   |  E = mc^2        (old news)                          |   \         V          \         +----------------------------+
 #   |                                                      |----\|      [=]      |   |------->| + shape:   tuple[int, ...] |
 #   |______________________________________________________|     |       o       |   |        | + ndim:    int             | We use + to denote user-visible state
@@ -125,7 +126,7 @@ tensor([[29.6088, 29.6088],
 
 # While the mathematicians have to come to terms with their ideals of real numbers and real analysis not actually being so *real*
 # and join the physicists, computer scientists, and numerical analysts in reality with floating point numerics
-# the current Tensor data structure and matrix multiplication algorithm is satisfactory — They don't even need to worry about any striding nonsense!
+# the current Tensor1 data structure and matrix multiplication algorithm is satisfactory — They don't even need to worry about any striding nonsense!
 #                                                                                           Striding memory is so beneath the working mathematician!
     # When we first learned the art of designing programs, we learned that the rules how procedure application became evaluated were similar to that of middle school algebra.
     # That is, *substitution*.
@@ -142,7 +143,7 @@ tensor([[29.6088, 29.6088],
 
 # While mathematics and computation have a close relationship where they concern themselves with
 # the same objects or the same mathema (μάθημα), which in greek literally means “that which is learnt”, “what one gets to know” and “these things.”
-# In the case of the Tensor data structure and it's matrix multiplication algorithm, mathematicians prioritize the *definitions* and the *proofs* of their properties.
+# In the case of the Tensor1 data structure and it's matrix multiplication algorithm, mathematicians prioritize the *definitions* and the *proofs* of their properties.
 
 
     # They are not so much interested in their *evaluation*.
@@ -247,7 +248,7 @@ def _main(): # run the file as a script (i.e uv run tensor_nativecpu.py) on your
 
     # Given that processes in the artificial sciences are not black box like the ones of the natural sciences
     # (we have access to the source!) we can *model* and *predict* the cost of our program (in this case the cost we care about is *time*)
-    # Consider the code of the inlined def mm(A: Tensor, B: Tensor) -> Tensor:
+    # Consider the code of the inlined def mm(A: Tensor1, B: Tensor1) -> Tensor1:
     (nrows, p), (p2, mcols) = A.shape, B.shape
     if len(A.shape) != 2 or len(B.shape) != 2: raise RuntimeError("self must be a matrix" if len(A.shape) != 2 else "B must be a matrix")
     if p != p2: raise RuntimeError(f"A and B shapes cannot be multiplied ({nrows}x{p} and {p2}x{mcols})")
@@ -313,7 +314,7 @@ def _main(): # run the file as a script (i.e uv run tensor_nativecpu.py) on your
     #                                                      MM                                                                                                                                                                      
     #                                                    .JMML.                                                                                                                                                                         
     import time # We want to empirically measure actual wall-clock time, rather than analytically analyzing an upper bound
-    def time_virtual_mm(A: Tensor, B: Tensor, n: int):
+    def time_virtual_mm(A: Tensor1, B: Tensor1, n: int):
         t0 = time.perf_counter()
         _ = mm_managed(A, B)  # ignore the output. we care about performance right now, not correctness
         t = time.perf_counter() - t0 # mm_managed is the matrix multiplication routine implemented from File 2. tensor_managed.py
@@ -325,7 +326,7 @@ def _main(): # run the file as a script (i.e uv run tensor_nativecpu.py) on your
     # Moreover, the first optimization we make to the standard matrix multiplication triple loop algorithm is
     # to simply change the implementation language from Python to Rust so that the code gets executed *directly* by a physical processor
     # That is, to follow the advice of the crowd and "rewrite it in Rust".
-    def time_native_mm(A: Tensor, B: Tensor, n: int):
+    def time_native_mm(A: Tensor1, B: Tensor1, n: int):
         t0 = time.perf_counter()
         _ = mm_native(A, B) # mm_native is implemented with a native language
         t = time.perf_counter() - t0
@@ -423,7 +424,7 @@ def _main(): # run the file as a script (i.e uv run tensor_nativecpu.py) on your
 # After skimming how we call the natively accelerated _gemm() routine, head on over to File 3B (pyproject.toml/Cargo.toml)
 # ---------------------------------------------------------------------------------------------------------------------
 
-def mm(A: Tensor, B: Tensor) -> Tensor: # mm has the same definition from File 2..
+def mm(A: Tensor1, B: Tensor1) -> Tensor1: # mm has the same definition from File 2..
     # the same doctest..
     """Multiply the (n,k) matrix `A` with the (k,m) matrix `B` into a new (n,m) matrix.
 
@@ -447,14 +448,14 @@ def mm(A: Tensor, B: Tensor) -> Tensor: # mm has the same definition from File 2
 
 from borscht._borscht import _gemm # in turn, mm_native will also be a facade for the _gemm(a,b,n,k,m) routine imported from the _borscht module implemented in Rust
                                    # the module name is prepended with a leading underscore following PEP 8 see: https://peps.python.org/pep-0008/#package-and-module-names
-def mm_native(A: Tensor, B: Tensor) -> Tensor: # we now define mm_native
+def mm_native(A: Tensor1, B: Tensor1) -> Tensor1: # we now define mm_native
     (nrows, p), (p2, mcols) = A.shape, B.shape          # realias..
     C = full((nrows, mcols), 0.0)                 # construct output
     C.storage = _gemm(A.storage, B.storage, nrows, p, mcols) # <-- and in turn, mm_native is also a facade for _gemm
     return C                                                                #     where _gemm() takes the flat storages of A and B and produces the flat storage for C
 
 if __name__ == "__main__": _main()            # Just running the file is used as a script
-__all__ = ["Tensor", "full", "mm"] # Exports for when the file is used as a module
+__all__ = ["Tensor1", "full", "mm"] # Exports for when the file is used as a module
                                               # Here we maintain the same API as File 2. Hello Tensor (tensor_managed.py)
                                               # and export mm rather than mm_native
                                               # Now, before we implement _gemm(a,b,n,km) File 3C kernelcpu.rs to implement the matrix multiplication algorithm in Rust,

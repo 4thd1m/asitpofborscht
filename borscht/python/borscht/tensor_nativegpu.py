@@ -9,6 +9,7 @@
 #       MM
 # **********************************************************************************************************************
 #                                               borscht (Literary Source)
+#                                             Part 1: From Arrays to NDArrays
 # <-- File 3. Accelerate Tensor               -- File 4. Accelerate++ Tensor --          File 5. Abstract Accelerate -->
 #             tensor_nativecpu.py                        tensor_nativegpu.py
 #             pyproject.toml/Cargo.toml                  Cargo.toml
@@ -20,10 +21,10 @@
 #                                              > 3A. tensor_nativecpu.py <
 #                                                 0. From Latency-Oriented to Throughput-Oriented Processors
 
-from borscht.tensor_managed import Tensor                 # Let us import Tensor to define our GPU accelerated mm routine
+from borscht.tensor_managed import Tensor1                # Let us import Tensor1 to define our GPU accelerated mm routine
 from borscht.tensor_managed import full, mm as mm_managed # Let us import the full constructor and managed matrix multiply routine
 from borscht.tensor_nativecpu import mm as mm_native      # Let us import                          native  matrix multiply routine
-__all__ = ["Tensor", "full", "mm"]             # Let us re-export the full constructor and Tensor concept as-is from tensor_managed.py as well as our natively GPU accelerated mm
+__all__ = ["Tensor1", "full", "mm"]            # Let us re-export the full constructor and Tensor1 concept as-is from tensor_managed.py as well as our natively GPU accelerated mm
 
 # +=============================================================================+
 # |                HOST INTERFACE  ::  PCIe Gen5 x16  /  NVLink 4               |
@@ -92,11 +93,11 @@ def _main():
         t = _sgemm_bench(n, n, n, reps=10)
         print(f"{n}x{n} sgemm_naive kernel: {t*1e3:.3f} ms, {2*n**3 / t / 1e9:.1f} GFLOP/s")
 
-def mm(A: Tensor, B: Tensor) -> Tensor:
+def mm(A: Tensor1, B: Tensor1) -> Tensor1:
     return mm_nativegpu(A,B)
 
 from borscht._borscht import _sgemm, _sgemm_bench
-def mm_nativegpu(A: Tensor, B: Tensor) -> Tensor:
+def mm_nativegpu(A: Tensor1, B: Tensor1) -> Tensor1:
     """Multiply the (n,k) matrix `A` with the (k,m) matrix `B` into a new (n,m) matrix on the GPU.
 
     Examples:
