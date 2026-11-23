@@ -70,6 +70,9 @@ Want to read the textbook? See SITP [Chapter 4. The Engine of Automatic Differen
   - File 8B. Adding Backward Ops
 - File 9. Hello Optimizer
   - File 9A. `borscht.optim`
+- File 10. Hello Convolutional Neural Network
+- File 11. Hello Recurrent Neural Network
+- File 12. Hello Transformer
 - File ??. From `borscht.nn` to [`torch.nn`]()
 - File ??. From `borscht.optim` to [`torch.optim`]()
 - File ??. From `borscht.autograd` to [`torch.autograd`]()
