@@ -59,20 +59,20 @@ Want to read the textbook? See SITP [Chapter 2. The Massively Parallel Tensor](h
   - File 6B: `Dispatcher`, `Iterator`
 - File ?? From `borscht.Tensor` to `torch.Tensor`
 
-**Part 2: From Numerical Linear Algebra Library to Deep Learning Framework (`borscht.autograd`, `borscht.nn`, `borscht.optim`)**<br>
+**Part 2: From Numerical Linear Algebra Library to Deep Learning Framework (`borscht.nn`, `borscht.autograd`, `borscht.optim`)**<br>
 In which we add support for first-order gradient-based optimization via automatic differentiation.<br>
 Want to read the textbook? See SITP [Chapter 4. The Engine of Automatic Differentiation](https://sitp.ai/2#4-the-engine-of-automatic-differentiation)
 - File 7. Hello Neural Network
   - File 7A. ([`nn/module.py`](./borscht/python/borscht/nn/module.py))
   - FIle 7B. ([`nn/functional.py`](./borscht/python/borscht/nn/functional.py))
 - File 8. Hello Autograd ([`tensor_autograd.py`](./borscht/python/borscht/tensor_autograd.py))
-- File 9. Adding Forward Ops
-- File 10. Adding Backward Ops
-- File 11. Hello Optimizer
-  - File 11A. `borscht.optim`
-- File 12. From `borscht.nn` to [`torch.nn`]()
-- File 13. From `borscht.optim` to [`torch.optim`]()
-- File 14. From `borscht.autograd` to [`torch.autograd`]()
+  - File 8A. Adding Forward Ops
+  - File 8B. Adding Backward Ops
+- File 9. Hello Optimizer
+  - File 9A. `borscht.optim`
+- File ??. From `borscht.nn` to [`torch.nn`]()
+- File ??. From `borscht.optim` to [`torch.optim`]()
+- File ??. From `borscht.autograd` to [`torch.autograd`]()
 
 **Part 3: From CPU Kernels to GPU Kernels (`beets`)**<br>
 In which we accelerate our kernel library to reach speed of light throughputs with tensor cores.<br>

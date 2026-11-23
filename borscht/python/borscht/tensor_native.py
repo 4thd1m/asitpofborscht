@@ -38,6 +38,7 @@ class Tensor2(Tensor1):
     def __init__(self):
         return                                                                                                                      
                                                                                                                                                                       
+__all__ = ["Tensor2"]
 
 # Storage
 # Allocator

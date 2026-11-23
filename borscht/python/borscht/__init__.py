@@ -161,7 +161,8 @@ _SHELANG = os.environ.get("SHELANG") or "BSL"
 
 if   _SHELANG == "BSL":   from .tensor_managed   import Tensor1, full, mm  # BSL: beginning student language implements the Tensor concept with matrix multiplication
 elif _SHELANG == "ISL":   from .tensor_nativecpu import Tensor1, full, mm  # ISL: intermediate student language accelerates the Tensor with the Rust programming language
-elif _SHELANG == "foobar":   from .tensor_autograd import Tensor2
+elif _SHELANG == "foobar":   from .tensor_native import Tensor2
+elif _SHELANG == "foobar":   from .tensor_autograd import Tensor3
 # elif _SHELANG == "ISL+":  from .tensor_nativegpu import Tensor, full, mm  # ISL+: intermediate student language plus accelerates the Tensor with the CUDA Rust programming language
 # elif _SHELANG == "ASL":   from .tensor           import Tensor, full, mm  # ASL: advanced student language abstracts device acceleration with Dispatcher, Storage, and Allocator concepts
 else: raise ValueError(f"SHELANG must be one of 'BSL', 'ISL', 'ISL+', 'ASL' but got {_SHELANG!r}")
