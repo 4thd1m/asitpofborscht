@@ -25,17 +25,9 @@ echo "netlify: sitp toolchain is $TOOLCHAIN"
 # its toolchain, so none of this depends on a default being configured.
 rustup toolchain install --no-self-update stable
 
-# The Rust tools install under TOOLS_HOME, which the sitp-tool-cache plugin
-# (netlify/plugins/) restores before this command and saves after a successful
-# build. cargo install skips a crate already installed at the same version and
-# source, so a cached tool is not recompiled. It does not check rustc, though,
-# and aquascope_front links against the pinned nightly's compiler libraries, so
-# each toolchain gets its own install root, and roots for any other toolchain
-# are deleted so the cache does not keep stale tools.
-TOOLS_HOME="$HOME/.sitp-tools"
-TOOLS="$TOOLS_HOME/$TOOLCHAIN"
+# The Rust tools install under TOOLS and are compiled fresh on every deploy.
+TOOLS="$HOME/.sitp-tools"
 mkdir -p "$TOOLS"
-find "$TOOLS_HOME" -mindepth 1 -maxdepth 1 ! -name "$TOOLCHAIN" -exec rm -rf {} +
 export PATH="$TOOLS/bin:$PATH"
 
 # The mdbook preprocessors build against stable; only aquascope_front needs the
@@ -57,9 +49,6 @@ export PATH="$HOME/.elan/bin:$PATH"
 cd sitp && mdbook build
 '''
 publish = "sitp/book"
-
-[[plugins]]
-package = "./netlify/plugins/sitp-tool-cache"
 
 # Same-origin passthrough for the doc hover previews in theme/js/custom.js.
 # Those previews fetch a doc page and lift out its signature + summary, which
