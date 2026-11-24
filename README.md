@@ -10,18 +10,32 @@ source below.
 ![](./sitp/src/assets/models_banner.webp)
 ## Deep Neural Networks
 Deep neural networks you train throughout the SITP textbook, which are located in [`./models`](./models):
-- Model 1: Bigram
-- Model 2: Discriminative Perceptron
-- Model 3: Probabilistic Perceptron
-- Model 4: Multilayer Peceptron
-- Model 5: Convolutional Neural Network
-- Model 6: Recurrent Neural Network
-- Model 7: Long Short-Term Memory Network
-- Model 8: Encoder-Decoder Pre-trained Transformers (BERT)
-- Model 9: Decoder Only Pre-trained Transformers (mingpt)
-- Model 10: Decoder Only Pre-trained Transformers (nanogpt)
-- Model 11: Post-trained Transformer (nanochat)
-- Model 12: Post-trained Transformer (nanoreasoner)
+
+**Part I (1969-2001). From Software 1.0 SHRDLU to Software 2.0 Neural Language Models**<br>
+In which we learn the elements of differentiable programming: specifying a parameterized architecture, scoring such paramaters with a measure, and optimizing the score.
+- Model 1: Bigram [(Markov 1913)](), [(Shannon 1948)]()
+- Model 2: Discriminative Perceptron [(Rosenblatt 1957)]()
+- Model 3: Probabilistic Perceptron [(Rosenblatt 1957)]()
+- Model 4: Multilayer Peceptron [(Bengio et al., 2003)](), [(Mikolov et al., 2013)]()
+
+**Part II (2012-2019). From Multi Layer Perceptrons to Transformers**<br>
+In which we rediscover the various inductive biases explored during the age of research for ourselves.
+We implement the same character-level networks from `karpathy/makemore`, presented in the [Neural Networks: Zero to Hero](https://karpathy.ai/zero-to-hero.html) course.
+- Model 5: Convolutional Neural Network (CNN) [(van den Oord et al., 2016)]()
+- Model 6: Recurrent Neural Network (RNN)  [(Mikolov et al., 2010)]()
+- Model 7: Long Short-Term Memory Network (LSTM) [(Graves et al., 2014)]()
+- Model 8: Encoder-Decoder Pre-trained Transformers (BERT)[(Vaswani et al., 2017)](),  [(Devlin et al., 2018)]()
+- Model 9: Decoder Only Pre-trained Transformers (GPT) [(Radford et al., 2019)]()
+
+**Part III (2019-2025). From Language Models to Large Language Models**<br>
+In which we rediscover the post-training during the age of scale. We implement `karpathy/mingpt` and `karpathy/nanogpt`.
+- Model 10: GPT-2
+- Model 11: Reinforcement Learning with Human Feedback [(Christiano et al., 2017)]()
+- Model 12: Reinforcement Learning with Veriable Rewards (nanoreasoner)
+
+**Part IV (2025-). From SITP to SOTA**<br>
+In which we bridge ourselves from SITP to SOTA frontier with the age of research 2.0
+
 
 <!-- After Model 12, you might be interested in the first research blog series
 From SITP to SOTA [FS2S Part 1 (ARCH/OPT): From modded-nanogpt to dsv3 and k3](). -->
@@ -38,7 +52,7 @@ cuda oxide doctor
 cuda oxide run
 ``` -->
 
-**Part 1: From Arrays to NDArrays (`borscht.Tensor`)**<br>
+**Part I: From Arrays to NDArrays (`borscht.Tensor`)**<br>
 In which we transition from software 1.0 arrays to software 2.0 ndarrays.<br>
 Want to read the textbook? See SITP [Chapter 2. The Massively Parallel Tensor](https://sitp.ai/1.html#2-the-massively-parallel-multidimensional-tensor)
 - File 1. Hello borscht ([`__init__.py`](./borscht/python/borscht/__init__.py))
@@ -59,7 +73,7 @@ Want to read the textbook? See SITP [Chapter 2. The Massively Parallel Tensor](h
   - File 6B: `Dispatcher`, `Iterator`
 - File ?? From `borscht.Tensor` to `torch.Tensor`
 
-**Part 2: From Numerical Linear Algebra Library to Deep Learning Framework (`borscht.nn`, `borscht.autograd`, `borscht.optim`)**<br>
+**Part II: From Numerical Linear Algebra Library to Deep Learning Framework (`borscht.nn`, `borscht.autograd`, `borscht.optim`)**<br>
 In which we add support for first-order gradient-based optimization via automatic differentiation.<br>
 Want to read the textbook? See SITP [Chapter 4. The Engine of Automatic Differentiation](https://sitp.ai/2#4-the-engine-of-automatic-differentiation)
 - File 7. Hello Neural Network
@@ -77,7 +91,7 @@ Want to read the textbook? See SITP [Chapter 4. The Engine of Automatic Differen
 - File ??. From `borscht.optim` to [`torch.optim`]()
 - File ??. From `borscht.autograd` to [`torch.autograd`]()
 
-**Part 3: From CPU Kernels to GPU Kernels (`beets`)**<br>
+**Part III: From CPU Kernels to GPU Kernels (`beets`)**<br>
 In which we accelerate our kernel library to reach speed of light throughputs with tensor cores.<br>
 Want to read the textbook? See SITP [Chapter 5. The Speed of Light]()
 - File ??. From Volta (sm70) to Ampere (sm80)
@@ -86,11 +100,11 @@ Want to read the textbook? See SITP [Chapter 5. The Speed of Light]()
 - File ??. From GPUs to TPUs
 - File ??. From `beets` to [`quack`](https://github.com/Dao-AILab/quack) and [`flash-attention`](https://github.com/dao-ailab/flash-attention)
 
-**Part 4: From Interpreters to Compilers (`bt2`)**
+**Part IV: From Interpreters to Compilers (`bt2`)**<br>
 - File ??. Hello Tensor Compiler
 - File ??. From `bortsch bynamo` and `borscht binductor` to [`torch dynamo`](https://github.com/pytorch/pytorch/tree/main/torch/_dynamo) and [`torch inductor`](https://github.com/pytorch/pytorch/tree/main/torch/_inductor)
 
-**Part 5: Runtimes (`bllm`)**
+**Part V: Runtimes (`bllm`)**<br>
 - File ??. Hello Inference Engine
 - File ??. From `bllm` to [`vllm`](https://github.com/vllm-project/vllm)
 
