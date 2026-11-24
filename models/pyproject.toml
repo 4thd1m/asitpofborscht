@@ -9,10 +9,11 @@ dependencies = [
     "torch>=2.15.0",
 ]
 
+[dependency-groups]
+dev = ["ipykernel>=7.4.0"]
+
+[tool.uv]
+extra-build-variables = { borscht = { CARGO = ".cargo/maturin-cargo" } } # mirror ../borscht/pyproject.toml: [tool.uv] settings only apply to the project uv runs in, so without this, building the borscht path dependency from here uses plain cargo with the cuda feature on
+
 [tool.uv.sources]
 borscht = { path = "../borscht", editable = true }
-
-[dependency-groups]
-dev = [
-    "ipykernel>=7.4.0",
-]
