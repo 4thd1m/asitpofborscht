@@ -34,7 +34,11 @@ In which we rediscover the post-training during the age of scale. We implement `
 - Model 12: Reinforcement Learning with Veriable Rewards (nanoreasoner)
 
 **Part IV (2025-). From SITP to SOTA**<br>
-In which we bridge ourselves from SITP to SOTA frontier with the age of research 2.0
+In which we bridge ourselves from SITP to SOTA frontier with the age of research 2.0.
+Want to read the textbook? See SITP [Afterword]().
+- Model 13: From GPT to Llama
+- Model 14: From Llama to Deepseek
+- Model 15: From Llama to Olmo
 
 
 <!-- After Model 12, you might be interested in the first research blog series
