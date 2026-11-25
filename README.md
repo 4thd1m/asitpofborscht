@@ -1,4 +1,4 @@
-# asitpofborscht <img src="sitp/src/assets/borscht.webp" width="32">
+1# asitpofborscht <img src="sitp/src/assets/borscht.webp" width="32">
 
 This repository hosts the https://sitp.ai textbook under [./sitp](./sitp) where you will train [`nanogpt`](https://github.com/karpathy/nanogpt)
 *using* the `borscht` teaching deep learning framework and then *implement* the framework itself.
@@ -11,21 +11,21 @@ source below.
 ## Deep Neural Networks
 Deep neural networks you train throughout the SITP textbook, which are located in [`./models`](./models):
 
-**Part I (1969-2001). From Software 1.0 SHRDLU to Software 2.0 Neural Language Models**<br>
+**Part I (1969-2001). From Language Compilers to Neural Language Models**<br>
 In which we learn the elements of differentiable programming: specifying a parameterized architecture, scoring such paramaters with a measure, and optimizing the score.
 - Model 1: Bigram [(Markov 1913)](), [(Shannon 1948)]()
 - Model 2: Discriminative Perceptron [(Rosenblatt 1957)]()
 - Model 3: Probabilistic Perceptron [(Rosenblatt 1957)]()
 - Model 4: Multilayer Peceptron [(Bengio et al., 2003)](), [(Mikolov et al., 2013)]()
 
-**Part II (2012-2019). From Multi Layer Perceptrons to Transformers**<br>
+**Part II (2012-2019). From Static to Dynamic Embeddings**<br>
 In which we rediscover the various inductive biases explored during the age of research for ourselves.
 We implement the same character-level networks from `karpathy/makemore`, presented in the [Neural Networks: Zero to Hero](https://karpathy.ai/zero-to-hero.html) course.
-- Model 5: Convolutional Neural Network (CNN) [(van den Oord et al., 2016)]()
-- Model 6: Recurrent Neural Network (RNN)  [(Mikolov et al., 2010)]()
-- Model 7: Long Short-Term Memory Network (LSTM) [(Graves et al., 2014)]()
-- Model 8: Encoder-Decoder Pre-trained Transformers (BERT)[(Vaswani et al., 2017)](),  [(Devlin et al., 2018)]()
-- Model 9: Decoder Only Pre-trained Transformers (GPT) [(Radford et al., 2019)]()
+- Model 5: Hello Convolutional Neural Network (CNN) [(van den Oord et al., 2016)]()
+- Model 6: Hello Recurrent Neural Network (RNN)  [(Mikolov et al., 2010)]()
+- Model 7: Hello Long Short-Term Memory Network (LSTM) [(Graves et al., 2014)]()
+- Model 8: Hello Encoder-Decoder Pre-trained Transformers (BERT)[(Vaswani et al., 2017)](),  [(Devlin et al., 2018)]()
+- Model 9: Hello Decoder Only Pre-trained Transformers (GPT) [(Radford et al., 2019)]()
 
 **Part III (2019-2025). From Language Models to Large Language Models**<br>
 In which we rediscover the post-training during the age of scale. We implement `karpathy/mingpt` and `karpathy/nanogpt`.
