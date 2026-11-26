@@ -12,7 +12,7 @@ source below.
 Deep neural networks you train throughout the SITP textbook, which are located in [`./models`](./models):
 
 **Part I (1969-2001). From Language Compilers to Neural Language Models**<br>
-In which we learn the elements of differentiable programming: specifying a parameterized architecture, scoring such paramaters with a measure, and optimizing the score.
+In whickkh we learn the elements of differentiable programming: specifying a parameterized architecture, scoring such paramaters with a measure, and optimizing the score.
 - Model 1: Bigram [(Markov 1913)](), [(Shannon 1948)]()
 - Model 2: Discriminative Perceptron [(Rosenblatt 1957)]()
 - Model 3: Probabilistic Perceptron [(Rosenblatt 1957)]()
@@ -21,8 +21,8 @@ In which we learn the elements of differentiable programming: specifying a param
 **Part II (2012-2019). From Static to Dynamic Embeddings**<br>
 In which we rediscover the various inductive biases explored during the age of research for ourselves.
 We implement the same character-level networks from `karpathy/makemore`, presented in the [Neural Networks: Zero to Hero](https://karpathy.ai/zero-to-hero.html) course.
-- Model 5: Hello Convolutional Neural Network (CNN) [(van den Oord et al., 2016)]()
-- Model 6: Hello Recurrent Neural Network (RNN)  [(Mikolov et al., 2010)]()
+- Model 5: Hello Recurrent Neural Network (RNN)  [(Mikolov et al., 2010)]()
+- Model 6: Hello Convolutional Neural Network (CNN) [(van den Oord et al., 2016)]()
 - Model 7: Hello Long Short-Term Memory Network (LSTM) [(Graves et al., 2014)]()
 - Model 8: Hello Encoder-Decoder Pre-trained Transformers (BERT)[(Vaswani et al., 2017)](),  [(Devlin et al., 2018)]()
 - Model 9: Hello Decoder Only Pre-trained Transformers (GPT) [(Radford et al., 2019)]()
@@ -36,7 +36,7 @@ In which we rediscover the post-training during the age of scale. We implement `
 **Part IV (2025-). From SITP to SOTA**<br>
 In which we bridge ourselves from SITP to SOTA frontier with the age of research 2.0.
 Want to read the textbook? See SITP [Afterword]().
-- Model 13: From GPT to Llama
+- Model 13: From GPT-2 to GPT-3 (Llama)
 - Model 14: From Llama to Deepseek
 - Model 15: From Llama to Olmo
 
